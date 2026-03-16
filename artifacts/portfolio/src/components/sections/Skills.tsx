@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Code, Cpu, Database, Cloud, BrainCircuit } from "lucide-react";
+import { Code, Cpu, Database, Cloud, BrainCircuit, FlaskConical } from "lucide-react";
 
 export function Skills() {
   const skillCategories = [
@@ -13,31 +13,83 @@ export function Skills() {
     {
       title: "Core Computer Science",
       icon: <Cpu className="w-5 h-5 text-highlight" />,
-      skills: ["Data Structures", "Algorithms", "Dynamic Programming", "Graphs", "Greedy Algorithms", "Backtracking", "Object Oriented Design", "Complexity Analysis"]
+      skills: [
+        "Data Structures & Algorithms",
+        "Dynamic Programming",
+        "Graphs",
+        "Trees",
+        "Greedy Algorithms",
+        "Backtracking",
+        "Object Oriented Design",
+        "Complexity Analysis"
+      ]
     },
     {
       title: "Backend Engineering",
       icon: <Database className="w-5 h-5 text-secondary" />,
-      skills: ["FastAPI", "REST API Design", "Asynchronous Programming", "System Design", "Distributed Systems", "API Lifecycle Management", "SDLC"]
+      skills: [
+        "FastAPI",
+        "REST API Design",
+        "Asynchronous Programming",
+        "Modular Architecture",
+        "Algorithm Optimization",
+        "System Design",
+        "Distributed Systems",
+        "API Lifecycle Management",
+        "SDLC"
+      ]
     },
     {
       title: "Cloud & DevOps",
       icon: <Cloud className="w-5 h-5 text-blue-400" />,
-      skills: ["AWS (EC2, S3, Lambda, RDS, SageMaker)", "Docker", "Jenkins", "CI/CD", "Git", "GitHub", "SQL", "NoSQL"]
+      skills: [
+        "AWS (EC2, S3, Lambda, RDS, SageMaker)",
+        "Docker",
+        "Jenkins",
+        "CI/CD",
+        "Git & GitHub",
+        "Version Control",
+        "SQL",
+        "NoSQL"
+      ]
     },
     {
-      title: "Machine Learning",
+      title: "Machine Learning & AI",
       icon: <BrainCircuit className="w-5 h-5 text-green-400" />,
-      skills: ["Machine Learning", "Deep Learning", "Neural Networks", "Natural Language Processing", "Bayesian Estimation", "Probabilistic Modeling", "PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas"]
+      skills: [
+        "Machine Learning",
+        "Deep Learning",
+        "Neural Networks",
+        "Natural Language Processing",
+        "Bayesian Estimation",
+        "Probabilistic Modeling",
+        "Statistical ML",
+        "PyTorch",
+        "TensorFlow",
+        "Keras",
+        "NumPy",
+        "Pandas"
+      ]
+    },
+    {
+      title: "Research & Probabilistic Methods",
+      icon: <FlaskConical className="w-5 h-5 text-violet-400" />,
+      skills: [
+        "Bayesian Inference",
+        "Gibbs Sampling",
+        "Variational Inference",
+        "Laplace Approximation",
+        "Monte Carlo Methods",
+        "Uncertainty Quantification",
+        "Posterior Estimation",
+        "PEFT Fine-tuning"
+      ]
     }
   ];
 
   const container = {
     hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+    show: { opacity: 1, transition: { staggerChildren: 0.08 } }
   };
 
   const item = {
@@ -59,7 +111,7 @@ export function Skills() {
             <div className="h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={container}
             initial="hidden"
@@ -67,7 +119,7 @@ export function Skills() {
             viewport={{ once: true, margin: "-50px" }}
           >
             {skillCategories.map((category, i) => (
-              <motion.div key={i} variants={item} className={i === 4 ? "md:col-span-2 lg:col-span-3" : ""}>
+              <motion.div key={i} variants={item}>
                 <Card className="h-full bg-card/50 hover:bg-card/80 transition-colors">
                   <CardHeader className="pb-3 flex flex-row items-center gap-3">
                     <div className="p-2 bg-secondary-bg rounded-lg border border-border">

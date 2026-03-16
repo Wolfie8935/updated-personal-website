@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Github, Linkedin, Mail, Send, TerminalSquare } from "lucide-react";
+import { Github, Linkedin, Mail, Send, TerminalSquare, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,9 +32,7 @@ export function Contact() {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     const subject = encodeURIComponent(`Portfolio Contact from ${data.name}`);
-    const body = encodeURIComponent(
-      `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`
-    );
+    const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`);
     window.open(`mailto:${TO_EMAIL}?subject=${subject}&body=${body}`, "_blank");
     await new Promise((r) => setTimeout(r, 400));
     setIsSubmitting(false);
@@ -49,6 +47,7 @@ export function Contact() {
     { icon: <Github className="w-5 h-5" />, label: "GitHub", href: "https://github.com/Wolfie8935" },
     { icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn", href: "https://www.linkedin.com/in/amangoel8935" },
     { icon: <TerminalSquare className="w-5 h-5" />, label: "LeetCode", href: "https://leetcode.com/u/Wolfie8935/" },
+    { icon: <Link2 className="w-5 h-5" />, label: "ORCID", href: "https://orcid.org/0009-0000-0899-9400" },
     { icon: <Mail className="w-5 h-5" />, label: "Email", href: `mailto:${TO_EMAIL}` },
   ];
 
@@ -74,7 +73,7 @@ export function Contact() {
             <div className="lg:col-span-5 space-y-8">
               <div>
                 <h3 className="text-xl font-bold text-foreground mb-6 font-mono">&gt; Connect</h3>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   {socialLinks.map((link, i) => (
                     <a
                       key={i}

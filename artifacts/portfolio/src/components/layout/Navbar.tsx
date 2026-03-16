@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, FileDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -21,9 +21,7 @@ export function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -36,6 +34,13 @@ export function Navbar() {
       const offsetTop = element.getBoundingClientRect().top + window.scrollY - 72;
       window.scrollTo({ top: offsetTop, behavior: "smooth" });
     }
+  };
+
+  const downloadResume = () => {
+    const a = document.createElement("a");
+    a.href = "/Aman_Goel_Resume.pdf";
+    a.download = "Aman_Goel_Resume.pdf";
+    a.click();
   };
 
   return (
@@ -53,13 +58,11 @@ export function Navbar() {
               onClick={(e) => { e.preventDefault(); scrollTo("#home"); }}
               className="font-mono text-2xl font-bold text-foreground flex items-center gap-1"
             >
-              <span className="text-primary">&lt;</span>
-              AG
-              <span className="text-primary">/&gt;</span>
+              <span className="text-primary">&lt;</span>AG<span className="text-primary">/&gt;</span>
             </a>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -70,16 +73,32 @@ export function Navbar() {
                 {item.name}
               </a>
             ))}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="ml-2 p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 transition-colors"
-            >
-              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            <div className="flex items-center gap-1 ml-2 pl-2 border-l border-border/50">
+              <button
+                onClick={downloadResume}
+                title="Download Resume"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary border border-primary/40 hover:bg-primary/10 transition-all"
+              >
+                <FileDown size={14} /> Resume
+              </button>
+              <button
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+                className="p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 transition-colors"
+              >
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </div>
           </nav>
 
           <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={downloadResume}
+              title="Download Resume"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-primary border border-primary/40 hover:bg-primary/10 transition-all"
+            >
+              <FileDown size={13} /> CV
+            </button>
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
