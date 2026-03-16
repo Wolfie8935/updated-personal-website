@@ -1,0 +1,18 @@
+packages:
+  "framer-motion": "For section fade-ins, card hover lifts, and smooth animations"
+  "three": "For the animated neural network/particle background in the hero section"
+  "@types/three": "TypeScript definitions for Three.js"
+  "react-hook-form": "For clean, performant form state management in the Contact section"
+  "@hookform/resolvers": "For Zod integration with react-hook-form"
+  "zod": "For validating contact form inputs"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility to safely merge Tailwind CSS classes"
+
+images:
+  - path: "artifacts/portfolio/public/images/avatar.png"
+    description: "Stylized abstract geometric human avatar or monogram 'AG', minimal wireframe style, deep space dark background, glowing cyan and indigo accents, highly technical and futuristic aesthetic"
+    aspect_ratio: "1:1"
+
+notes:
+  - This is a static portfolio site; no backend API is required. All data is hardcoded.
+  - Form submission in the Contact section will be simulated with a success toast.
