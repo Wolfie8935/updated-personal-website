@@ -17,8 +17,16 @@ export function ThreeBackground() {
 
     const PARTICLE_COUNT = 80;
     const CONNECTION_DISTANCE = 150;
-    const PRIMARY = "#6366F1";
-    const SECONDARY = "#22D3EE";
+
+    const getColors = () => {
+      const isLight = document.documentElement.classList.contains("light");
+      return {
+        particle: isLight ? "#6366F1" : "#6366F1",
+        connection: isLight ? "#818CF8" : "#22D3EE",
+        particleOpacity: isLight ? 0.55 : 0.7,
+        connectionOpacity: isLight ? 0.18 : 0.25,
+      };
+    };
 
     interface Particle {
       x: number;
@@ -57,6 +65,7 @@ export function ThreeBackground() {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
+      const colors = getColors();
 
       for (const p of particles) {
         p.x += p.vx;
@@ -65,7 +74,6 @@ export function ThreeBackground() {
         if (p.y < 0 || p.y > height) p.vy *= -1;
       }
 
-      // Mouse repulsion
       for (const p of particles) {
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
@@ -82,16 +90,15 @@ export function ThreeBackground() {
         }
       }
 
-      // Draw connections
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         for (let j = i + 1; j < PARTICLE_COUNT; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < CONNECTION_DISTANCE) {
-            const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.25;
+            const alpha = (1 - dist / CONNECTION_DISTANCE) * colors.connectionOpacity;
             ctx.beginPath();
-            ctx.strokeStyle = SECONDARY;
+            ctx.strokeStyle = colors.connection;
             ctx.globalAlpha = alpha;
             ctx.lineWidth = 0.8;
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -101,19 +108,17 @@ export function ThreeBackground() {
         }
       }
 
-      // Draw particles
       for (const p of particles) {
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = colors.particleOpacity;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = PRIMARY;
+        ctx.fillStyle = colors.particle;
         ctx.fill();
 
-        // Glow
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4);
-        gradient.addColorStop(0, "rgba(99,102,241,0.3)");
+        gradient.addColorStop(0, "rgba(99,102,241,0.25)");
         gradient.addColorStop(1, "rgba(99,102,241,0)");
-        ctx.globalAlpha = 0.4;
+        ctx.globalAlpha = 0.3;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2);
         ctx.fillStyle = gradient;

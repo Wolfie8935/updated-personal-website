@@ -19,7 +19,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       outline: "border border-border bg-transparent hover:bg-secondary-bg hover:text-foreground",
       ghost: "hover:bg-secondary-bg hover:text-foreground",
       link: "text-primary underline-offset-4 hover:underline",
-      glow: "bg-background border border-primary/50 text-primary-foreground shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] hover:border-primary transition-all duration-300",
+      glow: "bg-primary text-primary-foreground border border-primary/80 shadow-[0_0_15px_rgba(99,102,241,0.35)] hover:shadow-[0_0_28px_rgba(99,102,241,0.55)] hover:bg-primary/90 transition-all duration-300",
     }
     
     const sizes = {

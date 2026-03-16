@@ -51,19 +51,19 @@
   color-scheme: dark;
 }
 
-/* LIGHT MODE */
+/* LIGHT MODE — warm off-white */
 :root.light {
-  --background: 210 40% 98%;
-  --secondary-bg: 214 32% 95%;
-  --card: 0 0% 100%;
-  --primary: 239 84% 60%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 199 89% 48%;
-  --highlight: 258 90% 60%;
-  --foreground: 222 47% 11%;
-  --muted-foreground: 215 16% 42%;
-  --border: 214 32% 86%;
-  --card-border: 214 32% 86%;
+  --background: 40 30% 97%;        /* #F9F8F5 warm off-white */
+  --secondary-bg: 38 25% 93%;      /* #EEECe8 warm light gray */
+  --card: 0 0% 100%;               /* pure white card */
+  --primary: 239 84% 60%;          /* indigo accent */
+  --primary-foreground: 0 0% 100%; /* white text on primary */
+  --secondary: 199 89% 42%;        /* slightly deeper cyan */
+  --highlight: 258 90% 58%;        /* violet */
+  --foreground: 222 47% 12%;       /* near-black text */
+  --muted-foreground: 220 13% 42%; /* warm medium gray */
+  --border: 35 20% 86%;            /* warm gray border */
+  --card-border: 35 20% 86%;
   color-scheme: light;
 }
 
