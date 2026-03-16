@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -17,6 +18,7 @@ const navItems = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,13 +30,11 @@ export function Navbar() {
 
   const scrollTo = (href: string) => {
     setMobileMenuOpen(false);
-    const element = document.querySelector(href);
+    const id = href.replace("#", "");
+    const element = document.getElementById(id);
     if (element) {
-      const offsetTop = element.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth"
-      });
+      const offsetTop = element.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top: offsetTop, behavior: "smooth" });
     }
   };
 
@@ -42,16 +42,15 @@ export function Navbar() {
     <header
       className={cn(
         "fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent",
-        isScrolled ? "bg-background/80 backdrop-blur-md border-border/50 shadow-sm" : "bg-transparent py-4"
+        isScrolled ? "bg-background/85 backdrop-blur-md border-border/50 shadow-sm" : "bg-transparent py-4"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <div className="flex-shrink-0">
-            <a 
-              href="#home" 
-              onClick={(e) => { e.preventDefault(); scrollTo('#home'); }}
+            <a
+              href="#home"
+              onClick={(e) => { e.preventDefault(); scrollTo("#home"); }}
               className="font-mono text-2xl font-bold text-foreground flex items-center gap-1"
             >
               <span className="text-primary">&lt;</span>
@@ -60,8 +59,7 @@ export function Navbar() {
             </a>
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-1 lg:space-x-4">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -72,10 +70,23 @@ export function Navbar() {
                 {item.name}
               </a>
             ))}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="ml-2 p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 transition-colors"
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="p-2 rounded-lg text-muted-foreground hover:text-primary transition-colors"
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-muted-foreground hover:text-foreground p-2 focus:outline-none"
@@ -86,7 +97,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Nav */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div

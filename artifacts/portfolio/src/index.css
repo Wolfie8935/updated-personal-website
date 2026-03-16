@@ -34,27 +34,37 @@
   --radius-2xl: calc(var(--radius) + 8px);
 }
 
+/* DARK MODE (default) */
 :root {
-  /* Dark Technical Minimal Palette */
-  --background: 223 39% 7%; /* #0B0F19 */
-  --secondary-bg: 221 39% 11%; /* #111827 */
-  --card: 215 21% 11%; /* #161B22 */
-  
-  --primary: 239 84% 67%; /* #6366F1 - Indigo */
-  --primary-foreground: 210 40% 98%; /* #F9FAFB */
-  
-  --secondary: 188 86% 53%; /* #22D3EE - Cyan */
-  --highlight: 258 90% 66%; /* #8B5CF6 - Violet Glow */
-  
-  --foreground: 210 40% 98%; /* #F9FAFB */
-  --muted-foreground: 215 16% 47%; /* #9CA3AF */
-  
-  --border: 215 28% 17%; /* #1F2937 */
+  --background: 223 39% 7%;
+  --secondary-bg: 221 39% 11%;
+  --card: 215 21% 11%;
+  --primary: 239 84% 67%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 188 86% 53%;
+  --highlight: 258 90% 66%;
+  --foreground: 210 40% 98%;
+  --muted-foreground: 215 16% 57%;
+  --border: 215 28% 17%;
   --card-border: 215 28% 17%;
-  
   --radius: 0.75rem;
-
   color-scheme: dark;
+}
+
+/* LIGHT MODE */
+:root.light {
+  --background: 210 40% 98%;
+  --secondary-bg: 214 32% 95%;
+  --card: 0 0% 100%;
+  --primary: 239 84% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 199 89% 48%;
+  --highlight: 258 90% 60%;
+  --foreground: 222 47% 11%;
+  --muted-foreground: 215 16% 42%;
+  --border: 214 32% 86%;
+  --card-border: 214 32% 86%;
+  color-scheme: light;
 }
 
 @layer base {
@@ -65,6 +75,7 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
   }
 
   h1, h2, h3, h4, h5, h6 {

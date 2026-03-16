@@ -1,4 +1,23 @@
 import { motion } from "framer-motion";
+import { Brain, Server, FlaskConical } from "lucide-react";
+
+const highlights = [
+  {
+    icon: <Brain className="w-5 h-5 text-primary" />,
+    label: "AI / ML Focus",
+    desc: "Reasoning systems, probabilistic ML, LLM pipelines",
+  },
+  {
+    icon: <Server className="w-5 h-5 text-secondary" />,
+    label: "Backend Engineering",
+    desc: "FastAPI, async architecture, distributed systems",
+  },
+  {
+    icon: <FlaskConical className="w-5 h-5 text-highlight" />,
+    label: "Research",
+    desc: "Bayesian inference, uncertainty modeling at IISc Bangalore",
+  },
+];
 
 export function About() {
   return (
@@ -15,39 +34,68 @@ export function About() {
             <div className="h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            <div className="lg:col-span-5 flex justify-center lg:justify-start">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary via-highlight to-secondary rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                <div className="relative rounded-2xl overflow-hidden bg-card border border-border p-2 aspect-square max-w-sm w-full">
-                  <img 
-                    src={`${import.meta.env.BASE_URL}images/avatar.png`} 
-                    alt="Aman Goel Avatar" 
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                  {/* Decorative corner accents */}
-                  <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
-                  <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-secondary/50"></div>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
+              <p>
+                I'm a Computer Science undergraduate at SRM Institute of Science and Technology with a strong focus on{" "}
+                <span className="text-primary font-medium">artificial intelligence</span>,{" "}
+                <span className="text-highlight font-medium">reasoning systems</span>, and{" "}
+                <span className="text-secondary font-medium">scalable backend engineering</span>.
+              </p>
+              <p>
+                I build AI platforms that connect machine learning models with robust software infrastructure — ensuring models don't just live in research notebooks, but actually scale in production environments.
+              </p>
+              <p>
+                My work spans reasoning-driven AI systems, LLM orchestration platforms, scalable ML pipelines, and probabilistic machine learning research.
+              </p>
+              <div className="p-4 border-l-2 border-primary bg-primary/5 rounded-r-lg text-foreground mt-6">
+                I recently completed a research internship at the{" "}
+                <strong className="text-primary">Indian Institute of Science (IISc) Bangalore</strong> — selected from a competitive cohort based on academic merit — where I worked on probabilistic machine learning and Bayesian inference methods.
               </div>
             </div>
 
-            <div className="lg:col-span-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                Aman Goel is a Computer Science undergraduate at SRM Institute of Science and Technology with strong interests in <span className="text-primary font-medium">artificial intelligence</span>, <span className="text-highlight font-medium">reasoning systems</span>, and <span className="text-secondary font-medium">scalable backend engineering</span>.
-              </p>
-              <p>
-                His work focuses on building AI platforms that combine machine learning models with robust software infrastructure, ensuring models don't just exist in notebooks, but scale in production environments.
-              </p>
-              <p>
-                His projects range from reasoning-driven AI systems and LLM orchestration platforms to scalable machine learning pipelines and probabilistic ML research.
-              </p>
-              <p className="p-4 border-l-2 border-primary bg-primary/5 rounded-r-lg text-foreground mt-6">
-                He recently completed a research internship at the <strong className="text-primary">Indian Institute of Science (IISc) Bangalore</strong> working on probabilistic machine learning and Bayesian inference methods.
-              </p>
-            </div>
+            <div className="lg:col-span-5 space-y-4">
+              {highlights.map((h, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="flex items-start gap-4 p-5 rounded-xl border border-border bg-card/50 hover:border-primary/40 hover:bg-card transition-all"
+                >
+                  <div className="p-2 rounded-lg bg-secondary-bg border border-border flex-shrink-0">
+                    {h.icon}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-base">{h.label}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{h.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
 
+              <div className="mt-6 p-5 rounded-xl border border-border bg-card/50">
+                <p className="text-sm font-mono text-muted-foreground mb-3">&gt; quick_stats</p>
+                <div className="space-y-2 text-sm font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">institution</span>
+                    <span className="text-foreground">SRMIST</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">degree</span>
+                    <span className="text-foreground">B.Tech CSE</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">cgpa</span>
+                    <span className="text-primary font-bold">9.79 / 10</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">batch</span>
+                    <span className="text-foreground">2022 – 2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
