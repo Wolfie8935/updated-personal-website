@@ -33,7 +33,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-primary font-mono text-lg mb-2">Hello, I'm</h2>
+              <h2 className="text-primary font-mono text-lg mb-2">Software Engineer • AI / Systems</h2>
               <h1 className="text-5xl sm:text-7xl font-extrabold text-foreground tracking-tight mb-4">
                 Aman Goel.
               </h1>
@@ -45,8 +45,9 @@ export function Hero() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                  <span className="text-foreground font-medium">AI / ML Engineer</span> focusing on{' '}
-                  <span className="text-gradient font-medium">Reasoning Systems</span> & <span className="text-secondary font-medium">Backend Architecture</span>.
+                  <span className="text-foreground font-medium">I design and ship AI systems</span> that turn{" "}
+                  <span className="text-gradient font-medium">reasoning models</span> into{" "}
+                  <span className="text-secondary font-medium">production-grade backend platforms</span>.
                 </motion.p>
               </div>
             </motion.div>
@@ -57,7 +58,7 @@ export function Hero() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              Computer Science undergraduate building intelligent systems that combine machine learning, reasoning engines, and scalable backend architecture. Focused on probabilistic ML, LLM pipelines, and production-grade AI platforms.
+              I’m a CS undergrad who builds real systems: reasoning engines, ML pipelines, and backends that stay fast under load. Recent work includes CERAS — a cognitive efficiency & reasoning alignment platform — and research in probabilistic ML at IISc Bangalore.
             </motion.p>
 
             <motion.div 

@@ -30,17 +30,44 @@ export function Contact() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    const subject = encodeURIComponent(`Portfolio Contact from ${data.name}`);
-    const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`);
-    window.open(`mailto:${TO_EMAIL}?subject=${subject}&body=${body}`, "_blank");
-    await new Promise((r) => setTimeout(r, 400));
-    setIsSubmitting(false);
-    toast({
-      title: "Email client opened",
-      description: "Your message is ready to send to goel07.aman@gmail.com.",
-    });
-    form.reset();
+    try {
+      setIsSubmitting(true);
+
+      const response = await fetch(`https://formsubmit.co/ajax/${TO_EMAIL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          message: data.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result.success === "false") {
+        throw new Error("Failed to send message");
+      }
+
+      toast({
+        title: "Message sent",
+        description: "Your message has been sent successfully. Check your inbox.",
+      });
+
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Something went wrong",
+        description: "Unable to send your message right now. Please try again later.",
+        variant: "destructive",
+      } as any);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const socialLinks = [
@@ -136,12 +163,12 @@ export function Contact() {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? "Opening email..." : (
+                      {isSubmitting ? "Sending..." : (
                         <>Send Message <Send className="ml-2 w-4 h-4" /></>
                       )}
                     </Button>
                     <p className="text-xs text-center text-muted-foreground">
-                      Sends to <span className="text-primary font-mono">{TO_EMAIL}</span> via your email client
+                      Sends directly to <span className="text-primary font-mono">{TO_EMAIL}</span> without opening your email app
                     </p>
                   </form>
                 </CardContent>

@@ -13,15 +13,15 @@ export function Projects() {
       title: "CERAS",
       subtitle: "Cognitive Efficiency & Reasoning Alignment System",
       tag: "Major Project",
-      description: "A reasoning-driven AI platform designed to evaluate and improve cognitive problem solving through structured multi-step reasoning and adaptive task decomposition.",
+      description: "Full‑stack AI platform that evaluates and improves cognitive problem solving using a custom Tree‑of‑Thoughts engine, telemetry, and adaptive learning workflows.",
       features: [
-        "Custom Tree-of-Thought reasoning architecture",
-        "Multi-stage planning and verification",
-        "Greedy reasoning path optimization",
-        "Asynchronous backend pipelines",
-        "Dynamic model orchestration",
-        "Telemetry-based cognitive efficiency scoring",
-        "Adaptive subtask decomposition for learning workflows"
+        "Implemented Tree-of-Thoughts data structure from scratch with multi-stage planning and verification-based validation",
+        "Designed greedy reasoning path selection to keep inference efficient while preserving answer quality",
+        "Built asynchronous FastAPI backend pipelines with dynamic model routing and distributed LLM inference",
+        "Captured request latency, processing time, and token usage as first-class telemetry",
+        "Computed Cognitive Efficiency (CE) scores from telemetry to quantify user reasoning performance",
+        "Generated dynamic-programming-based subtask decomposition for adaptive learning workflows",
+        "Deployed React dashboard to monitor runs and reason over CE scores and reasoning traces"
       ],
       tech: ["FastAPI", "React", "Async Python", "LLM Pipelines", "Distributed inference"],
       demo: "https://ceras-frontend.onrender.com/",
@@ -32,12 +32,12 @@ export function Projects() {
       id: "cyclone",
       title: "Cyclone Intensity Prediction Pipeline",
       tag: "IEEE Published",
-      description: "Machine learning pipeline to predict cyclone intensity from large-scale meteorological data. Published at ICCMC 2025.",
+      description: "End‑to‑end ML pipeline predicting cyclone intensity on >1M meteorological data points, published at ICCMC 2025.",
       features: [
-        "Processed more than 1 million data points",
-        "Advanced multi-stage feature engineering",
-        "Optimized prediction workflows",
-        "Achieved R² score of 0.993"
+        "Processed and cleaned 1M+ spatio‑temporal data points into a training‑ready dataset",
+        "Designed multi-stage feature engineering to capture temporal and atmospheric patterns",
+        "Optimized training and inference workflows for reproducibility and faster experimentation",
+        "Achieved R² score of 0.993, significantly reducing prediction error vs baseline models"
       ],
       tech: ["Python", "Scikit-Learn", "Pandas", "ERA5 Dataset", "Feature Engineering"],
       github: "https://github.com/Wolfie8935/Cyclone-Intensity-Prediction",
@@ -47,12 +47,12 @@ export function Projects() {
       id: "genai",
       title: "GenAI Chatbot",
       subtitle: "Intel Unnati",
-      description: "LLM-powered chatbot pipeline built using ETL preprocessing, tokenization workflows, and LLaMA-based inference models optimized for CPU inference.",
+      description: "LLM-powered chatbot built during Intel Unnati, focused on CPU-optimized inference and robust data → model → inference pipelines.",
       features: [
-        "Dataset preprocessing pipelines",
-        "Tokenization and batching",
-        "CPU optimized inference",
-        "Large scale summarization workflows"
+        "Engineered Python-based ETL pipelines to preprocess and transform large text datasets",
+        "Integrated LLaMA-based models with Intel Extension for Transformers for efficient CPU inference",
+        "Designed tokenization and batching workflows for long‑running summarization tasks",
+        "Debugged and stabilized long-running jobs by migrating to batch environments with better monitoring"
       ],
       tech: ["LLaMA", "Intel Extension for Transformers", "ETL", "PEFT", "Python"],
       github: "https://github.com/Wolfie8935/Intel-Unnati-GenAI-Chatbot",

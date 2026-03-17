@@ -37,20 +37,20 @@ export function About() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
               <p>
-                I'm a Computer Science undergraduate at SRM Institute of Science and Technology with a strong focus on{" "}
+                I’m a Computer Science undergraduate who builds systems at the intersection of{" "}
                 <span className="text-primary font-medium">artificial intelligence</span>,{" "}
-                <span className="text-highlight font-medium">reasoning systems</span>, and{" "}
-                <span className="text-secondary font-medium">scalable backend engineering</span>.
+                <span className="text-highlight font-medium">reasoning engines</span>, and{" "}
+                <span className="text-secondary font-medium">backend architecture</span>.
               </p>
               <p>
-                I build AI platforms that connect machine learning models with robust software infrastructure — ensuring models don't just live in research notebooks, but actually scale in production environments.
+                Most of my work answers one question: <span className="text-foreground font-medium">“How do we make intelligent models reliable at scale?”</span> — from reasoning pipelines and ML workloads to the APIs and services that expose them.
               </p>
               <p>
-                My work spans reasoning-driven AI systems, LLM orchestration platforms, scalable ML pipelines, and probabilistic machine learning research.
+                Recently, that has meant building CERAS, a reasoning alignment system with telemetry-backed evaluation, and contributing research in probabilistic ML and Bayesian inference.
               </p>
               <div className="p-4 border-l-2 border-primary bg-primary/5 rounded-r-lg text-foreground mt-6">
-                I recently completed a research internship at the{" "}
-                <strong className="text-primary">Indian Institute of Science (IISc) Bangalore</strong> — selected from a competitive cohort based on academic merit — where I worked on probabilistic machine learning and Bayesian inference methods.
+                Selected for a research internship at{" "}
+                <strong className="text-primary">Indian Institute of Science (IISc) Bangalore</strong>, where I worked on probabilistic machine learning and Bayesian inference methods with a focus on uncertainty-aware decision making.
               </div>
             </div>
 
