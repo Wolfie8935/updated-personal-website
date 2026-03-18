@@ -80,7 +80,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-24 bg-secondary-bg/30 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-linear-to-r from-transparent via-primary/50 to-transparent"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -96,32 +96,34 @@ export function Contact() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-5xl mx-auto">
-            <div className="lg:col-span-5 space-y-8">
-              <div>
-                <h3 className="text-xl font-bold text-foreground mb-6 font-mono">&gt; Connect</h3>
-                <div className="flex flex-col gap-3">
-                  {socialLinks.map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.href}
-                      target={link.href.startsWith("mailto") ? undefined : "_blank"}
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:text-primary transition-all group"
-                    >
-                      <div className="p-2 bg-secondary-bg rounded-lg group-hover:bg-primary/10 transition-colors">
-                        {link.icon}
-                      </div>
-                      <span className="font-medium">{link.label}</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch max-w-5xl mx-auto">
+            <div className="lg:col-span-6">
+              <Card className="bg-card border-border/80 h-full">
+                <CardContent className="p-6 sm:p-8 h-full">
+                  <h3 className="text-xl font-bold text-foreground mb-6 font-mono">&gt; Connect</h3>
+                  <div className="flex flex-col gap-3">
+                    {socialLinks.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.href}
+                        target={link.href.startsWith("mailto") ? undefined : "_blank"}
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:text-primary transition-all group"
+                      >
+                        <div className="p-2 bg-secondary-bg rounded-lg group-hover:bg-primary/10 transition-colors">
+                          {link.icon}
+                        </div>
+                        <span className="font-medium">{link.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            <div className="lg:col-span-7">
-              <Card className="bg-card border-border/80">
-                <CardContent className="p-6 sm:p-8">
+            <div className="lg:col-span-6">
+              <Card className="bg-card border-border/80 h-full">
+                <CardContent className="p-6 sm:p-8 h-full">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
