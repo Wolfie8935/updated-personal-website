@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
 import { ThreeBackground } from "@/components/ThreeBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Code2, Microscope, Trophy, GraduationCap, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronRight, Code2, GraduationCap, Microscope, Trophy } from "lucide-react";
 
 export function Hero() {
   const scrollToProjects = () => {
@@ -33,7 +33,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-primary font-mono text-lg mb-2">Software Engineer • AI / Systems</h2>
+              <h2 className="text-primary font-mono text-lg mb-2">Data Science • ML / Backend</h2>
               <h1 className="text-5xl sm:text-7xl font-extrabold text-foreground tracking-tight mb-4">
                 Aman Goel.
               </h1>
@@ -45,9 +45,9 @@ export function Hero() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                  <span className="text-foreground font-medium">I design and ship AI systems</span> that turn{" "}
-                  <span className="text-gradient font-medium">reasoning models</span> into{" "}
-                  <span className="text-secondary font-medium">production-grade backend platforms</span>.
+                  <span className="text-foreground font-medium">Former Indian Tennis Player</span> and{" "}
+                  <span className="text-gradient font-medium">loves to play</span> with{" "}
+                  <span className="text-secondary font-medium">AI and ML systems</span>.
                 </motion.p>
               </div>
             </motion.div>

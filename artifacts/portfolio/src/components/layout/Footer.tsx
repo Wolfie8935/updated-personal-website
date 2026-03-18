@@ -6,7 +6,7 @@ export function Footer() {
           &copy; {new Date().getFullYear()} Aman Goel
         </p>
         <p className="text-muted-foreground text-sm">
-          Built with <span className="text-primary font-medium">React</span> and <span className="text-secondary font-medium">Tailwind</span>
+          Built with <span className="text-primary font-medium">Love</span> and <span className="text-secondary font-medium">Care</span>
         </p>
       </div>
     </footer>

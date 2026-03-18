@@ -58,7 +58,7 @@ export function Navbar() {
               onClick={(e) => { e.preventDefault(); scrollTo("#home"); }}
               className="font-mono text-2xl font-bold text-foreground flex items-center gap-1"
             >
-              <span className="text-primary">&lt;</span>AG<span className="text-primary">/&gt;</span>
+              <span className="text-primary">&lt;</span>Aman<span className="text-primary">/&gt;</span>
             </a>
           </div>
 
