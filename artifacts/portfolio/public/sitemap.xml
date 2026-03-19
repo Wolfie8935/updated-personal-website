@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
   <url>
     <loc>https://wolfie8935.vercel.app/</loc>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://wolfie8935.vercel.app/opengraph.jpg</image:loc>
+      <image:title>Aman Goel Portfolio</image:title>
+      <image:caption>Portfolio preview for Aman Goel's AI, backend, and research work.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://wolfie8935.vercel.app/images/avatar.png</image:loc>
+      <image:title>Aman Goel Avatar</image:title>
+      <image:caption>Profile avatar used on Aman Goel's portfolio website.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://wolfie8935.vercel.app/Aman_Goel_Resume.pdf</loc>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://wolfie8935.vercel.app/IISc_Research_Report.pdf</loc>
+    <lastmod>2026-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
