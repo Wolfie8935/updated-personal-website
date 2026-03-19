@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wolfie8935.vercel.app/sitemap.xml

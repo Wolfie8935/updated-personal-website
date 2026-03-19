@@ -1,0 +1,16 @@
+{
+  "name": "Aman Goel Portfolio",
+  "short_name": "Aman Goel",
+  "description": "Portfolio website of Aman Goel featuring AI/ML, backend engineering, research, and projects.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
