@@ -31,7 +31,8 @@ export function Navbar() {
     const id = href.replace("#", "");
     const element = document.getElementById(id);
     if (element) {
-      const offsetTop = element.getBoundingClientRect().top + window.scrollY - 72;
+      const offsetTop =
+        element.getBoundingClientRect().top + window.scrollY - 72;
       window.scrollTo({ top: offsetTop, behavior: "smooth" });
     }
   };
@@ -47,7 +48,9 @@ export function Navbar() {
     <header
       className={cn(
         "fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent",
-        isScrolled ? "bg-background/85 backdrop-blur-md border-border/50 shadow-sm" : "bg-transparent py-4"
+        isScrolled
+          ? "bg-background/85 backdrop-blur-md border-border/50 shadow-sm"
+          : "bg-transparent py-4",
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,10 +58,13 @@ export function Navbar() {
           <div className="flex-shrink-0">
             <a
               href="#home"
-              onClick={(e) => { e.preventDefault(); scrollTo("#home"); }}
-              className="font-mono text-2xl font-bold text-foreground flex items-center gap-1"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("#home");
+              }}
+              className="font-mono text-2xl font-bold text-foreground"
             >
-              <span className="text-primary">&lt;</span>Aman<span className="text-primary">/&gt;</span>
+              Aman Goel
             </a>
           </div>
 
@@ -67,7 +73,10 @@ export function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                onClick={(e) => { e.preventDefault(); scrollTo(item.href); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo(item.href);
+                }}
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-secondary-bg/50"
               >
                 {item.name}
@@ -129,7 +138,10 @@ export function Navbar() {
                 <a
                   key={item.name}
                   href={item.href}
-                  onClick={(e) => { e.preventDefault(); scrollTo(item.href); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo(item.href);
+                  }}
                   className="block px-3 py-3 text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 rounded-md"
                 >
                   {item.name}
