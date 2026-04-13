@@ -35,18 +35,23 @@ export function About() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
+            <div className="lg:col-span-7 space-y-6 text-lg text-muted-foreground leading-relaxed text-justify">
               <p>
-                I’m a Computer Science undergraduate who builds systems at the intersection of{" "}
+                I am a Computer Science undergraduate who likes building high-leverage systems at the intersection of{" "}
                 <span className="text-primary font-medium">artificial intelligence</span>,{" "}
                 <span className="text-highlight font-medium">reasoning engines</span>, and{" "}
-                <span className="text-secondary font-medium">backend architecture</span>.
+                <span className="text-secondary font-medium">backend architecture</span>. I care most about taking strong ideas from paper and turning them into reliable, measurable software that can be used in production.
               </p>
               <p>
-                Most of my work answers one question: <span className="text-foreground font-medium">“How do we make intelligent models reliable at scale?”</span> — from reasoning pipelines and ML workloads to the APIs and services that expose them.
+                Most of my work is centered around one question:{" "}
+                <span className="text-foreground font-medium">"How do we make intelligent systems dependable at scale?"</span>{" "}
+                That means working across the full stack, from model behavior and evaluation loops to async backends, observability, and API layers that expose intelligence safely and consistently.
               </p>
               <p>
-                Recently, that has meant building CERAS, a reasoning alignment system with telemetry-backed evaluation, and contributing research in probabilistic ML and Bayesian inference.
+                Recently, this has included building CERAS, a reasoning alignment framework with telemetry-backed evaluation, failure-mode tracking, and iterative guardrails for model reliability. In parallel, I have contributed to research in probabilistic machine learning and Bayesian inference, with a focus on uncertainty-aware decision making in real-world settings.
+              </p>
+              <p>
+                I enjoy solving problems where clean architecture, mathematical rigor, and product thinking meet. Whether I am designing a reasoning pipeline, shipping a backend service, or testing alignment strategies, my goal is the same: build intelligent systems that are not only capable, but trustworthy.
               </p>
               <div className="p-4 border-l-2 border-primary bg-primary/5 rounded-r-lg text-foreground mt-6">
                 Selected for a research internship at{" "}

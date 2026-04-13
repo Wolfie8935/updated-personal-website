@@ -1,16 +1,49 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, ExternalLink, FileText, Calendar, MapPin, User, BookMarked, Link2 } from "lucide-react";
 
 const topics = [
-  { name: "Gibbs Sampling", desc: "Iterative conditional sampling from joint distributions" },
-  { name: "Variational Inference", desc: "Approximating posteriors via optimization" },
-  { name: "Laplace Approximation", desc: "Gaussian approximation around MAP estimates" },
-  { name: "Monte Carlo Methods", desc: "Stochastic simulation for intractable integrals" },
-  { name: "Bayesian Model Selection", desc: "Marginal likelihood and empirical Bayes" },
-  { name: "Uncertainty Modeling", desc: "Epistemic vs aleatoric uncertainty quantification" },
-  { name: "Rejection Sampling", desc: "Accept-reject strategies for complex densities" },
-  { name: "Metropolis-Hastings", desc: "Markov Chain Monte Carlo proposal mechanics" },
+  {
+    name: "Gibbs Sampling",
+    desc: "Iterative conditional sampling from joint distributions",
+    brief: "Isme hum ek baar me ek variable sample karte hain. Aise step-by-step chalke difficult posterior ko practically estimate kar lete hain.",
+  },
+  {
+    name: "Variational Inference",
+    desc: "Approximating posteriors via optimization",
+    brief: "True posterior tough hota hai, to hum ek simpler distribution choose karke usko optimize karte hain taki woh original ke close aa jaye.",
+  },
+  {
+    name: "Laplace Approximation",
+    desc: "Gaussian approximation around MAP estimates",
+    brief: "Posterior ke peak (MAP point) ke around curve ko Gaussian maan lete hain. Isse calculations fast aur manageable ho jaati hain.",
+  },
+  {
+    name: "Monte Carlo Methods",
+    desc: "Stochastic simulation for intractable integrals",
+    brief: "Jab exact integration mushkil ho, tab random samples se average nikalke answer ka accha estimate banaya jata hai.",
+  },
+  {
+    name: "Bayesian Model Selection",
+    desc: "Marginal likelihood and empirical Bayes",
+    brief: "Different models compare karne ke liye dekhte hain data kis model ko zyada support karta hai, sirf accuracy nahi balki uncertainty bhi consider hoti hai.",
+  },
+  {
+    name: "Uncertainty Modeling",
+    desc: "Epistemic vs aleatoric uncertainty quantification",
+    brief: "Prediction ke saath confidence samajhna: data noisy hai (aleatoric) ya model ko knowledge kam hai (epistemic).",
+  },
+  {
+    name: "Rejection Sampling",
+    desc: "Accept-reject strategies for complex densities",
+    brief: "Easy distribution se sample leke rule ke basis par accept/reject karte hain, taki final samples target distribution ko follow karein.",
+  },
+  {
+    name: "Metropolis-Hastings",
+    desc: "Markov Chain Monte Carlo proposal mechanics",
+    brief: "Naya sample propose hota hai aur probability ke basis par accept hota hai. Time ke saath chain target posterior ko represent karne lagti hai.",
+  },
 ];
 
 const publications = [
@@ -42,6 +75,7 @@ const publications = [
 
 export function Research() {
   const reportUrl = `${import.meta.env.BASE_URL}IISc_Research_Report.pdf`;
+  const [selectedTopic, setSelectedTopic] = useState(topics[0]);
 
   return (
     <section id="research" className="py-24 bg-secondary-bg/30">
@@ -165,21 +199,32 @@ export function Research() {
                 <p className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">Topics Explored</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {topics.map((topic, i) => (
-                    <motion.div
+                    <motion.button
                       key={i}
+                      type="button"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.06 }}
-                      className="flex items-start gap-3 p-3 rounded-lg border border-border/50 bg-secondary-bg/40 hover:border-primary/40 transition-colors"
+                      onClick={() => setSelectedTopic(topic)}
+                      className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border bg-secondary-bg/40 hover:border-primary/40 transition-colors ${
+                        selectedTopic.name === topic.name
+                          ? "border-primary/60 ring-1 ring-primary/40"
+                          : "border-border/50"
+                      }`}
                     >
                       <span className="text-primary mt-0.5 text-sm font-bold">▹</span>
                       <div>
                         <p className="text-sm font-semibold text-foreground">{topic.name}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">{topic.desc}</p>
                       </div>
-                    </motion.div>
+                    </motion.button>
                   ))}
+                </div>
+                <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4">
+                  <p className="text-xs uppercase tracking-wider text-primary font-semibold mb-1">Quick Explanation</p>
+                  <p className="text-sm font-semibold text-foreground mb-1">{selectedTopic.name}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{selectedTopic.brief}</p>
                 </div>
               </div>
 
