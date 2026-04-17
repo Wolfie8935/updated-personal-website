@@ -30,8 +30,8 @@ export function About() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">About Me</h2>
-            <div className="h-px bg-border flex-grow max-w-xs"></div>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">About Me</h2>
+            <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">

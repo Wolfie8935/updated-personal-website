@@ -34,7 +34,7 @@ export function Hero() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-primary font-mono text-lg mb-2">Data Science • ML / Backend</h2>
-              <h1 className="text-5xl sm:text-7xl font-extrabold text-foreground tracking-tight mb-4">
+              <h1 className="hero-site-title text-5xl sm:text-7xl font-extrabold text-foreground tracking-tight mb-4">
                 Aman Goel.
               </h1>
               

@@ -1,0 +1,352 @@
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes wizard-lumos-flash {
+  0% { opacity: 0; }
+  25% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
+@keyframes wizard-revelio-unblur {
+  from { opacity: 0; filter: blur(8px) sepia(1); }
+  to { opacity: 1; filter: none; }
+}
+
+@keyframes wizard-alohomora-unlock {
+  from { opacity: 0; transform: rotate(-2deg) scale(0.95); }
+  to { opacity: 1; transform: rotate(0) scale(1); }
+}
+
+@keyframes wizard-accio-arrive {
+  from { opacity: 0; transform: translateY(120px) rotate(3deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes wizard-legilimens-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(140%); opacity: 0; }
+}
+
+@keyframes wizard-patronus-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes wizard-owl-fly {
+  0% { transform: translate(80px, -60px) scale(0.6) rotate(-12deg); opacity: 0; }
+  20% { opacity: 0.9; }
+  65% { transform: translate(-34vw, 10px) scale(1) rotate(5deg); opacity: 0.95; }
+  100% { transform: translate(-72vw, 80px) scale(0.7) rotate(12deg); opacity: 0; }
+}
+
+@keyframes wizard-section-entry-spell {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.96);
+    filter: blur(2px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes wizard-nav-popup-enter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -2px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1);
+  }
+}
+
+@keyframes wizard-nav-popup-exit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -30px) scale(0.95);
+  }
+}
+
+@keyframes wizard-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes wizard-char-glow {
+  0% {
+    opacity: 0.2;
+    text-shadow: 0 0 0 rgba(252, 225, 129, 0);
+  }
+  35% {
+    opacity: 1;
+    text-shadow:
+      0 0 8px rgba(252, 225, 129, 0.95),
+      0 0 22px rgba(147, 120, 255, 0.45);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 0 rgba(252, 225, 129, 0);
+  }
+}
+
+@keyframes wizard-angle-spin {
+  to {
+    --angle: 1turn;
+  }
+}
+
+.theme-wizarding .wizard-section-spell-ready {
+  position: relative;
+}
+
+.theme-wizarding .wizard-section-spell-cast::after {
+  content: attr(data-wizard-spell);
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  font-size: 0.72rem;
+  font-family: "ui-monospace", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(255, 233, 156, 0.95);
+  text-shadow:
+    0 0 10px rgba(251, 218, 112, 0.75),
+    0 0 24px rgba(143, 116, 255, 0.5);
+  animation: wizard-section-entry-spell 900ms ease-out forwards;
+}
+
+.theme-wizarding .wizard-section-spell-cast.wizard-section-spell-cast-static::after {
+  animation: none;
+  opacity: 0.8;
+}
+
+body.theme-wizarding .wizard-nav-spell-popup {
+  position: fixed;
+  z-index: 90;
+  transform: translate(-50%, -10px);
+  pointer-events: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(201, 168, 76, 0.75);
+  background: rgba(26, 16, 8, 0.92);
+  color: #e8c96e;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  font-family: "Cinzel Decorative", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  box-shadow:
+    0 0 0 1px rgba(203, 164, 69, 0.36),
+    0 10px 25px rgba(0, 0, 0, 0.35);
+  animation: wizard-nav-popup-enter 200ms ease-out forwards;
+}
+
+body.theme-wizarding .wizard-nav-spell-popup.is-exiting {
+  animation: wizard-nav-popup-exit 200ms ease-in forwards;
+}
+
+.theme-wizarding .wizard-hero-typewriter {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.01em;
+}
+
+.theme-wizarding .wizard-hero-typewriter::after {
+  content: "";
+  width: 0.08em;
+  height: 0.86em;
+  margin-left: 0.12em;
+  border-radius: 99px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 237, 173, 0.95),
+    rgba(203, 164, 69, 0.9)
+  );
+  animation: wizard-cursor-blink 1s steps(1, end) infinite;
+}
+
+.theme-wizarding .wizard-hero-typewriter:not(.wizard-hero-typewriter-active)::after {
+  opacity: 0.35;
+}
+
+.theme-wizarding .wizard-type-char {
+  display: inline-block;
+  animation: wizard-char-glow 620ms ease-out forwards;
+}
+
+.theme-wizarding #projects .wizard-project-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.theme-wizarding #projects .wizard-project-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle),
+    rgba(147, 120, 255, 0.08),
+    rgba(252, 225, 129, 0.8),
+    rgba(147, 120, 255, 0.1),
+    rgba(252, 225, 129, 0.8),
+    rgba(147, 120, 255, 0.08)
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 1px;
+}
+
+.theme-wizarding #projects .wizard-project-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 16px 32px rgba(8, 8, 14, 0.4),
+    0 0 0 1px rgba(251, 218, 112, 0.22);
+}
+
+.theme-wizarding #projects .wizard-project-card:hover::before {
+  opacity: 1;
+  animation: wizard-angle-spin 1.2s linear infinite;
+}
+
+.theme-wizarding #home.wizard-section-spell-cast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.68), transparent 58%);
+  animation: wizard-lumos-flash 700ms ease-out;
+}
+
+.theme-wizarding #about.wizard-section-spell-cast > * {
+  animation: wizard-revelio-unblur 0.8s ease-out both;
+}
+
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card {
+  opacity: 0;
+  animation: wizard-alohomora-unlock 520ms ease-out forwards;
+}
+
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(1) { animation-delay: 0ms; }
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(2) { animation-delay: 80ms; }
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(3) { animation-delay: 160ms; }
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(4) { animation-delay: 240ms; }
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(5) { animation-delay: 320ms; }
+.theme-wizarding #skills.wizard-section-spell-cast .wizard-card:nth-of-type(6) { animation-delay: 400ms; }
+
+.theme-wizarding #projects.wizard-section-spell-cast .wizard-card {
+  animation: wizard-accio-arrive 620ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+}
+
+.theme-wizarding #research.wizard-section-spell-cast {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-wizarding #research.wizard-section-spell-cast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(245, 230, 200, 0.08) 45%,
+    rgba(245, 230, 200, 0.16) 50%,
+    rgba(245, 230, 200, 0.08) 55%,
+    transparent 100%
+  );
+  animation: wizard-legilimens-scan 700ms ease-out;
+}
+
+.theme-wizarding #achievements.wizard-section-spell-cast {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-wizarding #achievements.wizard-section-spell-cast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(220, 220, 255, 0.15),
+    transparent
+  );
+  background-size: 220% 100%;
+  animation: wizard-patronus-shimmer 900ms ease-out;
+}
+
+.theme-wizarding #contact.wizard-section-spell-cast {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-wizarding #contact.wizard-section-spell-cast::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  right: 8%;
+  width: 52px;
+  height: 26px;
+  background: #2a1a0f;
+  clip-path: polygon(0 55%, 12% 35%, 25% 40%, 35% 18%, 50% 32%, 65% 18%, 75% 40%, 88% 35%, 100% 55%, 74% 58%, 66% 76%, 50% 62%, 34% 76%, 26% 58%);
+  box-shadow: 0 0 14px rgba(201, 168, 76, 0.2);
+  pointer-events: none;
+  animation: wizard-owl-fly 1.35s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-wizarding .wizard-section-spell-cast::after,
+  body.theme-wizarding .wizard-nav-spell-popup,
+  body.theme-wizarding .wizard-nav-spell-popup.is-exiting,
+  .theme-wizarding .wizard-type-char,
+  .theme-wizarding #projects .wizard-project-card:hover::before,
+  .theme-wizarding #home.wizard-section-spell-cast::before,
+  .theme-wizarding #about.wizard-section-spell-cast > *,
+  .theme-wizarding #skills.wizard-section-spell-cast .wizard-card,
+  .theme-wizarding #projects.wizard-section-spell-cast .wizard-card,
+  .theme-wizarding #research.wizard-section-spell-cast::before,
+  .theme-wizarding #achievements.wizard-section-spell-cast::before,
+  .theme-wizarding #contact.wizard-section-spell-cast::after {
+    animation: none;
+  }
+
+  .theme-wizarding #projects .wizard-project-card:hover {
+    transform: none;
+  }
+}

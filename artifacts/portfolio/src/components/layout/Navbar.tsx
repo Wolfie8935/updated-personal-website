@@ -3,25 +3,41 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, FileDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
+import { NavbarSilhouetteOverlay } from "@/components/wizarding";
 
 const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Research", href: "#research" },
-  { name: "Achievements", href: "#achievements" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "#home", spell: "Lumos" },
+  { name: "About", href: "#about", spell: "Revelio" },
+  { name: "Skills", href: "#skills", spell: "Alohomora" },
+  { name: "Experience", href: "#experience", spell: "Tempus" },
+  { name: "Projects", href: "#projects", spell: "Accio" },
+  { name: "Research", href: "#research", spell: "Legilimens" },
+  { name: "Achievements", href: "#achievements", spell: "Expecto Patronum" },
+  { name: "Contact", href: "#contact", spell: "Owl Post" },
 ];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      const offset = window.scrollY + 120;
+      let current = "home";
+      navItems.forEach((item) => {
+        const sectionId = item.href.replace("#", "");
+        const element = document.getElementById(sectionId);
+        if (element && element.offsetTop <= offset) {
+          current = sectionId;
+        }
+      });
+      setActiveSection(current);
+    };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -29,6 +45,7 @@ export function Navbar() {
   const scrollTo = (href: string) => {
     setMobileMenuOpen(false);
     const id = href.replace("#", "");
+    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
       const offsetTop =
@@ -44,15 +61,26 @@ export function Navbar() {
     a.click();
   };
 
+  const themeIcon =
+    theme === "dark" ? (
+      <Sun size={18} />
+    ) : theme === "light" ? (
+      <Moon size={18} />
+    ) : (
+      <span className="text-base leading-none">⚡</span>
+    );
+  const resumeTooltip = theme === "wizarding" ? "Accio Resume" : "Download Resume";
+
   return (
     <header
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent",
+        "site-navbar fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent relative",
         isScrolled
           ? "bg-background/85 backdrop-blur-md border-border/50 shadow-sm"
           : "bg-transparent py-4",
       )}
     >
+      <NavbarSilhouetteOverlay />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
@@ -62,7 +90,7 @@ export function Navbar() {
                 e.preventDefault();
                 scrollTo("#home");
               }}
-              className="font-mono text-2xl font-bold text-foreground"
+              className="site-logo site-title font-mono text-2xl font-bold text-foreground"
             >
               Aman Goel
             </a>
@@ -77,7 +105,11 @@ export function Navbar() {
                   e.preventDefault();
                   scrollTo(item.href);
                 }}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-secondary-bg/50"
+                className={cn(
+                  "nav-link spell-hoverable text-sm font-medium text-muted-foreground hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-secondary-bg/50",
+                  activeSection === item.href.replace("#", "") && "text-primary",
+                )}
+                data-spell-hover={item.spell}
               >
                 {item.name}
               </a>
@@ -85,7 +117,7 @@ export function Navbar() {
             <div className="flex items-center gap-1 ml-2 pl-2 border-l border-border/50">
               <button
                 onClick={downloadResume}
-                title="Download Resume"
+                title={resumeTooltip}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary border border-primary/40 hover:bg-primary/10 transition-all"
               >
                 <FileDown size={14} /> Resume
@@ -93,9 +125,10 @@ export function Navbar() {
               <button
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
-                className="p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 transition-colors"
+                title={theme === "wizarding" ? "Nox / Lumos" : "Toggle theme"}
+                className="theme-toggle-btn p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 transition-colors"
               >
-                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+                {themeIcon}
               </button>
             </div>
           </nav>
@@ -103,7 +136,7 @@ export function Navbar() {
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={downloadResume}
-              title="Download Resume"
+              title={resumeTooltip}
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-primary border border-primary/40 hover:bg-primary/10 transition-all"
             >
               <FileDown size={13} /> CV
@@ -111,9 +144,10 @@ export function Navbar() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded-lg text-muted-foreground hover:text-primary transition-colors"
+              title={theme === "wizarding" ? "Nox / Lumos" : "Toggle theme"}
+              className="theme-toggle-btn p-2 rounded-lg text-muted-foreground hover:text-primary transition-colors"
             >
-              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              {themeIcon}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -142,7 +176,11 @@ export function Navbar() {
                     e.preventDefault();
                     scrollTo(item.href);
                   }}
-                  className="block px-3 py-3 text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 rounded-md"
+                  className={cn(
+                    "nav-link spell-hoverable block px-3 py-3 text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary-bg/50 rounded-md",
+                    activeSection === item.href.replace("#", "") && "text-primary",
+                  )}
+                  data-spell-hover={item.spell}
                 >
                   {item.name}
                 </a>

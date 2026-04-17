@@ -89,8 +89,8 @@ export function Research() {
         >
           {/* Section header */}
           <div className="flex items-center gap-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Research</h2>
-            <div className="h-px bg-border flex-grow max-w-xs"></div>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">Research</h2>
+            <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
             <a
               href="https://orcid.org/0009-0000-0899-9400"
               target="_blank"

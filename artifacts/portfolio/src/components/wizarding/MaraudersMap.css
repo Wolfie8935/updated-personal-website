@@ -1,0 +1,571 @@
+:root.theme-wizarding .marauders-map-section {
+  display: block;
+  width: 100%;
+  min-height: 70vh;
+  padding: 4rem 1rem;
+}
+
+:root.theme-wizarding .marauders-map-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 8px solid #8b5a2b;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #d4a853;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(139, 90, 43, 0.08) 25px),
+    repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(139, 90, 43, 0.06) 25px),
+    radial-gradient(ellipse at 20% 30%, rgba(180, 120, 40, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(120, 70, 20, 0.2) 0%, transparent 50%);
+  box-shadow:
+    0 14px 40px rgba(20, 10, 5, 0.42),
+    inset 0 0 0 2px rgba(83, 53, 29, 0.45),
+    inset 0 0 36px rgba(76, 45, 21, 0.32);
+}
+
+:root.theme-wizarding .marauders-map-header {
+  padding: 1.75rem 1.75rem 1rem;
+}
+
+:root.theme-wizarding .marauders-map-title {
+  margin: 0;
+  color: #3d1f08;
+  font-size: clamp(1.9rem, 4.1vw, 2.7rem);
+  letter-spacing: 0.04em;
+  font-family: "Cinzel Decorative", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .marauders-map-oath {
+  margin: 0.6rem 0 0;
+  color: #3d1f08;
+  font-style: italic;
+  font-size: clamp(0.98rem, 1.8vw, 1.2rem);
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .marauders-map-reveal-btn {
+  margin-top: 0.9rem;
+  border: 1px solid #7b5a2d;
+  background: linear-gradient(180deg, #f0d79f 0%, #dab772 100%);
+  color: #3d1f08;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+:root.theme-wizarding .marauders-map-reveal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(61, 31, 8, 0.2);
+}
+
+:root.theme-wizarding .marauders-map-placeholder {
+  position: relative;
+  margin: 0 1.3rem 1.4rem;
+  min-height: 420px;
+  border-radius: 14px;
+  border: 2px solid rgba(78, 48, 25, 0.55);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 242, 208, 0.24), transparent 45%),
+    radial-gradient(circle at 80% 75%, rgba(116, 72, 39, 0.16), transparent 40%),
+    repeating-linear-gradient(12deg, rgba(93, 61, 37, 0.05) 0px, rgba(93, 61, 37, 0.05) 2px, transparent 2px, transparent 8px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+:root.theme-wizarding .marauders-map-placeholder-scripts {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 1.35rem 1.5rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+:root.theme-wizarding .marauders-map-canvas-scripts {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 1.35rem 1.5rem;
+  pointer-events: none;
+  z-index: 0;
+}
+
+:root.theme-wizarding .marauders-map-script-column {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: clamp(0.58rem, 1vw, 0.72rem);
+  line-height: 1.38;
+  letter-spacing: 0.02em;
+  color: rgba(76, 45, 24, 0.16);
+  text-shadow: 0 0 1px rgba(66, 38, 20, 0.08);
+  align-self: stretch;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.65) 72%, rgba(0, 0, 0, 0));
+}
+
+:root.theme-wizarding .marauders-map-script-column.left {
+  padding-right: 0.4rem;
+}
+
+:root.theme-wizarding .marauders-map-script-column.right {
+  padding-left: 0.4rem;
+}
+
+:root.theme-wizarding .marauders-map-placeholder-text {
+  margin: 0;
+  color: rgba(76, 45, 24, 0.86);
+  font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  text-align: center;
+  border: 1px solid rgba(90, 54, 29, 0.35);
+  border-radius: 999px;
+  background: radial-gradient(circle at center, rgba(255, 244, 216, 0.45), rgba(214, 177, 117, 0.12));
+  padding: 0.8rem 1.2rem;
+  position: relative;
+  z-index: 2;
+}
+
+:root.theme-wizarding .marauders-map-canvas {
+  position: relative;
+  min-height: max(54vh, 450px);
+  margin: 0 1.3rem 1.4rem;
+  border-radius: 14px;
+  border: 2px solid rgba(78, 48, 25, 0.55);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 242, 208, 0.24), transparent 45%),
+    radial-gradient(circle at 80% 75%, rgba(116, 72, 39, 0.16), transparent 40%),
+    repeating-linear-gradient(12deg, rgba(93, 61, 37, 0.05) 0px, rgba(93, 61, 37, 0.05) 2px, transparent 2px, transparent 8px);
+  box-shadow:
+    inset 0 0 0 1px rgba(115, 74, 43, 0.2),
+    inset 0 10px 35px rgba(89, 56, 32, 0.23);
+  clip-path: circle(150% at 50% 50%);
+  cursor: default;
+  isolation: isolate;
+  transform-origin: center top;
+}
+
+:root.theme-wizarding .marauders-map-canvas.phase-opening {
+  animation: marauders-map-open 900ms cubic-bezier(0.22, 0.76, 0.2, 1) both;
+}
+
+:root.theme-wizarding .marauders-map-canvas.phase-closing {
+  animation: marauders-map-close 650ms ease-in both;
+}
+
+:root.theme-wizarding .marauders-map-legend {
+  position: absolute;
+  top: 0.65rem;
+  right: 1rem;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(75, 45, 24, 0.7);
+  background: linear-gradient(180deg, rgba(245, 228, 194, 0.93), rgba(227, 201, 157, 0.9));
+  box-shadow: 0 8px 18px rgba(26, 13, 6, 0.18);
+}
+
+:root.theme-wizarding .marauders-map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: #442815;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .legend-symbol {
+  width: 0.7rem;
+  display: inline-flex;
+  justify-content: center;
+  color: #6a3f1f;
+  font-size: 0.72rem;
+}
+
+:root.theme-wizarding .legend-symbol-harry {
+  color: #8b4923;
+}
+
+:root.theme-wizarding .legend-symbol-hermione {
+  color: #5c4126;
+}
+
+:root.theme-wizarding .legend-symbol-ron {
+  color: #4f3420;
+}
+
+:root.theme-wizarding .legend-symbol-dumbledore {
+  color: #3d2a1a;
+}
+
+:root.theme-wizarding .marauders-map-canvas::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #060402;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+:root.theme-wizarding .marauders-map-canvas.is-revealed::before {
+  opacity: 0;
+}
+
+:root.theme-wizarding .marauders-map-canvas.is-revealed {
+  animation: marauders-ink-reveal 1100ms cubic-bezier(0.2, 0.78, 0.2, 1) forwards;
+}
+
+:root.theme-wizarding .marauders-map-canvas:not(.is-revealed) {
+  cursor: pointer;
+}
+
+:root.theme-wizarding .marauders-map-floorplan {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: max(54vh, 450px);
+}
+
+
+:root.theme-wizarding .marauders-map-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  color: #4e2f1a;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+  letter-spacing: 0.04em;
+  background: radial-gradient(circle, rgba(233, 208, 160, 0.35), rgba(222, 192, 141, 0.7));
+  text-shadow: 0 1px 0 rgba(255, 237, 201, 0.6);
+}
+
+:root.theme-wizarding .map-room {
+  fill: rgba(238, 214, 172, 0.54);
+  stroke: rgba(62, 37, 20, 0.9);
+  stroke-width: 2.3px;
+  transition: fill 180ms ease, transform 180ms ease;
+}
+
+:root.theme-wizarding .map-room:hover {
+  fill: rgba(231, 197, 140, 0.75);
+}
+
+:root.theme-wizarding .map-room.hidden-room {
+  fill: rgba(214, 188, 140, 0.33);
+  stroke-dasharray: 8 8;
+}
+
+:root.theme-wizarding .map-room-label {
+  fill: #442815;
+  font-size: 13px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-style: italic;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .map-room-quote {
+  fill: rgba(70, 44, 25, 0.76);
+  font-size: 8.2px;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .map-pathway-base {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:root.theme-wizarding .map-pathway-core {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:root.theme-wizarding .map-pathway-core.dashed {
+  stroke-dasharray: 10 9;
+}
+
+:root.theme-wizarding .map-pathway.hidden-corridor {
+  opacity: 0.35;
+}
+
+:root.theme-wizarding .map-path-quote {
+  fill: rgba(62, 38, 21, 0.86);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .forest-tree-crown {
+  fill: rgba(44, 75, 45, 0.68);
+  stroke: rgba(29, 49, 29, 0.78);
+  stroke-width: 0.8;
+}
+
+:root.theme-wizarding .forest-tree-trunk {
+  fill: rgba(81, 54, 35, 0.88);
+}
+
+:root.theme-wizarding .map-character {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 160ms linear;
+}
+
+:root.theme-wizarding .map-person {
+  stroke-width: 2px;
+}
+
+:root.theme-wizarding .map-person-harry {
+  fill: #7f3f1f;
+  stroke: #2d170d;
+}
+
+:root.theme-wizarding .map-person-hermione {
+  fill: #9b5b2e;
+  stroke: #2f1a0f;
+}
+
+:root.theme-wizarding .map-person-ron {
+  fill: #744124;
+  stroke: #251408;
+}
+
+:root.theme-wizarding .map-person-dumbledore {
+  fill: #51311f;
+  stroke: #1f120a;
+}
+
+:root.theme-wizarding .map-moving-symbol {
+  font-size: 19px;
+  font-family: "Cinzel Decorative", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  paint-order: stroke;
+  stroke: rgba(243, 227, 196, 0.85);
+  stroke-width: 1.4px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(89, 53, 27, 0.4));
+}
+
+:root.theme-wizarding .map-person-symbol {
+  fill: #5b3518;
+  font-size: 10px;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .map-person-label {
+  fill: #4f2f1a;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  paint-order: stroke;
+  stroke: rgba(238, 212, 171, 0.85);
+  stroke-width: 1.4px;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .map-footprint-pair {
+  transform-origin: center;
+  animation: marauders-footprint-fade 3.2s linear forwards;
+}
+
+:root.theme-wizarding .map-footprint {
+  fill: #5f3b20;
+  opacity: 0.72;
+}
+
+:root.theme-wizarding .marauders-map-tooltip {
+  position: absolute;
+  max-width: 230px;
+  z-index: 10;
+  pointer-events: none;
+  border: 1px solid rgba(75, 45, 24, 0.8);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(245, 228, 194, 0.97), rgba(227, 201, 157, 0.96));
+  color: #452817;
+  padding: 0.6rem 0.75rem;
+  box-shadow: 0 10px 22px rgba(26, 13, 6, 0.28);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .marauders-map-tooltip strong {
+  display: block;
+  font-size: 0.97rem;
+  margin-bottom: 0.22rem;
+}
+
+:root.theme-wizarding .marauders-map-tooltip p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+@keyframes marauders-ink-reveal {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    filter: saturate(0.75) blur(1px);
+  }
+
+  70% {
+    clip-path: circle(110% at 50% 50%);
+    filter: saturate(1) blur(0);
+  }
+
+  100% {
+    clip-path: circle(150% at 50% 50%);
+    filter: saturate(1) blur(0);
+  }
+}
+
+@keyframes marauders-map-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.975);
+    filter: saturate(0.55) brightness(0.7) blur(1px);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.01);
+    filter: saturate(1) brightness(1.02) blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1) blur(0);
+  }
+}
+
+@keyframes marauders-map-close {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.985);
+    filter: saturate(0.45) brightness(0.6);
+  }
+}
+
+@keyframes marauders-footprint-fade {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  :root.theme-wizarding .marauders-map-section {
+    padding: 3rem 0.4rem;
+    min-height: 64vh;
+  }
+
+  :root.theme-wizarding .marauders-map-shell {
+    border-width: 4px;
+  }
+
+  :root.theme-wizarding .marauders-map-canvas {
+    margin: 0 0.8rem 0.9rem;
+    min-height: 420px;
+  }
+
+  :root.theme-wizarding .marauders-map-placeholder {
+    margin: 0 0.8rem 0.9rem;
+    min-height: 390px;
+  }
+
+  :root.theme-wizarding .marauders-map-floorplan {
+    min-height: 420px;
+  }
+
+  :root.theme-wizarding .map-room-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root.theme-wizarding .marauders-map-header {
+    padding: 1.2rem 1.2rem 0.8rem;
+  }
+
+  :root.theme-wizarding .marauders-map-canvas {
+    margin: 0 0.55rem 0.7rem;
+    min-height: 390px;
+  }
+
+  :root.theme-wizarding .marauders-map-placeholder {
+    margin: 0 0.55rem 0.7rem;
+    min-height: 330px;
+  }
+
+  :root.theme-wizarding .marauders-map-floorplan {
+    min-height: 390px;
+  }
+
+  :root.theme-wizarding .map-room-label {
+    font-size: 11px;
+  }
+
+  :root.theme-wizarding .map-person-label {
+    font-size: 12px;
+  }
+
+  :root.theme-wizarding .marauders-map-tooltip {
+    max-width: 180px;
+    font-size: 0.8rem;
+  }
+
+  :root.theme-wizarding .marauders-map-reveal-btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  :root.theme-wizarding .marauders-map-legend {
+    right: 0.55rem;
+    top: 0.55rem;
+    padding: 0.4rem 0.55rem;
+  }
+
+  :root.theme-wizarding .marauders-map-legend-item {
+    font-size: 0.68rem;
+  }
+}

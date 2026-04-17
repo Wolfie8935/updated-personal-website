@@ -41,8 +41,8 @@ export function Experience() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Experience</h2>
-            <div className="h-px bg-border flex-grow max-w-xs"></div>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">Experience</h2>
+            <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
           <div className="relative border-l border-border/80 ml-3 md:ml-6 space-y-12">

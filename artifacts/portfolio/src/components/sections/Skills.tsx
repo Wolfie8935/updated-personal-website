@@ -2,8 +2,27 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Cpu, Database, Cloud, BrainCircuit, FlaskConical } from "lucide-react";
+import { WizardingSkillSubtitle } from "@/components/wizarding";
 
 export function Skills() {
+  const hoverSpells: Record<string, string> = {
+    "Programming Languages": "Linguarum",
+    "Core Computer Science": "Arithmancy",
+    "Backend Engineering": "Protego",
+    "Cloud & DevOps": "Ventus",
+    "Machine Learning & AI": "Legilimens",
+    "Research & Probabilistic Methods": "Divinatio",
+  };
+
+  const wizardingSubtitles: Record<string, string> = {
+    "Programming Languages": "O.W.L. in Charms",
+    "Backend Engineering": "N.E.W.T. in Transfiguration",
+    "Machine Learning & AI": "Advanced Divination",
+    "Research & Probabilistic Methods": "Ancient Runes Studies",
+    "Cloud & DevOps": "Master of Potions",
+    "Core Computer Science": "Wizard Duelling",
+  };
+
   const skillCategories = [
     {
       title: "Programming Languages",
@@ -107,8 +126,8 @@ export function Skills() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Technical Arsenal</h2>
-            <div className="h-px bg-border flex-grow max-w-xs"></div>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">Technical Arsenal</h2>
+            <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
           <motion.div
@@ -120,12 +139,18 @@ export function Skills() {
           >
             {skillCategories.map((category, i) => (
               <motion.div key={i} variants={item}>
-                <Card className="h-full bg-card/50 hover:bg-card/80 transition-colors">
+                <Card
+                  className="spell-hoverable h-full bg-card/50 hover:bg-card/80 transition-colors"
+                  data-spell-hover={hoverSpells[category.title] ?? "Lumos"}
+                >
                   <CardHeader className="pb-3 flex flex-row items-center gap-3">
                     <div className="p-2 bg-secondary-bg rounded-lg border border-border">
                       {category.icon}
                     </div>
-                    <CardTitle className="text-lg m-0">{category.title}</CardTitle>
+                    <div>
+                      <CardTitle className="text-lg m-0">{category.title}</CardTitle>
+                      <WizardingSkillSubtitle title={category.title} map={wizardingSubtitles} />
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">

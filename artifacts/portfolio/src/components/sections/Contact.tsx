@@ -78,6 +78,14 @@ export function Contact() {
     { icon: <Mail className="w-5 h-5" />, label: "Email", href: `mailto:${TO_EMAIL}` },
   ];
 
+  const contactSpells: Record<string, string> = {
+    GitHub: "Aparecium",
+    LinkedIn: "Sonorus",
+    LeetCode: "Finite Incantatem",
+    ORCID: "Legilimens",
+    Email: "Owl Post",
+  };
+
   return (
     <section id="contact" className="py-24 bg-secondary-bg/30 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-linear-to-r from-transparent via-primary/50 to-transparent"></div>
@@ -90,7 +98,7 @@ export function Contact() {
           transition={{ duration: 0.6 }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Get In Touch</h2>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground mb-4">Get In Touch</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               I'm open to new opportunities and collaborations. Fill out the form and your email client will open pre-filled — or reach out directly.
             </p>
@@ -101,6 +109,7 @@ export function Contact() {
               <Card className="bg-card border-border/80 h-full">
                 <CardContent className="p-6 sm:p-8 h-full">
                   <h3 className="text-xl font-bold text-foreground mb-6 font-mono">&gt; Connect</h3>
+                  <p className="wizard-owl-label hidden">Platform 9¾ — Direct Owl Post</p>
                   <div className="flex flex-col gap-3">
                     {socialLinks.map((link, i) => (
                       <a
@@ -108,7 +117,8 @@ export function Contact() {
                         href={link.href}
                         target={link.href.startsWith("mailto") ? undefined : "_blank"}
                         rel="noopener noreferrer"
-                        className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:text-primary transition-all group"
+                        className="spell-hoverable flex items-center gap-4 p-4 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:text-primary transition-all group"
+                        data-spell-hover={contactSpells[link.label] ?? "Lumos"}
                       >
                         <div className="p-2 bg-secondary-bg rounded-lg group-hover:bg-primary/10 transition-colors">
                           {link.icon}

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Terminal, Zap, FolderGit2 } from "lucide-react";
 
 const GITHUB_REPOS = "https://github.com/Wolfie8935?tab=repositories";
+const HOUSES = ["Gryffindor", "Slytherin", "Ravenclaw"] as const;
 
 export function Projects() {
   const projects = [
@@ -70,8 +71,8 @@ export function Projects() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Featured Projects</h2>
-            <div className="h-px bg-border flex-grow max-w-xs"></div>
+            <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">Featured Projects</h2>
+            <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -84,7 +85,13 @@ export function Projects() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <Card className={`h-full flex flex-col ${project.featured ? 'border-primary/40 bg-gradient-to-br from-card to-card/50 shadow-[0_0_30px_rgba(99,102,241,0.05)] hover:border-primary glow-border' : 'bg-card/50 hover:bg-card'}`}>
+                <Card
+                  className={`spell-hoverable relative h-full flex flex-col ${project.featured ? 'border-primary/40 bg-gradient-to-br from-card to-card/50 shadow-[0_0_30px_rgba(99,102,241,0.05)] hover:border-primary glow-border' : 'bg-card/50 hover:bg-card'}`}
+                  data-spell-hover={project.featured ? "Expecto Patronum" : "Accio"}
+                >
+                  <span className="project-house-badge hidden" data-house={HOUSES[idx] ?? "Hufflepuff"}>
+                    {HOUSES[idx] ?? "Hufflepuff"}
+                  </span>
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
                       <div className="p-3 rounded-lg bg-secondary-bg border border-border inline-block">
@@ -147,9 +154,13 @@ export function Projects() {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Card
-                className="h-full flex flex-col items-center justify-center bg-card/30 border-dashed border-border hover:border-primary/50 hover:bg-card/50 transition-all cursor-pointer group min-h-[260px]"
+                className="spell-hoverable relative h-full flex flex-col items-center justify-center bg-card/30 border-dashed border-border hover:border-primary/50 hover:bg-card/50 transition-all cursor-pointer group min-h-[260px]"
+                data-spell-hover="Portus"
                 onClick={() => window.open(GITHUB_REPOS, "_blank")}
               >
+                <span className="project-house-badge hidden" data-house="Hufflepuff">
+                  Hufflepuff
+                </span>
                 <CardContent className="flex flex-col items-center gap-5 p-8 text-center">
                   <div className="p-4 rounded-xl bg-secondary-bg border border-border group-hover:border-primary/40 group-hover:bg-primary/5 transition-all">
                     <FolderGit2 className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
