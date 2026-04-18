@@ -99,10 +99,15 @@
 }
 
 /*
-  ⚡ Wizarding Theme v2 — Aggressive Edition
-  "It matters not what someone is born,
-   but what they grow to be." — Dumbledore
-  Crafted for: wolfie8935.vercel.app
+  ⚡ Wizarding Theme v3 — Nuclear Edition
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  "It does not do to dwell on dreams and forget to live."
+  — Albus Percival Wulfric Brian Dumbledore
+
+  Built for: wolfie8935.vercel.app
+  Contains: Video BG · Goblet of Fire · Horcrux Hunt · Daily Prophet
+            Mirror of Erised · Chamber of Secrets · Time-Turner · Pensieve
+  All effects scoped to .theme-wizarding — zero bleed to light/dark themes.
 */
 :root.theme-wizarding {
   --bg-primary: #1a1008;
@@ -422,6 +427,10 @@
   text-transform: none;
 }
 
+:root .footer-chamber-hint {
+  display: none;
+}
+
 :root.theme-wizarding .wizard-map-quote {
   display: inline-flex !important;
   position: relative;
@@ -460,6 +469,20 @@
 
 :root.theme-wizarding .footer-riddle-hint {
   display: none;
+}
+
+:root.theme-wizarding .footer-chamber-hint {
+  display: block;
+  margin-top: 0.85rem;
+  text-align: center;
+  color: #8a6e4b;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+
+:root.theme-wizarding .footer-chamber-hint span {
+  color: #e8c96e;
 }
 
 :root.theme-wizarding .wizard-owl-label {
@@ -536,6 +559,216 @@
   transform: translate(-50%, 0);
 }
 
+/* Phase 7: Time-Turner */
+:root.theme-wizarding .wizard-time-turner {
+  --tt-speed: 1;
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 0 12px rgb(201 168 76 / 0.28));
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+:root.theme-wizarding .wizard-time-turner:focus-visible {
+  outline: 2px solid #c9a84c;
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+:root.theme-wizarding .wizard-time-turner:hover {
+  --tt-speed: 0.5;
+}
+
+:root.theme-wizarding #home.time-turner-flash {
+  animation: time-turner-hero-glow 0.9s ease-out;
+}
+
+@keyframes time-turner-hero-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  45% {
+    filter: brightness(1.08) sepia(0.12);
+  }
+}
+
+:root.theme-wizarding .wizard-time-turner__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid rgb(201 168 76 / 0.55);
+  transform-origin: center;
+}
+
+:root.theme-wizarding .wizard-time-turner__ring::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgb(232 201 110 / 0.88);
+  top: 50%;
+  left: -2px;
+  transform: translateY(-50%);
+}
+
+:root.theme-wizarding .wizard-time-turner__ring--outer {
+  animation: wizard-spin-cw calc(7s * var(--tt-speed)) linear infinite;
+}
+
+:root.theme-wizarding .wizard-time-turner__ring--mid {
+  inset: 6px;
+  border-color: rgb(201 168 76 / 0.45);
+  animation: wizard-spin-ccw calc(5s * var(--tt-speed)) linear infinite;
+}
+
+:root.theme-wizarding .wizard-time-turner__ring--inner {
+  inset: 14px;
+  border-color: rgb(201 168 76 / 0.35);
+  animation: wizard-spin-cw calc(3.5s * var(--tt-speed)) linear infinite;
+}
+
+:root.theme-wizarding .wizard-time-turner__hourglass {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+}
+
+:root.theme-wizarding .wizard-time-turner__hourglass::before,
+:root.theme-wizarding .wizard-time-turner__hourglass::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+
+:root.theme-wizarding .wizard-time-turner__hourglass::before {
+  top: 0;
+  border-bottom: 8px solid rgb(245 230 200 / 0.7);
+}
+
+:root.theme-wizarding .wizard-time-turner__hourglass::after {
+  bottom: 0;
+  border-top: 8px solid rgb(245 230 200 / 0.7);
+}
+
+:root.theme-wizarding .wizard-time-turner__sand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(201 168 76 / 0.85);
+}
+
+:root.theme-wizarding .wizard-time-turner__sand--top {
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  animation: wizard-sand-top calc(2s * var(--tt-speed)) ease-in-out infinite;
+}
+
+:root.theme-wizarding .wizard-time-turner__sand--bottom {
+  bottom: 4px;
+  width: 5px;
+  height: 2px;
+  animation: wizard-sand-bottom calc(2s * var(--tt-speed)) ease-in-out infinite;
+}
+
+:root.theme-wizarding .wizard-time-turner.is-reduced-motion .wizard-time-turner__ring,
+:root.theme-wizarding .wizard-time-turner.is-reduced-motion .wizard-time-turner__sand {
+  animation: none !important;
+}
+
+/* Phase 7: Pensieve */
+:root.theme-wizarding .wizard-pensieve {
+  margin-top: 1.5rem;
+  padding: 0.9rem;
+  border: 1px solid rgb(90 62 40 / 0.75);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgb(19 12 7 / 0.88), rgb(12 8 4 / 0.94));
+  box-shadow: inset 0 1px 0 rgb(232 201 110 / 0.12), 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+
+:root.theme-wizarding .wizard-pensieve__bowl {
+  position: relative;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgb(201 168 76 / 0.45);
+  background:
+    radial-gradient(ellipse at center, rgb(232 201 110 / 0.14) 0%, rgb(12 8 4 / 0.1) 70%),
+    linear-gradient(125deg, rgb(232 201 110 / 0.2), rgb(123 13 13 / 0.16), rgb(201 168 76 / 0.24));
+  box-shadow: inset 0 0 20px rgb(0 0 0 / 0.45), 0 0 18px rgb(201 168 76 / 0.14);
+}
+
+:root.theme-wizarding .wizard-pensieve__label {
+  margin-top: 0.55rem;
+  margin-bottom: 0.55rem;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(201 168 76 / 0.82);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .wizard-pensieve__content > div {
+  margin-top: 0 !important;
+}
+
+:root.theme-wizarding .wizard-pensieve .pensieve-rows > div {
+  border-radius: 0.45rem;
+  padding: 0.2rem 0.38rem;
+  transition: box-shadow 220ms ease, background-color 220ms ease;
+}
+
+:root.theme-wizarding .wizard-pensieve .pensieve-rows > div:hover {
+  background: rgb(201 168 76 / 0.08);
+  box-shadow: 0 0 16px rgb(232 201 110 / 0.18);
+}
+
+/* Phase 7: Restricted Section warning overlay */
+:root.theme-wizarding .wizard-restricted-warning {
+  position: relative;
+  overflow: hidden;
+}
+
+:root.theme-wizarding .wizard-restricted-warning::after {
+  content: "Restricted Section - Ministry Eyes Only";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 22;
+  padding: 0.48rem 0.75rem;
+  text-align: center;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f5e6c8;
+  background: linear-gradient(90deg, rgb(123 13 13 / 0.94), rgb(60 7 7 / 0.97));
+  border-bottom: 1px solid rgb(232 201 110 / 0.42);
+  transform: translateY(0);
+  animation: wizard-restricted-slide-in 210ms ease-out;
+}
+
+:root.theme-wizarding .wizard-restricted-warning.wizard-restricted-warning-dismissed::after {
+  animation: wizard-restricted-slide-away 420ms ease forwards;
+}
+
 body.theme-wizarding .wizard-konami-toast {
   position: fixed;
   left: 50%;
@@ -574,6 +807,36 @@ body.theme-wizarding .wizard-konami-toast.hide {
   50% {
     text-shadow: 0 0 60px rgba(201,168,76,0.9), 0 0 120px rgba(201,168,76,0.5);
   }
+}
+
+@keyframes wizard-spin-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes wizard-spin-ccw {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes wizard-sand-top {
+  0%, 100% { opacity: 0.9; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.35; transform: translateX(-50%) scale(0.65); }
+}
+
+@keyframes wizard-sand-bottom {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scaleX(0.8); }
+  50% { opacity: 1; transform: translateX(-50%) scaleX(1.2); }
+}
+
+@keyframes wizard-restricted-slide-in {
+  from { transform: translateY(-108%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes wizard-restricted-slide-away {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-112%); opacity: 0; }
 }
 
 :root.theme-wizarding .wizard-reveal-target,
@@ -622,6 +885,14 @@ body.theme-wizarding .wizard-konami-toast.hide {
   :root.theme-wizarding .wizard-reveal-target,
   :root.theme-wizarding .wizard-card {
     transition: none !important;
+  }
+
+  :root.theme-wizarding .wizard-pensieve__bowl {
+    animation: none !important;
+  }
+
+  :root.theme-wizarding .wizard-restricted-warning::after {
+    animation: none !important;
   }
 
   :root.theme-wizarding .hp-video-bg {

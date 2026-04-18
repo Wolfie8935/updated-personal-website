@@ -27,6 +27,9 @@ export function Footer() {
         <p className="footer-riddle-hint" aria-label="Hidden wizarding hint">
           Three lights guard one secret; when night is deepest, the scar reveals the doorway.
         </p>
+        <p className="footer-chamber-hint" aria-label="Chamber unlock hint">
+          Chamber hint: conquer every horcrux, whisper <span>open</span>, or seek <span>#chamber</span>.
+        </p>
       </div>
     </footer>
   );

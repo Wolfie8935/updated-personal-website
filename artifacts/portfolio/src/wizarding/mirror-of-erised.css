@@ -1,0 +1,207 @@
+.theme-wizarding #contact .wizard-mirror {
+  position: relative;
+  height: 100%;
+}
+
+.theme-wizarding #contact .wizard-mirror__frame {
+  position: relative;
+  height: 100%;
+  padding: 0.8rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgb(197 210 236 / 0.55);
+  background:
+    linear-gradient(135deg, rgb(244 247 255 / 0.45), rgb(154 174 214 / 0.22)),
+    radial-gradient(circle at 18% 16%, rgb(255 255 255 / 0.38), transparent 56%),
+    radial-gradient(circle at 78% 82%, rgb(96 129 201 / 0.22), transparent 60%);
+  box-shadow:
+    inset 0 0 0 1px rgb(238 245 255 / 0.34),
+    0 18px 44px rgb(6 11 28 / 0.34),
+    0 0 36px rgb(162 192 255 / 0.16);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.theme-wizarding #contact .wizard-mirror__inscription {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.58rem;
+  color: rgb(214 227 251 / 0.88);
+  text-shadow: 0 0 10px rgb(173 197 241 / 0.5);
+}
+
+.theme-wizarding #contact .wizard-mirror__inscription--top {
+  padding: 0.35rem 0.5rem 0.5rem;
+}
+
+.theme-wizarding #contact .wizard-mirror__inscription--bottom {
+  padding: 0.55rem 0.5rem 0.35rem;
+}
+
+.theme-wizarding #contact .wizard-mirror__inner {
+  position: relative;
+  min-height: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid rgb(165 187 230 / 0.55);
+  background:
+    radial-gradient(circle at 22% 18%, rgb(233 242 255 / 0.38), transparent 58%),
+    linear-gradient(150deg, rgb(78 109 170 / 0.25), rgb(32 46 90 / 0.5));
+  box-shadow:
+    inset 0 0 24px rgb(199 219 255 / 0.2),
+    inset 0 -20px 30px rgb(18 27 58 / 0.32);
+  overflow: hidden;
+}
+
+.theme-wizarding #contact .wizard-mirror__inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      112deg,
+      transparent 16%,
+      rgb(255 255 255 / 0.33) 46%,
+      transparent 68%
+    );
+  background-size: 230% 100%;
+  animation: wizard-mirror-shimmer 3.8s linear infinite;
+}
+
+.theme-wizarding #contact .wizard-mirror[data-reduced-motion="true"] .wizard-mirror__inner::before {
+  animation: none;
+  opacity: 0.35;
+}
+
+.theme-wizarding #contact .wizard-mirror__inner > * {
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem 1.1rem;
+}
+
+.theme-wizarding #contact .wizard-mirror input,
+.theme-wizarding #contact .wizard-mirror textarea {
+  border-color: rgb(183 207 252 / 0.55);
+  background: rgb(14 24 54 / 0.5);
+  color: rgb(231 240 255 / 0.96);
+}
+
+.theme-wizarding #contact .wizard-mirror input::placeholder,
+.theme-wizarding #contact .wizard-mirror textarea::placeholder {
+  color: rgb(186 205 240 / 0.75);
+}
+
+.theme-wizarding #contact .wizard-mirror button[type="submit"] {
+  border: 1px solid rgb(181 206 255 / 0.65);
+  background: linear-gradient(135deg, rgb(127 158 227 / 0.8), rgb(66 98 165 / 0.92));
+  box-shadow: 0 8px 18px rgb(6 10 24 / 0.35);
+}
+
+.theme-wizarding #contact .wizard-mirror__whisper,
+.theme-wizarding #contact .wizard-mirror__fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.theme-wizarding #contact .wizard-mirror__whisper {
+  display: grid;
+  place-items: end center;
+  padding: 0 1rem 3rem;
+  z-index: 4;
+  opacity: 0;
+  color: rgb(217 233 255 / 0.94);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow:
+    0 0 14px rgb(190 211 247 / 0.75),
+    0 0 30px rgb(122 164 240 / 0.35);
+  transform: translateY(8px);
+  transition:
+    opacity 260ms ease,
+    transform 260ms ease;
+}
+
+.theme-wizarding #contact .wizard-mirror__whisper.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.theme-wizarding #contact .wizard-mirror__mist {
+  --mist-size: 150px;
+  position: absolute;
+  width: var(--mist-size);
+  height: calc(var(--mist-size) * 0.62);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgb(212 230 255 / 0.48), rgb(164 193 255 / 0.1) 65%, transparent 100%);
+  filter: blur(6px);
+  animation: wizard-mirror-mist 1.75s ease-out forwards;
+}
+
+.theme-wizarding #contact .wizard-mirror__ripple {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 1px solid rgb(208 230 255 / 0.8);
+  box-shadow:
+    0 0 18px rgb(184 210 255 / 0.45),
+    inset 0 0 8px rgb(212 232 255 / 0.35);
+  animation: wizard-mirror-ripple 900ms ease-out forwards;
+}
+
+.theme-wizarding #contact .wizard-mirror[data-reduced-motion="true"] .wizard-mirror__mist,
+.theme-wizarding #contact .wizard-mirror[data-reduced-motion="true"] .wizard-mirror__ripple,
+.theme-wizarding #contact .wizard-mirror[data-reduced-motion="true"] .wizard-mirror__whisper {
+  display: none;
+}
+
+@keyframes wizard-mirror-shimmer {
+  from {
+    background-position: -180% 0;
+  }
+  to {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes wizard-mirror-mist {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(0.9);
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -62%) scale(1.2);
+  }
+}
+
+@keyframes wizard-mirror-ripple {
+  0% {
+    opacity: 0.7;
+    width: 8px;
+    height: 8px;
+  }
+  100% {
+    opacity: 0;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-wizarding #contact .wizard-mirror__inner::before,
+  .theme-wizarding #contact .wizard-mirror__mist,
+  .theme-wizarding #contact .wizard-mirror__ripple,
+  .theme-wizarding #contact .wizard-mirror__whisper {
+    animation: none !important;
+  }
+}

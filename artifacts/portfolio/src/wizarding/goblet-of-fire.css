@@ -1,0 +1,432 @@
+:root.theme-wizarding .gof-shell {
+  margin-top: 1.5rem;
+  border: 1px solid rgb(201 168 76 / 0.35);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgb(26 16 8 / 0.92), rgb(15 9 5 / 0.97)),
+    radial-gradient(circle at 50% 0%, rgb(201 168 76 / 0.12), transparent 56%);
+  box-shadow: inset 0 0 40px rgb(0 0 0 / 0.45), 0 10px 28px rgb(0 0 0 / 0.34);
+  padding: 1rem;
+}
+
+:root.theme-wizarding .gof-stage {
+  position: relative;
+  min-height: 22rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgb(90 62 40 / 0.75);
+  background: radial-gradient(ellipse 120% 55% at 50% 8%, rgb(201 168 76 / 0.06), transparent 50%);
+  overflow: hidden;
+}
+
+:root.theme-wizarding .gof-slips-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .gof-slip {
+  position: absolute;
+  width: min(11.5rem, 74vw);
+  min-height: 2.2rem;
+  left: calc(12% + (var(--gof-lane, 1) * 18%));
+  bottom: 2.2rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgb(90 62 40 / 0.88);
+  background: linear-gradient(180deg, #3b2416, #2c1a10 65%, #1b1008);
+  color: #f0d8ad;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  letter-spacing: 0.01em;
+  text-align: center;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.45), inset 0 0 22px rgb(0 0 0 / 0.3);
+}
+
+:root.theme-wizarding .gof-slip::before,
+:root.theme-wizarding .gof-slip::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.26);
+}
+
+:root.theme-wizarding .gof-slip::before {
+  top: 3px;
+  left: 4px;
+}
+
+:root.theme-wizarding .gof-slip::after {
+  right: 4px;
+  bottom: 3px;
+}
+
+:root.theme-wizarding .gof-slip-name {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 8px rgb(0 0 0 / 0.55);
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+:root.theme-wizarding .gof-clip-0 {
+  clip-path: polygon(5% 5%, 97% 0, 94% 88%, 4% 98%, 0 36%);
+}
+
+:root.theme-wizarding .gof-clip-1 {
+  clip-path: polygon(2% 8%, 100% 7%, 94% 96%, 6% 93%, 0 49%);
+}
+
+:root.theme-wizarding .gof-clip-2 {
+  clip-path: polygon(6% 0, 96% 8%, 99% 82%, 8% 99%, 0 55%);
+}
+
+:root.theme-wizarding .gof-clip-3 {
+  clip-path: polygon(4% 2%, 98% 6%, 90% 97%, 3% 89%, 0 40%);
+}
+
+:root.theme-wizarding .gof-clip-4 {
+  clip-path: polygon(0 12%, 95% 0, 100% 90%, 9% 96%, 2% 54%);
+}
+
+:root.theme-wizarding .gof-slip--ambient {
+  animation: gof-ambient-slip 5.7s ease-in forwards;
+}
+
+:root.theme-wizarding .gof-slip--chosen {
+  left: 50%;
+  transform: translateX(-50%);
+  animation: gof-chosen-eject 3.8s cubic-bezier(0.15, 0.86, 0.23, 0.99) forwards;
+}
+
+:root.theme-wizarding .gof-slip--submitted {
+  left: 50%;
+  transform: translateX(-50%);
+  animation: gof-slip-submit 0.95s ease-in forwards;
+}
+
+:root.theme-wizarding .gof-slip.is-reduced {
+  animation-duration: 0.24s !important;
+}
+
+:root.theme-wizarding .gof-goblet-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 0.8rem;
+  transform: translateX(-50%);
+  width: 14rem;
+  height: 12.5rem;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+:root.theme-wizarding .gof-goblet {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  filter: drop-shadow(0 14px 24px rgb(0 0 0 / 0.4));
+}
+
+:root.theme-wizarding .gof-goblet-rim {
+  position: absolute;
+  left: 50%;
+  top: 2.3rem;
+  width: 8.4rem;
+  height: 1rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d8b971, #8e6338);
+}
+
+:root.theme-wizarding .gof-goblet-cup {
+  position: absolute;
+  left: 50%;
+  top: 2.5rem;
+  transform: translateX(-50%);
+  width: 7.4rem;
+  height: 5.1rem;
+  background: linear-gradient(180deg, #ab7b45, #704521 65%, #4e2e16);
+  clip-path: polygon(6% 0, 94% 0, 78% 100%, 22% 100%);
+}
+
+:root.theme-wizarding .gof-goblet-stem {
+  position: absolute;
+  left: 50%;
+  top: 7.5rem;
+  transform: translateX(-50%);
+  width: 1.15rem;
+  height: 2.25rem;
+  background: linear-gradient(180deg, #c19457, #69401f);
+  border-radius: 0.4rem;
+}
+
+:root.theme-wizarding .gof-goblet-base {
+  position: absolute;
+  left: 50%;
+  top: 9.4rem;
+  transform: translateX(-50%);
+  width: 4.3rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d6b066, #6f4522);
+}
+
+:root.theme-wizarding .gof-flames {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: -3.35rem;
+  transform: translateX(-50%);
+  width: 10.5rem;
+  height: 9.5rem;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .gof-flame {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  margin-left: 0;
+  border-radius: 52% 52% 38% 38% / 78% 78% 28% 28%;
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  filter: blur(0.65px);
+  animation: gof-flame-flicker 1.6s ease-in-out infinite;
+}
+
+:root.theme-wizarding .gof-flame--outer {
+  width: 8.4rem;
+  height: 8rem;
+  background: radial-gradient(
+    ellipse 85% 95% at 50% 24%,
+    rgb(255 164 92 / 0.88) 0%,
+    rgb(196 72 28 / 0.32) 42%,
+    transparent 70%
+  );
+  opacity: 0.82;
+}
+
+:root.theme-wizarding .gof-flame--mid {
+  width: 6.2rem;
+  height: 6.75rem;
+  background: radial-gradient(
+    ellipse 82% 92% at 48% 20%,
+    rgb(255 214 140 / 0.78) 0%,
+    rgb(212 140 60 / 0.22) 48%,
+    rgb(96 160 220 / 0.12) 72%,
+    transparent 76%
+  );
+  animation-duration: 1.28s;
+  opacity: 0.74;
+}
+
+:root.theme-wizarding .gof-flame--core {
+  width: 4rem;
+  height: 4.85rem;
+  background: radial-gradient(
+    ellipse 78% 88% at 50% 14%,
+    rgb(255 252 240 / 0.92) 0%,
+    rgb(180 210 255 / 0.28) 58%,
+    transparent 72%
+  );
+  animation-duration: 1.02s;
+  opacity: 0.88;
+  filter: blur(0.35px);
+}
+
+:root.theme-wizarding .gof-stage.is-casting .gof-flame--outer {
+  animation-duration: 0.8s;
+}
+
+:root.theme-wizarding .gof-stage.is-casting .gof-flame--mid {
+  animation-duration: 0.66s;
+}
+
+:root.theme-wizarding .gof-stage.is-casting .gof-flame--core {
+  animation-duration: 0.54s;
+}
+
+:root.theme-wizarding .gof-form {
+  margin-top: 1rem;
+}
+
+:root.theme-wizarding .gof-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #cfb184;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+:root.theme-wizarding .gof-slip-paper {
+  position: relative;
+  width: min(20rem, 100%);
+  margin: 0 auto;
+  padding: 0.55rem 0.75rem 0.65rem;
+  border: 1px solid rgb(90 62 40 / 0.88);
+  background: linear-gradient(165deg, #3d2818 0%, #2c1a10 55%, #1a1008 100%);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.5), inset 0 0 26px rgb(0 0 0 / 0.35);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+:root.theme-wizarding .gof-slip-paper:focus-within {
+  border-color: rgb(201 168 76 / 0.55);
+  box-shadow:
+    0 4px 18px rgb(0 0 0 / 0.55),
+    inset 0 0 26px rgb(0 0 0 / 0.35),
+    0 0 0 1px rgb(232 201 110 / 0.12);
+}
+
+:root.theme-wizarding .gof-slip-paper::before,
+:root.theme-wizarding .gof-slip-paper::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.28);
+  z-index: 1;
+  pointer-events: none;
+}
+
+:root.theme-wizarding .gof-slip-paper::before {
+  top: 5px;
+  left: 6px;
+}
+
+:root.theme-wizarding .gof-slip-paper::after {
+  right: 6px;
+  bottom: 5px;
+}
+
+:root.theme-wizarding .gof-slip-input {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.35rem 0.15rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f0d8ad;
+  font-family: "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 1.02rem;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-align: center;
+  outline: none;
+  box-shadow: none;
+  text-shadow: 0 0 10px rgb(0 0 0 / 0.45);
+}
+
+:root.theme-wizarding .gof-slip-input::placeholder {
+  color: rgb(207 177 132 / 0.42);
+  font-style: italic;
+}
+
+:root.theme-wizarding .gof-slip-input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+:root.theme-wizarding .gof-slip-hint {
+  margin: 0.55rem 0 0;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: rgb(183 155 115 / 0.75);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+@keyframes gof-flame-flicker {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(0.98) rotate(-1deg);
+    opacity: 0.88;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.08) rotate(1.4deg);
+    opacity: 1;
+  }
+}
+
+@keyframes gof-slip-submit {
+  0% {
+    opacity: 0;
+    bottom: 9.6rem;
+    transform: translateX(-50%) scale(0.9);
+  }
+  16% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    bottom: 2.1rem;
+    transform: translateX(-50%) scale(0.68);
+  }
+}
+
+@keyframes gof-ambient-slip {
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0) scale(0.88) rotate(0deg);
+  }
+  20% {
+    opacity: 0.96;
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(calc(((var(--gof-lane, 1) - 1.5) * 68px) + ((var(--gof-id, 0) % 2) * 24px)))
+      translateY(-210px)
+      scale(1)
+      rotate(calc((var(--gof-lane, 1) - 1.5) * 8deg));
+  }
+}
+
+@keyframes gof-chosen-eject {
+  0% {
+    opacity: 0;
+    bottom: 2.2rem;
+    transform: translateX(-50%) scale(0.86);
+  }
+  14% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+    bottom: 13rem;
+    transform: translateX(-50%) scale(1.06) rotate(calc((var(--gof-id, 0) % 2) * 6deg - 3deg));
+  }
+  100% {
+    opacity: 0;
+    bottom: 16.2rem;
+    transform: translateX(-50%) scale(1.04) rotate(calc((var(--gof-id, 0) % 2) * 10deg - 5deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-wizarding .gof-flame,
+  :root.theme-wizarding .gof-slip {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root.theme-wizarding .gof-slip-paper {
+    transition: none !important;
+  }
+
+  :root.theme-wizarding .gof-slip--ambient,
+  :root.theme-wizarding .gof-slip--chosen,
+  :root.theme-wizarding .gof-slip--submitted {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  :root.theme-wizarding .gof-stage {
+    min-height: 21rem;
+  }
+}

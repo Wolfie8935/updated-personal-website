@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Cpu, Database, Cloud, BrainCircuit, FlaskConical } from "lucide-react";
 import { WizardingSkillSubtitle } from "@/components/wizarding";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 export function Skills() {
   const hoverSpells: Record<string, string> = {
@@ -79,6 +80,9 @@ export function Skills() {
         "Machine Learning",
         "Deep Learning",
         "Neural Networks",
+        <>
+          <HorcruxInk id="skills">precious</HorcruxInk> few-shot calibration
+        </>,
         "Natural Language Processing",
         "Bayesian Estimation",
         "Probabilistic Modeling",

@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Brain, Server, FlaskConical } from "lucide-react";
+import { Pensieve } from "@/wizarding/Pensieve";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 const highlights = [
   {
@@ -40,7 +42,8 @@ export function About() {
                 I am a Computer Science undergraduate who likes building high-leverage systems at the intersection of{" "}
                 <span className="text-primary font-medium">artificial intelligence</span>,{" "}
                 <span className="text-highlight font-medium">reasoning engines</span>, and{" "}
-                <span className="text-secondary font-medium">backend architecture</span>. I care most about taking strong ideas from paper and turning them into reliable, measurable software that can be used in production.
+                <span className="text-secondary font-medium">backend architecture</span>. I care most about taking strong ideas from paper and turning them into reliable, measurable software that reads like an engineer&apos;s{" "}
+                <HorcruxInk id="about">diary</HorcruxInk> once it ships to production.
               </p>
               <p>
                 Most of my work is centered around one question:{" "}
@@ -79,27 +82,29 @@ export function About() {
                 </motion.div>
               ))}
 
-              <div className="mt-6 p-5 rounded-xl border border-border bg-card/50">
+              <Pensieve>
+                <div className="mt-6 p-5 rounded-xl border border-border bg-card/50">
                 <p className="text-sm font-mono text-muted-foreground mb-3">&gt; quick_stats</p>
-                <div className="space-y-2 text-sm font-mono">
-                  <div className="flex justify-between">
+                  <div className="pensieve-rows space-y-2 text-sm font-mono">
+                    <div className="flex justify-between">
                     <span className="text-muted-foreground">institution</span>
                     <span className="text-foreground">SRMIST</span>
                   </div>
-                  <div className="flex justify-between">
+                    <div className="flex justify-between">
                     <span className="text-muted-foreground">degree</span>
                     <span className="text-foreground">B.Tech CSE</span>
                   </div>
-                  <div className="flex justify-between">
+                    <div className="flex justify-between">
                     <span className="text-muted-foreground">cgpa</span>
                     <span className="text-primary font-bold">9.79 / 10</span>
                   </div>
-                  <div className="flex justify-between">
+                    <div className="flex justify-between">
                     <span className="text-muted-foreground">batch</span>
                     <span className="text-foreground">2022 – 2026</span>
                   </div>
                 </div>
-              </div>
+                </div>
+              </Pensieve>
             </div>
           </div>
         </motion.div>

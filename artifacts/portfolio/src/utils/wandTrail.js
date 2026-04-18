@@ -83,9 +83,6 @@ export function enableWandTrail() {
   if (typeof window === "undefined") return () => {};
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (reducedMotionQuery.matches) {
-    return () => {};
-  }
 
   ensureSparkStyles();
 

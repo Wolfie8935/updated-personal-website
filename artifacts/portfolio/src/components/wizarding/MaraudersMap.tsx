@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
 import "./MaraudersMap.css";
 
 type Point = { x: number; y: number };
@@ -138,6 +138,94 @@ const DEFAULT_POSITIONS: CharacterPosition[] = CHARACTER_PATHS.map((character) =
   y: character.path[0].y,
 }));
 
+function normalizeMapPhrase(value: string) {
+  return value.toLowerCase().replace(/[^a-z\s]/g, "").replace(/\s+/g, " ").trim();
+}
+
+const MAP_OATH_OPEN_NORM = normalizeMapPhrase("i solemnly swear that i am up to no good");
+const MAP_OATH_OPEN_SHORT_NORM = normalizeMapPhrase("i solemnly swear i am up to no good");
+const MAP_OATH_CLOSE_NORM = normalizeMapPhrase("mischief managed");
+
+function mapPhraseOpens(normalized: string) {
+  return normalized.includes(MAP_OATH_OPEN_NORM) || normalized.includes(MAP_OATH_OPEN_SHORT_NORM);
+}
+
+function mapPhraseCloses(normalized: string) {
+  return normalized.includes(MAP_OATH_CLOSE_NORM);
+}
+
+/** Levenshtein distance for fuzzy speech matching. */
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const row = new Uint32Array(n + 1);
+  for (let j = 0; j <= n; j += 1) row[j] = j;
+  for (let i = 1; i <= m; i += 1) {
+    let prev = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= n; j += 1) {
+      const cur = row[j]!;
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, prev + cost);
+      prev = cur;
+    }
+  }
+  return row[n]!;
+}
+
+function phraseSimilarityRatio(utterance: string, target: string): number {
+  if (!utterance.length && !target.length) return 1;
+  if (!target.length) return 0;
+  const d = levenshtein(utterance, target);
+  return 1 - d / Math.max(utterance.length, target.length, 1);
+}
+
+/** After user stops speaking: match oath / close phrase with tolerance for ASR errors. */
+const SPEECH_OPEN_SIMILARITY_MIN = 0.72;
+const SPEECH_CLOSE_SIMILARITY_MIN = 0.78;
+
+function mapSpeechOpens(normalized: string): boolean {
+  if (mapPhraseOpens(normalized)) return true;
+  const best = Math.max(
+    phraseSimilarityRatio(normalized, MAP_OATH_OPEN_NORM),
+    phraseSimilarityRatio(normalized, MAP_OATH_OPEN_SHORT_NORM),
+  );
+  if (best >= SPEECH_OPEN_SIMILARITY_MIN) return true;
+  if (
+    normalized.includes("solemnly") &&
+    normalized.includes("swear") &&
+    /\bup\s+to\s+no\s+good\b/.test(normalized)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function mapSpeechCloses(normalized: string): boolean {
+  if (mapPhraseCloses(normalized)) return true;
+  if (phraseSimilarityRatio(normalized, MAP_OATH_CLOSE_NORM) >= SPEECH_CLOSE_SIMILARITY_MIN) return true;
+  if (normalized.includes("mischief") && /\bmanag/.test(normalized)) return true;
+  return false;
+}
+
+function isEditableKeyboardTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
+  return target.isContentEditable;
+}
+
+function getSpeechRecognitionConstructor(): (new () => SpeechRecognition) | null {
+  if (typeof window === "undefined") return null;
+  const w = window as Window & {
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+  };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
+
 function getPathPoint(path: Point[], normalizedProgress: number): Point {
   if (path.length < 2) return path[0] ?? { x: 0, y: 0 };
   const wrapped = ((normalizedProgress % 1) + 1) % 1;
@@ -153,7 +241,10 @@ function getPathPoint(path: Point[], normalizedProgress: number): Point {
 }
 
 export function MaraudersMap() {
+  const mapSectionRef = useRef<HTMLElement | null>(null);
   const mapBodyRef = useRef<HTMLDivElement | null>(null);
+  const mapVisibleRef = useRef(false);
+  const mapPhaseRef = useRef<"hidden" | "opening" | "open" | "closing">("hidden");
   const animationFrameRef = useRef<number | null>(null);
   const animationStartRef = useRef<number | null>(null);
   const lastVisualUpdateRef = useRef<number>(0);
@@ -168,6 +259,14 @@ export function MaraudersMap() {
   const [hoveredRoom, setHoveredRoom] = useState<Room | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [hiddenRoomRevealed, setHiddenRoomRevealed] = useState(false);
+
+  useEffect(() => {
+    mapVisibleRef.current = mapVisible;
+  }, [mapVisible]);
+
+  useEffect(() => {
+    mapPhaseRef.current = mapPhase;
+  }, [mapPhase]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -248,17 +347,25 @@ export function MaraudersMap() {
     [mapPhase, wizardingEnabled],
   );
 
-  const onRevealToggle = () => {
+  const revealMap = useCallback(() => {
     if (!wizardingEnabled) return;
-    if (!mapVisible || mapPhase === "hidden") {
-      if (phaseTimerRef.current !== null) window.clearTimeout(phaseTimerRef.current);
-      setMapVisible(true);
-      setHiddenRoomRevealed(false);
-      setMapPhase("opening");
-      phaseTimerRef.current = window.setTimeout(() => setMapPhase("open"), 950);
-      return;
-    }
-    if (mapPhase === "opening" || mapPhase === "closing") return;
+    const visible = mapVisibleRef.current;
+    const phase = mapPhaseRef.current;
+    if (visible && (phase === "open" || phase === "opening")) return;
+    if (phase === "closing") return;
+    if (phaseTimerRef.current !== null) window.clearTimeout(phaseTimerRef.current);
+    setMapVisible(true);
+    setHiddenRoomRevealed(false);
+    setMapPhase("opening");
+    phaseTimerRef.current = window.setTimeout(() => setMapPhase("open"), 950);
+  }, [wizardingEnabled]);
+
+  const concealMap = useCallback(() => {
+    if (!wizardingEnabled) return;
+    const visible = mapVisibleRef.current;
+    const phase = mapPhaseRef.current;
+    if (!visible || phase === "hidden" || phase === "closing") return;
+    if (phase === "opening") return;
     if (phaseTimerRef.current !== null) window.clearTimeout(phaseTimerRef.current);
     setMapPhase("closing");
     phaseTimerRef.current = window.setTimeout(() => {
@@ -266,7 +373,181 @@ export function MaraudersMap() {
       setMapPhase("hidden");
       setHoveredRoom(null);
     }, 700);
+  }, [wizardingEnabled]);
+
+  const onRevealToggle = () => {
+    if (!wizardingEnabled) return;
+    if (!mapVisible || mapPhase === "hidden") {
+      revealMap();
+      return;
+    }
+    if (mapPhase === "opening" || mapPhase === "closing") return;
+    concealMap();
   };
+
+  useEffect(() => {
+    if (!wizardingEnabled) return;
+
+    let buffer = "";
+    const maxLen = 200;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isEditableKeyboardTarget(event.target)) return;
+      const raw = event.key ?? "";
+      if (raw.length === 1) buffer = `${buffer}${raw.toLowerCase()}`;
+      else if (raw === "Backspace") buffer = buffer.slice(0, -1);
+      else if (raw === " " || raw === "Spacebar") buffer = `${buffer} `;
+      else return;
+
+      if (buffer.length > maxLen) buffer = buffer.slice(-maxLen);
+      const n = normalizeMapPhrase(buffer);
+      if (mapPhraseOpens(n)) {
+        buffer = "";
+        revealMap();
+        return;
+      }
+      if (mapPhraseCloses(n)) {
+        buffer = "";
+        concealMap();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [wizardingEnabled, revealMap, concealMap]);
+
+  useEffect(() => {
+    if (!wizardingEnabled) return;
+
+    const SR = getSpeechRecognitionConstructor();
+    const el = mapSectionRef.current ?? document.getElementById("marauders-map");
+    if (!SR || !el) return;
+
+    let mounted = true;
+    let inView = false;
+    let recognition: SpeechRecognition | null = null;
+    let pendingRestartId: number | null = null;
+    let pendingTranscript = "";
+
+    const cancelPendingRestart = () => {
+      if (pendingRestartId !== null) {
+        window.clearTimeout(pendingRestartId);
+        pendingRestartId = null;
+      }
+    };
+
+    const releaseMicrophone = () => {
+      cancelPendingRestart();
+      pendingTranscript = "";
+      if (recognition) {
+        try {
+          recognition.abort();
+        } catch {
+          try {
+            recognition.stop();
+          } catch {
+            /* ignore */
+          }
+        }
+        recognition = null;
+      }
+    };
+
+    const scheduleListenAgain = () => {
+      cancelPendingRestart();
+      pendingRestartId = window.setTimeout(() => {
+        pendingRestartId = null;
+        if (!mounted || !inView) return;
+        const live = recognition;
+        if (!live) return;
+        try {
+          live.start();
+        } catch {
+          recognition = null;
+          startListening();
+        }
+      }, 280);
+    };
+
+    const wireRecognitionHandlers = (r: SpeechRecognition) => {
+      r.continuous = false;
+      r.interimResults = true;
+      r.lang =
+        typeof navigator !== "undefined" && /^en/i.test(navigator.language) ? navigator.language : "en-US";
+
+      r.onresult = (event: SpeechRecognitionEvent) => {
+        if (!mounted) return;
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i += 1) {
+          transcript += event.results[i]![0]!.transcript;
+        }
+        pendingTranscript = transcript;
+      };
+
+      r.onerror = (event: SpeechRecognitionErrorEvent) => {
+        if (event.error === "aborted") return;
+      };
+
+      r.onend = () => {
+        if (!mounted || !inView) return;
+        const n = normalizeMapPhrase(pendingTranscript);
+        pendingTranscript = "";
+        if (n.length > 0) {
+          if (mapSpeechOpens(n)) revealMap();
+          else if (mapSpeechCloses(n)) concealMap();
+        }
+        scheduleListenAgain();
+      };
+    };
+
+    const startListening = () => {
+      if (!mounted || !inView) return;
+      if (!recognition) {
+        recognition = new SR();
+        wireRecognitionHandlers(recognition);
+      }
+
+      try {
+        recognition.start();
+      } catch {
+        recognition = null;
+        try {
+          const retry = new SR();
+          wireRecognitionHandlers(retry);
+          recognition = retry;
+          recognition.start();
+        } catch {
+          recognition = null;
+        }
+      }
+    };
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        inView = entry.isIntersecting && entry.intersectionRatio > 0.06;
+        if (!mounted) return;
+        if (inView) startListening();
+        else releaseMicrophone();
+      },
+      { threshold: [0, 0.06, 0.12, 0.25] },
+    );
+
+    intersectionObserver.observe(el);
+
+    return () => {
+      mounted = false;
+      inView = false;
+      cancelPendingRestart();
+      try {
+        recognition?.abort();
+      } catch {
+        /* ignore */
+      }
+      recognition = null;
+      intersectionObserver.disconnect();
+    };
+  }, [wizardingEnabled, revealMap, concealMap]);
 
   const onCanvasTouchStart = (event: TouchEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
@@ -283,7 +564,12 @@ export function MaraudersMap() {
   };
 
   return (
-    <section id="marauders-map" className="marauders-map-section" aria-labelledby="marauders-map-title">
+    <section
+      id="marauders-map"
+      ref={mapSectionRef}
+      className="marauders-map-section"
+      aria-labelledby="marauders-map-title"
+    >
       <div className="marauders-map-shell">
         <div className="marauders-map-header">
           <h2 id="marauders-map-title" className="marauders-map-title">

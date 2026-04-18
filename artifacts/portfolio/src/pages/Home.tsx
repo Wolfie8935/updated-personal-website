@@ -10,25 +10,31 @@ import { Achievements } from "@/components/sections/Achievements";
 import { Contact } from "@/components/sections/Contact";
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
+import { HorcruxHunt } from "@/wizarding/HorcruxHunt";
 import {
   ChapterDivider,
   MaraudersMap,
   WizardingCinematicIntro,
   WizardingPhase4Effects,
 } from "@/components/wizarding";
+import { ChamberOfSecrets } from "@/wizarding/ChamberOfSecrets";
+import { RestrictedSection } from "@/wizarding/RestrictedSection";
+import { DailyProphetTicker } from "@/wizarding/DailyProphet";
 
 export default function Home() {
   const { theme } = useTheme();
   const isWizarding = theme === "wizarding";
 
   return (
-    <div
-      className={cn(
-        "min-h-screen bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground",
-        isWizarding && "wizarding-scrollbar-scope",
-      )}
-    >
+    <HorcruxHunt enabled={isWizarding}>
+      <div
+        className={cn(
+          "min-h-screen bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground",
+          isWizarding && "wizarding-scrollbar-scope",
+        )}
+      >
       <WizardingPhase4Effects enabled={isWizarding} />
+      <RestrictedSection />
       {isWizarding && (
         <>
           <WizardingCinematicIntro
@@ -40,6 +46,7 @@ export default function Home() {
         </>
       )}
       <Navbar />
+      {isWizarding && <DailyProphetTicker />}
       
       <main>
         <Hero />
@@ -58,9 +65,12 @@ export default function Home() {
         <Achievements />
         {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
         <Contact />
+        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <ChamberOfSecrets enabled={isWizarding} />}
       </main>
 
       <Footer />
-    </div>
+      </div>
+    </HorcruxHunt>
   );
 }

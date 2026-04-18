@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "@/context/ThemeContext";
 import { useReducedMotion } from "@/components/wizarding/useReducedMotion";
+import { WIZARD_HERO_VIDEO_SRC } from "@/wizarding/wizardVideo";
 import { motion } from "framer-motion";
 import { ChevronRight, Code2, GraduationCap, Microscope, Trophy } from "lucide-react";
-
-const HERO_VIDEO_SRC = `${import.meta.env.BASE_URL}wizard_assets/background_wizard.mp4`;
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -41,8 +40,8 @@ export function Hero() {
       return;
     }
 
-    if (heroVideo.getAttribute("src") !== HERO_VIDEO_SRC) {
-      heroVideo.setAttribute("src", HERO_VIDEO_SRC);
+    if (heroVideo.getAttribute("src") !== WIZARD_HERO_VIDEO_SRC) {
+      heroVideo.setAttribute("src", WIZARD_HERO_VIDEO_SRC);
     }
   }, [theme, reducedMotion]);
 
@@ -59,8 +58,8 @@ export function Hero() {
           if (!document.documentElement.classList.contains("theme-wizarding")) return;
 
           if (entry.isIntersecting) {
-            if (heroVideo.getAttribute("src") !== HERO_VIDEO_SRC) {
-              heroVideo.setAttribute("src", HERO_VIDEO_SRC);
+            if (heroVideo.getAttribute("src") !== WIZARD_HERO_VIDEO_SRC) {
+              heroVideo.setAttribute("src", WIZARD_HERO_VIDEO_SRC);
             }
             heroVideo.load();
             heroVideo.play().catch(() => {});
@@ -91,7 +90,7 @@ export function Hero() {
         id="hp-hero-bg"
         ref={videoRef}
         className="hp-video-bg"
-        src={theme === "wizarding" && !reducedMotion ? HERO_VIDEO_SRC : undefined}
+        src={theme === "wizarding" && !reducedMotion ? WIZARD_HERO_VIDEO_SRC : undefined}
         muted
         loop
         playsInline
@@ -150,6 +149,7 @@ export function Hero() {
                 View Projects
               </Button>
             </motion.div>
+
           </div>
         </div>
 

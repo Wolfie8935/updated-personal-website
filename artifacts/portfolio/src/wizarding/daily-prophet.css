@@ -1,0 +1,262 @@
+.theme-wizarding .daily-prophet-section {
+  color: #1f150b;
+}
+
+.theme-wizarding .daily-prophet-masthead {
+  margin-bottom: 1.5rem;
+  border: 2px solid rgba(64, 44, 28, 0.72);
+  border-left-width: 6px;
+  border-right-width: 6px;
+  padding: 1rem 1.25rem 0.9rem;
+  background:
+    linear-gradient(to right, rgba(255, 247, 227, 0.93), rgba(250, 235, 206, 0.93));
+  box-shadow:
+    inset 0 0 0 1px rgba(111, 82, 54, 0.22),
+    0 10px 25px rgba(11, 8, 3, 0.2);
+}
+
+.theme-wizarding .daily-prophet-edition {
+  margin: 0;
+  text-align: center;
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(71, 46, 27, 0.9);
+}
+
+.theme-wizarding .daily-prophet-title {
+  margin: 0.35rem 0 0.45rem;
+  text-align: center;
+  font-family: "Cinzel Decorative", "Times New Roman", serif;
+  font-size: clamp(2rem, 4.8vw, 3.55rem);
+  line-height: 0.95;
+  color: #26190d;
+  text-shadow: none;
+}
+
+.theme-wizarding .daily-prophet-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.35rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(76, 51, 29, 0.55);
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgba(82, 56, 35, 0.9);
+}
+
+.theme-wizarding .daily-prophet-columns {
+  column-count: 1;
+  column-gap: 1rem;
+}
+
+.theme-wizarding .daily-prophet-card {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(73, 49, 30, 0.66);
+  background: linear-gradient(160deg, rgba(255, 249, 237, 0.92), rgba(248, 230, 194, 0.88));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.theme-wizarding .daily-prophet-card [data-prophet-card-body] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0.95rem;
+}
+
+.theme-wizarding .daily-prophet-card-icon {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(102, 70, 45, 0.7);
+  border-radius: 50%;
+  color: #39210e;
+  background: rgba(255, 250, 241, 0.9);
+}
+
+.theme-wizarding .daily-prophet-card-icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.theme-wizarding .daily-prophet-card-title {
+  margin: 0;
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: clamp(1.06rem, 1.9vw, 1.35rem);
+  letter-spacing: 0.03em;
+  color: #2a1a0d;
+}
+
+.theme-wizarding .daily-prophet-card-subtitle {
+  margin: 0;
+  font-family: "IM Fell English", Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(62, 40, 23, 0.92);
+  text-align: left;
+}
+
+.theme-wizarding .daily-prophet-byline {
+  margin: 0.2rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(73, 48, 28, 0.4);
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(78, 51, 30, 0.85);
+}
+
+.theme-wizarding .daily-prophet-moving-photo {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 140px;
+  border: 3px solid rgba(83, 56, 32, 0.65);
+  background: #1a1008;
+}
+
+.theme-wizarding .daily-prophet-moving-photo__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 72%;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.theme-wizarding .daily-prophet-moving-photo__fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 25%, rgba(255, 235, 179, 0.35), transparent 42%),
+    linear-gradient(120deg, rgba(65, 43, 26, 0.45), rgba(241, 207, 130, 0.2));
+}
+
+.theme-wizarding .daily-prophet-moving-photo__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.35rem 0.45rem;
+  font-family: "IM Fell English", Georgia, serif;
+  font-size: 0.62rem;
+  font-style: italic;
+  text-align: center;
+  color: rgba(245, 235, 220, 0.92);
+  background: linear-gradient(to top, rgba(12, 8, 4, 0.88), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.theme-wizarding .daily-prophet-ticker {
+  position: fixed;
+  top: 4rem;
+  z-index: 45;
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  border-top: 1px solid rgba(116, 75, 40, 0.6);
+  border-bottom: 1px solid rgba(116, 75, 40, 0.6);
+  background: rgba(20, 13, 8, 0.92);
+  color: #f2dec0;
+  backdrop-filter: blur(3px);
+}
+
+.theme-wizarding .daily-prophet-ticker-dismiss {
+  flex: 0 0 auto;
+  width: 2.25rem;
+  border: 0;
+  border-left: 1px solid rgba(116, 75, 40, 0.55);
+  background: rgba(40, 26, 14, 0.65);
+  color: #e8d5a0;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.theme-wizarding .daily-prophet-ticker-dismiss:hover {
+  background: rgba(90, 62, 40, 0.55);
+  color: #fff8e8;
+}
+
+.theme-wizarding .daily-prophet-ticker-dismiss:focus-visible {
+  outline: 2px solid #c9a84c;
+  outline-offset: -2px;
+}
+
+.theme-wizarding .daily-prophet-ticker-label {
+  flex: 0 0 auto;
+  border-right: 1px solid rgba(177, 132, 84, 0.7);
+  padding: 0.4rem 0.65rem;
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f7dca7;
+  background: linear-gradient(to right, rgba(91, 17, 17, 0.65), rgba(126, 31, 31, 0.55));
+}
+
+.theme-wizarding .daily-prophet-ticker-track {
+  display: flex;
+  gap: 2.25rem;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  padding: 0.35rem 0.85rem;
+  font-family: "IM Fell English", Georgia, serif;
+  font-size: 0.92rem;
+}
+
+.theme-wizarding .daily-prophet-ticker-track span {
+  flex: 0 0 auto;
+  min-width: 100%;
+  animation: daily-prophet-ticker 22s linear infinite;
+}
+
+@keyframes daily-prophet-ticker {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (min-width: 768px) {
+  .theme-wizarding .daily-prophet-columns {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 767px) {
+  .theme-wizarding .daily-prophet-meta {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .theme-wizarding .daily-prophet-ticker {
+    top: 3.8rem;
+  }
+
+  .theme-wizarding .daily-prophet-ticker-track {
+    font-size: 0.82rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-wizarding .daily-prophet-ticker-track span {
+    animation: none !important;
+  }
+}

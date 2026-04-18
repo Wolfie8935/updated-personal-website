@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Award, Trophy, Medal, Star, Code2 } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
+import { DailyProphetAchievements } from "@/wizarding/DailyProphet";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 export function Achievements() {
+  const { theme } = useTheme();
+  const isWizarding = theme === "wizarding";
   const achievements = [
     {
       icon: <Medal className="w-6 h-6 text-yellow-500" />,
@@ -27,9 +32,17 @@ export function Achievements() {
     {
       icon: <Code2 className="w-6 h-6 text-green-400" />,
       title: "400+ DSA problems solved",
-      subtitle: "Competitive Programming"
-    }
+      subtitle: (
+        <>
+          Competitive Programming — lots of <HorcruxInk id="achievements">Python</HorcruxInk>, C++, and notebooks
+        </>
+      ),
+    },
   ];
+
+  if (isWizarding) {
+    return <DailyProphetAchievements achievements={achievements} />;
+  }
 
   return (
     <section id="achievements" className="py-24">

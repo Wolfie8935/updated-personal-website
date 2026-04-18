@@ -20,6 +20,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [hasChosenOneBadge, setHasChosenOneBadge] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -40,6 +41,27 @@ export function Navbar() {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const updateChosenOneBadge = () => {
+      setHasChosenOneBadge(localStorage.getItem("hp_voldemort_defeated") === "true");
+    };
+    const onChamberUnlocked = () => updateChosenOneBadge();
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === "hp_voldemort_defeated") {
+        updateChosenOneBadge();
+      }
+    };
+
+    updateChosenOneBadge();
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("wizarding:chamber-unlocked", onChamberUnlocked);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("wizarding:chamber-unlocked", onChamberUnlocked);
+    };
   }, []);
 
   const scrollTo = (href: string) => {
@@ -93,6 +115,11 @@ export function Navbar() {
               className="site-logo site-title font-mono text-2xl font-bold text-foreground"
             >
               Aman Goel
+              {theme === "wizarding" && hasChosenOneBadge && (
+                <span className="wizarding-chosen-one-badge" aria-label="Chosen one unlocked">
+                  ⚡ Chosen One
+                </span>
+              )}
             </a>
           </div>
 

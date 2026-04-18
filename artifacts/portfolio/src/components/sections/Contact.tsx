@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/context/ThemeContext";
+import { GobletOfFire } from "@/wizarding/GobletOfFire";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -22,6 +24,7 @@ const TO_EMAIL = "goel07.aman@gmail.com";
 
 export function Contact() {
   const { toast } = useToast();
+  const { theme } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
@@ -86,6 +89,58 @@ export function Contact() {
     Email: "Owl Post",
   };
 
+  const contactForm = (
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">Name</label>
+          <Input
+            placeholder="Your name"
+            {...form.register("name")}
+            className={form.formState.errors.name ? "border-red-500" : ""}
+          />
+          {form.formState.errors.name && (
+            <p className="text-xs text-red-500">{form.formState.errors.name.message}</p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">Email</label>
+          <Input
+            type="email"
+            placeholder="your@email.com"
+            {...form.register("email")}
+            className={form.formState.errors.email ? "border-red-500" : ""}
+          />
+          {form.formState.errors.email && (
+            <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground">Message</label>
+        <Textarea
+          rows={5}
+          placeholder="Hi Aman, I'd love to connect about..."
+          className={`resize-none ${form.formState.errors.message ? "border-red-500" : ""}`}
+          {...form.register("message")}
+        />
+        {form.formState.errors.message && (
+          <p className="text-xs text-red-500">{form.formState.errors.message.message}</p>
+        )}
+      </div>
+
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? "Sending..." : (
+          <>Send Message <Send className="ml-2 w-4 h-4" /></>
+        )}
+      </Button>
+      <p className="text-xs text-center text-muted-foreground">
+        Sends directly to <span className="text-primary font-mono">{TO_EMAIL}</span> without opening your email app
+      </p>
+    </form>
+  );
+
   return (
     <section id="contact" className="py-24 bg-secondary-bg/30 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-linear-to-r from-transparent via-primary/50 to-transparent"></div>
@@ -134,59 +189,20 @@ export function Contact() {
             <div className="lg:col-span-6">
               <Card className="bg-card border-border/80 h-full">
                 <CardContent className="p-6 sm:p-8 h-full">
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground">Name</label>
-                        <Input
-                          placeholder="Your name"
-                          {...form.register("name")}
-                          className={form.formState.errors.name ? "border-red-500" : ""}
-                        />
-                        {form.formState.errors.name && (
-                          <p className="text-xs text-red-500">{form.formState.errors.name.message}</p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground">Email</label>
-                        <Input
-                          type="email"
-                          placeholder="your@email.com"
-                          {...form.register("email")}
-                          className={form.formState.errors.email ? "border-red-500" : ""}
-                        />
-                        {form.formState.errors.email && (
-                          <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">Message</label>
-                      <Textarea
-                        rows={5}
-                        placeholder="Hi Aman, I'd love to connect about..."
-                        className={`resize-none ${form.formState.errors.message ? "border-red-500" : ""}`}
-                        {...form.register("message")}
-                      />
-                      {form.formState.errors.message && (
-                        <p className="text-xs text-red-500">{form.formState.errors.message.message}</p>
-                      )}
-                    </div>
-
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? "Sending..." : (
-                        <>Send Message <Send className="ml-2 w-4 h-4" /></>
-                      )}
-                    </Button>
-                    <p className="text-xs text-center text-muted-foreground">
-                      Sends directly to <span className="text-primary font-mono">{TO_EMAIL}</span> without opening your email app
-                    </p>
-                  </form>
+                  {contactForm}
                 </CardContent>
               </Card>
             </div>
           </div>
+
+          {theme === "wizarding" && (
+            <div className="max-w-3xl mx-auto mt-14 lg:mt-16">
+              <p className="text-center text-sm font-mono text-muted-foreground mb-3 tracking-wide">
+                Triwizard registration
+              </p>
+              <GobletOfFire />
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

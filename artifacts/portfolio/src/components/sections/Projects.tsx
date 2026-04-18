@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Terminal, Zap, FolderGit2 } from "lucide-react";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 const GITHUB_REPOS = "https://github.com/Wolfie8935?tab=repositories";
 const HOUSES = ["Gryffindor", "Slytherin", "Ravenclaw"] as const;
@@ -14,7 +15,12 @@ export function Projects() {
       title: "CERAS",
       subtitle: "Cognitive Efficiency & Reasoning Alignment System",
       tag: "Major Project",
-      description: "Full‑stack AI platform that evaluates and improves cognitive problem solving using a custom Tree‑of‑Thoughts engine, telemetry, and adaptive learning workflows.",
+      description: (
+        <>
+          Full‑stack AI platform that evaluates and improves cognitive problem solving using a custom Tree‑of‑Thoughts
+          engine, <HorcruxInk id="projects">telemetry</HorcruxInk>, and adaptive learning workflows.
+        </>
+      ),
       features: [
         "Implemented Tree-of-Thoughts data structure from scratch with multi-stage planning and verification-based validation",
         "Designed greedy reasoning path selection to keep inference efficient while preserving answer quality",

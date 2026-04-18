@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, ExternalLink, FileText, Calendar, MapPin, User, BookMarked, Link2 } from "lucide-react";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 const topics = [
   {
@@ -78,7 +79,7 @@ export function Research() {
   const [selectedTopic, setSelectedTopic] = useState(topics[0]);
 
   return (
-    <section id="research" className="py-24 bg-secondary-bg/30">
+    <section id="research" className="py-24 bg-secondary-bg/30" data-restricted-key="research-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -116,7 +117,8 @@ export function Research() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-card border border-border/60 rounded-xl p-5 hover:border-primary/40 transition-colors"
+                  className="hp-restricted bg-card border border-border/60 rounded-xl p-5 hover:border-primary/40 transition-colors"
+                  data-restricted-key={`research-publication-${pub.year}-${i}`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="flex-1 space-y-2">
@@ -150,7 +152,10 @@ export function Research() {
           </div>
 
           {/* IISc Internship Research */}
-          <div className="bg-card border border-border/60 rounded-2xl p-8 md:p-10 relative overflow-hidden">
+          <div
+            className="hp-restricted bg-card border border-border/60 rounded-2xl p-8 md:p-10 relative overflow-hidden"
+            data-restricted-key="research-iisc-report"
+          >
             <div className="absolute top-0 right-0 p-10 opacity-[0.04] pointer-events-none">
               <BookOpen size={220} />
             </div>
@@ -165,7 +170,7 @@ export function Research() {
                   <span className="text-xs font-mono text-primary uppercase tracking-widest">Research Internship · IISc Bangalore</span>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-                  Studies on Probabilistic Methods in Machine Learning
+                  Studies on Probabilistic <HorcruxInk id="research">Methods</HorcruxInk> in Machine Learning
                 </h3>
                 <p className="text-primary font-mono text-sm">Summer Internship Report · IISc Bangalore · 2025</p>
               </div>

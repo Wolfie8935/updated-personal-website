@@ -97,7 +97,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      const raw = event.key ?? "";
+      const key = raw.length === 1 ? raw.toLowerCase() : raw;
+      if (!key) {
+        return;
+      }
       if (key === sequence[index]) {
         index += 1;
         if (index === sequence.length) {

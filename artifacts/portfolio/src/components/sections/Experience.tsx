@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Building2, Calendar, MapPin } from "lucide-react";
+import { TimeTurner } from "@/wizarding/TimeTurner";
+import { HorcruxInk } from "@/wizarding/HorcruxInk";
 
 export function Experience() {
   const experiences = [
@@ -11,10 +13,13 @@ export function Experience() {
       isFeatured: true,
       description: [
         "Implemented Bayesian inference algorithms in Python translating mathematical formulations into efficient code.",
-        "Built modular experimentation pipelines for posterior estimation, sampling, and evaluation.",
+        <>
+          Built modular experimentation <HorcruxInk id="experience">chains</HorcruxInk> for posterior estimation,
+          sampling, and evaluation.
+        </>,
         "Worked on probabilistic machine learning frameworks involving uncertainty modeling and inference.",
-        "Optimized numerical computations using vectorized operations to improve scalability."
-      ]
+        "Optimized numerical computations using vectorized operations to improve scalability.",
+      ],
     },
     {
       title: "Industrial Trainee",
@@ -42,6 +47,7 @@ export function Experience() {
         >
           <div className="flex items-center gap-4 mb-16">
             <h2 className="section-title text-3xl md:text-4xl font-bold text-foreground">Experience</h2>
+            <TimeTurner />
             <div className="section-divider h-px bg-border flex-grow max-w-xs"></div>
           </div>
 

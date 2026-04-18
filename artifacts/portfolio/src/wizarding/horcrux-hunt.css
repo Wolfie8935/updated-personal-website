@@ -1,0 +1,298 @@
+/* Inline “ink” words — indistinguishable from body copy until hover / click */
+.theme-wizarding button.wizarding-horcrux-ink {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  vertical-align: baseline;
+  cursor: pointer;
+  text-decoration: underline dotted rgb(201 168 76 / 0.22);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.theme-wizarding button.wizarding-horcrux-ink:hover:not(.is-destroyed) {
+  text-decoration-color: rgb(232 201 110 / 0.72);
+  background: rgb(232 201 110 / 0.06);
+}
+
+.theme-wizarding button.wizarding-horcrux-ink.is-discovered:not(.is-destroyed) {
+  text-decoration-color: rgb(232 201 110 / 0.48);
+  animation: wizarding-horcrux-ink-shimmer 2.4s ease-in-out infinite;
+}
+
+.theme-wizarding button.wizarding-horcrux-ink.is-destroying {
+  animation: wizarding-horcrux-ink-break 400ms ease-out forwards;
+  pointer-events: none;
+}
+
+.theme-wizarding button.wizarding-horcrux-ink.is-destroyed {
+  opacity: 0.45;
+  text-decoration: line-through;
+  text-decoration-color: rgb(130 100 65 / 0.55);
+  background: transparent;
+  pointer-events: none;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-wizarding button.wizarding-horcrux-ink.is-discovered:not(.is-destroyed),
+  .theme-wizarding button.wizarding-horcrux-ink.is-destroying {
+    animation: none;
+  }
+}
+
+.theme-wizarding .wizarding-toggle-hint {
+  animation: wizarding-toggle-hint-pulse 2.2s ease-in-out infinite;
+}
+
+.theme-wizarding .wizarding-toggle-discovered {
+  box-shadow:
+    0 0 0 1px rgb(232 201 110 / 0.45),
+    0 0 15px rgb(232 201 110 / 0.28);
+}
+
+.theme-wizarding .wizarding-toggle-destroyed {
+  opacity: 0.55;
+}
+
+.theme-wizarding .wizarding-horcrux-hud {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 90;
+  min-width: 168px;
+  border: 1px solid rgb(201 168 76 / 0.55);
+  border-radius: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  background: rgb(18 10 5 / 0.88);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.35);
+}
+
+.theme-wizarding .wizarding-horcrux-hud-title {
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f2dfb0;
+}
+
+.theme-wizarding .wizarding-horcrux-hud-count {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: #c9a97a;
+}
+
+.theme-wizarding .wizarding-horcrux-hud-grid {
+  margin-top: 0.45rem;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.theme-wizarding .wizarding-horcrux-hud-item {
+  width: 15px;
+  height: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: rgb(140 107 66 / 0.85);
+  background: rgb(34 19 9 / 0.8);
+  border: 1px solid rgb(74 53 32 / 0.7);
+  font-size: 0.7rem;
+}
+
+.theme-wizarding .wizarding-horcrux-hud-item.is-found {
+  color: #f6e4b9;
+  background: rgb(84 48 22 / 0.88);
+  border-color: rgb(232 201 110 / 0.75);
+}
+
+.theme-wizarding .wizarding-horcrux-floating {
+  position: fixed;
+  z-index: 95;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.78rem;
+  color: #f4e0b0;
+  text-shadow: 0 0 12px rgb(232 201 110 / 0.55);
+  animation: wizarding-horcrux-floating 1.5s ease-out forwards;
+}
+
+.theme-wizarding .wizarding-horcrux-floating-discover {
+  color: #ceb17d;
+}
+
+.theme-wizarding .wizarding-horcrux-floating-victory {
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  color: #fff2cc;
+}
+
+.theme-wizarding .wizarding-horcrux-victory-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at center, rgb(232 201 110 / 0.15), rgb(0 0 0 / 0.78));
+  pointer-events: none;
+  animation: wizarding-horcrux-overlay 420ms ease-out;
+}
+
+.theme-wizarding .wizarding-horcrux-victory-panel {
+  max-width: min(90vw, 540px);
+  border: 1px solid rgb(232 201 110 / 0.65);
+  border-radius: 0.95rem;
+  padding: 1.15rem 1.4rem;
+  background: rgb(22 12 6 / 0.96);
+  box-shadow: 0 16px 42px rgb(0 0 0 / 0.5);
+  text-align: center;
+}
+
+.theme-wizarding .wizarding-horcrux-victory-kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #d8ba88;
+}
+
+.theme-wizarding .wizarding-horcrux-victory-panel h3 {
+  margin-top: 0.35rem;
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  color: #f5e8c8;
+}
+
+.theme-wizarding .wizarding-horcrux-victory-panel p {
+  margin-top: 0.4rem;
+  color: #cbac7a;
+}
+
+.theme-wizarding body.wizarding-victory::before {
+  background:
+    radial-gradient(circle at 30% 22%, rgb(232 201 110 / 0.1), transparent 40%),
+    radial-gradient(circle at 78% 72%, rgb(123 13 13 / 0.2), transparent 45%);
+}
+
+.theme-wizarding body.wizarding-victory .site-navbar {
+  border-bottom-color: rgb(232 201 110 / 0.7) !important;
+  box-shadow: 0 0 24px rgb(232 201 110 / 0.12);
+}
+
+.theme-wizarding .wizarding-chosen-one-badge {
+  margin-left: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgb(232 201 110 / 0.72);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f5e6c8;
+  background: rgb(48 26 12 / 0.85);
+}
+
+.theme-wizarding #marauders-map.wizarding-chamber-unlocked .marauders-map-reveal-btn {
+  border-color: rgb(232 201 110 / 0.8);
+  box-shadow: 0 0 0 1px rgb(232 201 110 / 0.18), 0 8px 20px rgb(232 201 110 / 0.14);
+}
+
+@keyframes wizarding-horcrux-aura {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes wizarding-horcrux-break {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.3) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes wizarding-horcrux-ink-shimmer {
+  0%,
+  100% {
+    background: transparent;
+  }
+  50% {
+    background: rgb(232 201 110 / 0.09);
+  }
+}
+
+@keyframes wizarding-horcrux-ink-break {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  55% {
+    transform: scale(1.06);
+    opacity: 0.85;
+    filter: brightness(1.35) sepia(0.25);
+  }
+  100% {
+    transform: scale(0.94);
+    opacity: 0.35;
+    filter: brightness(0.95);
+  }
+}
+
+@keyframes wizarding-toggle-hint-pulse {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgb(232 201 110 / 0.45), 0 0 14px rgb(232 201 110 / 0.2);
+  }
+}
+
+@keyframes wizarding-horcrux-floating {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -120%);
+  }
+}
+
+@keyframes wizarding-horcrux-overlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
