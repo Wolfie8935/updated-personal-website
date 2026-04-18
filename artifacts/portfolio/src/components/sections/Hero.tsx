@@ -1,10 +1,20 @@
+import { useEffect, useRef } from "react";
 import { ThreeBackground } from "@/components/ThreeBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTheme } from "@/context/ThemeContext";
+import { useReducedMotion } from "@/components/wizarding/useReducedMotion";
 import { motion } from "framer-motion";
 import { ChevronRight, Code2, GraduationCap, Microscope, Trophy } from "lucide-react";
 
+const HERO_VIDEO_SRC = `${import.meta.env.BASE_URL}wizard_assets/background_wizard.mp4`;
+
 export function Hero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
+
   const scrollToProjects = () => {
     const element = document.querySelector('#projects');
     if (element) {
@@ -20,11 +30,76 @@ export function Hero() {
     { icon: <Trophy className="w-5 h-5 text-yellow-500" />, label: "ICPC Asia Regional", value: "Rank 77" },
   ];
 
+  useEffect(() => {
+    const heroVideo = videoRef.current;
+    if (!heroVideo) return;
+
+    if (theme !== "wizarding" || reducedMotion) {
+      heroVideo.pause();
+      heroVideo.removeAttribute("src");
+      heroVideo.load();
+      return;
+    }
+
+    if (heroVideo.getAttribute("src") !== HERO_VIDEO_SRC) {
+      heroVideo.setAttribute("src", HERO_VIDEO_SRC);
+    }
+  }, [theme, reducedMotion]);
+
+  useEffect(() => {
+    if (theme !== "wizarding" || reducedMotion) return;
+
+    const heroVideo = videoRef.current;
+    const heroSection = sectionRef.current;
+    if (!heroVideo || !heroSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!document.documentElement.classList.contains("theme-wizarding")) return;
+
+          if (entry.isIntersecting) {
+            if (heroVideo.getAttribute("src") !== HERO_VIDEO_SRC) {
+              heroVideo.setAttribute("src", HERO_VIDEO_SRC);
+            }
+            heroVideo.load();
+            heroVideo.play().catch(() => {});
+            return;
+          }
+
+          heroVideo.pause();
+          heroVideo.removeAttribute("src");
+          heroVideo.load();
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(heroSection);
+
+    return () => {
+      observer.disconnect();
+      heroVideo.pause();
+      heroVideo.removeAttribute("src");
+      heroVideo.load();
+    };
+  }, [theme, reducedMotion]);
+
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-center pt-20 overflow-hidden">
+    <section id="home" ref={sectionRef} className="hero-section relative min-h-screen pt-20 overflow-hidden">
+      <video
+        id="hp-hero-bg"
+        ref={videoRef}
+        className="hp-video-bg"
+        src={theme === "wizarding" && !reducedMotion ? HERO_VIDEO_SRC : undefined}
+        muted
+        loop
+        playsInline
+        preload="none"
+      />
       <ThreeBackground />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div className="hero-content-layer max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-8 text-left space-y-8">

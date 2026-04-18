@@ -77,7 +77,7 @@ export function Navbar() {
         "site-navbar fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent relative",
         isScrolled
           ? "bg-background/85 backdrop-blur-md border-border/50 shadow-sm"
-          : "bg-transparent py-4",
+          : "bg-transparent",
       )}
     >
       <NavbarSilhouetteOverlay />
