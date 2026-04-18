@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
+import { subscribeWizardingSpeech } from "@/wizarding/sharedSpeechRecognition";
 import "./MaraudersMap.css";
 
 type Point = { x: number; y: number };
@@ -217,13 +218,15 @@ function isEditableKeyboardTarget(target: EventTarget | null) {
   return target.isContentEditable;
 }
 
-function getSpeechRecognitionConstructor(): (new () => SpeechRecognition) | null {
-  if (typeof window === "undefined") return null;
-  const w = window as Window & {
-    SpeechRecognition?: new () => SpeechRecognition;
-    webkitSpeechRecognition?: new () => SpeechRecognition;
-  };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+function isElementActivelyVisible(element: Element) {
+  const rect = element.getBoundingClientRect();
+  const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
+  if (viewportH <= 0) return false;
+  const activeBandTop = viewportH * 0.2;
+  const activeBandBottom = viewportH * 0.8;
+  const overlapsActiveBand = rect.bottom > activeBandTop && rect.top < activeBandBottom;
+  const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportH) - Math.max(rect.top, 0));
+  return overlapsActiveBand && visibleHeight > 24;
 }
 
 function getPathPoint(path: Point[], normalizedProgress: number): Point {
@@ -419,134 +422,21 @@ export function MaraudersMap() {
   useEffect(() => {
     if (!wizardingEnabled) return;
 
-    const SR = getSpeechRecognitionConstructor();
     const el = mapSectionRef.current ?? document.getElementById("marauders-map");
-    if (!SR || !el) return;
+    if (!el) return;
 
-    let mounted = true;
-    let inView = false;
-    let recognition: SpeechRecognition | null = null;
-    let pendingRestartId: number | null = null;
-    let pendingTranscript = "";
-
-    const cancelPendingRestart = () => {
-      if (pendingRestartId !== null) {
-        window.clearTimeout(pendingRestartId);
-        pendingRestartId = null;
-      }
-    };
-
-    const releaseMicrophone = () => {
-      cancelPendingRestart();
-      pendingTranscript = "";
-      if (recognition) {
-        try {
-          recognition.abort();
-        } catch {
-          try {
-            recognition.stop();
-          } catch {
-            /* ignore */
-          }
+    return subscribeWizardingSpeech({
+      id: "marauders-map",
+      isActive: () => wizardingEnabled && isElementActivelyVisible(el),
+      onTranscript: (_raw, normalized) => {
+        if (!normalized.length) return;
+        if (mapSpeechOpens(normalized)) {
+          revealMap();
+          return;
         }
-        recognition = null;
-      }
-    };
-
-    const scheduleListenAgain = () => {
-      cancelPendingRestart();
-      pendingRestartId = window.setTimeout(() => {
-        pendingRestartId = null;
-        if (!mounted || !inView) return;
-        const live = recognition;
-        if (!live) return;
-        try {
-          live.start();
-        } catch {
-          recognition = null;
-          startListening();
-        }
-      }, 280);
-    };
-
-    const wireRecognitionHandlers = (r: SpeechRecognition) => {
-      r.continuous = false;
-      r.interimResults = true;
-      r.lang =
-        typeof navigator !== "undefined" && /^en/i.test(navigator.language) ? navigator.language : "en-US";
-
-      r.onresult = (event: SpeechRecognitionEvent) => {
-        if (!mounted) return;
-        let transcript = "";
-        for (let i = 0; i < event.results.length; i += 1) {
-          transcript += event.results[i]![0]!.transcript;
-        }
-        pendingTranscript = transcript;
-      };
-
-      r.onerror = (event: SpeechRecognitionErrorEvent) => {
-        if (event.error === "aborted") return;
-      };
-
-      r.onend = () => {
-        if (!mounted || !inView) return;
-        const n = normalizeMapPhrase(pendingTranscript);
-        pendingTranscript = "";
-        if (n.length > 0) {
-          if (mapSpeechOpens(n)) revealMap();
-          else if (mapSpeechCloses(n)) concealMap();
-        }
-        scheduleListenAgain();
-      };
-    };
-
-    const startListening = () => {
-      if (!mounted || !inView) return;
-      if (!recognition) {
-        recognition = new SR();
-        wireRecognitionHandlers(recognition);
-      }
-
-      try {
-        recognition.start();
-      } catch {
-        recognition = null;
-        try {
-          const retry = new SR();
-          wireRecognitionHandlers(retry);
-          recognition = retry;
-          recognition.start();
-        } catch {
-          recognition = null;
-        }
-      }
-    };
-
-    const intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        inView = entry.isIntersecting && entry.intersectionRatio > 0.06;
-        if (!mounted) return;
-        if (inView) startListening();
-        else releaseMicrophone();
+        if (mapSpeechCloses(normalized)) concealMap();
       },
-      { threshold: [0, 0.06, 0.12, 0.25] },
-    );
-
-    intersectionObserver.observe(el);
-
-    return () => {
-      mounted = false;
-      inView = false;
-      cancelPendingRestart();
-      try {
-        recognition?.abort();
-      } catch {
-        /* ignore */
-      }
-      recognition = null;
-      intersectionObserver.disconnect();
-    };
+    });
   }, [wizardingEnabled, revealMap, concealMap]);
 
   const onCanvasTouchStart = (event: TouchEvent<HTMLDivElement>) => {

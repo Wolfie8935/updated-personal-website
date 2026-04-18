@@ -533,6 +533,286 @@
   color: #372e29;
 }
 
+/* House sorting tint system (wizarding-only, body class driven). */
+body.theme-wizarding.hp-house-gryffindor {
+  --hp-house-primary: #740001;
+  --hp-house-secondary: #d3a625;
+  --hp-house-glow: rgb(211 166 37 / 0.25);
+  --hp-house-glow-strong: rgb(211 166 37 / 0.55);
+  --hp-house-border: rgb(116 0 1 / 0.6);
+  --hp-house-text-accent: #f0c040;
+  --hp-house-bg-tint: rgb(116 0 1 / 0.06);
+  --hp-house-bg-wash: rgb(116 0 1 / 0.14);
+  --hp-house-bg-primary: #130807;
+  --hp-house-bg-secondary: #1a0d0b;
+  --hp-house-bg-tertiary: #090403;
+  --hp-house-name: "Gryffindor";
+}
+
+body.theme-wizarding.hp-house-slytherin {
+  --hp-house-primary: #1a472a;
+  --hp-house-secondary: #aaaaaa;
+  --hp-house-glow: rgb(26 71 42 / 0.3);
+  --hp-house-glow-strong: rgb(100 200 120 / 0.35);
+  --hp-house-border: rgb(26 71 42 / 0.7);
+  --hp-house-text-accent: #7ecb8f;
+  --hp-house-bg-tint: rgb(26 71 42 / 0.07);
+  --hp-house-bg-wash: rgb(26 71 42 / 0.16);
+  --hp-house-bg-primary: #09120d;
+  --hp-house-bg-secondary: #0e1913;
+  --hp-house-bg-tertiary: #040907;
+  --hp-house-name: "Slytherin";
+}
+
+body.theme-wizarding.hp-house-ravenclaw {
+  --hp-house-primary: #0e1a40;
+  --hp-house-secondary: #946b2d;
+  --hp-house-glow: rgb(14 26 64 / 0.35);
+  --hp-house-glow-strong: rgb(80 110 200 / 0.4);
+  --hp-house-border: rgb(14 26 64 / 0.7);
+  --hp-house-text-accent: #7b9fd4;
+  --hp-house-bg-tint: rgb(14 26 64 / 0.09);
+  --hp-house-bg-wash: rgb(14 26 64 / 0.18);
+  --hp-house-bg-primary: #080b16;
+  --hp-house-bg-secondary: #0d1222;
+  --hp-house-bg-tertiary: #04060c;
+  --hp-house-name: "Ravenclaw";
+}
+
+body.theme-wizarding.hp-house-hufflepuff {
+  --hp-house-primary: #ecb939;
+  --hp-house-secondary: #372e29;
+  --hp-house-glow: rgb(236 185 57 / 0.2);
+  --hp-house-glow-strong: rgb(236 185 57 / 0.5);
+  --hp-house-border: rgb(236 185 57 / 0.5);
+  --hp-house-text-accent: #f5d06a;
+  --hp-house-bg-tint: rgb(236 185 57 / 0.05);
+  --hp-house-bg-wash: rgb(236 185 57 / 0.12);
+  --hp-house-bg-primary: #171108;
+  --hp-house-bg-secondary: #20170c;
+  --hp-house-bg-tertiary: #0b0803;
+  --hp-house-name: "Hufflepuff";
+}
+
+body.theme-wizarding[class*="hp-house-"] {
+  --accent-primary: var(--hp-house-secondary);
+  --accent-glow: var(--hp-house-text-accent);
+  --border-accent: var(--hp-house-secondary);
+  --link-color: var(--hp-house-text-accent);
+  --link-hover: #fff8e7;
+  --bg-primary: var(--hp-house-bg-primary);
+  --bg-secondary: var(--hp-house-bg-secondary);
+  --bg-tertiary: var(--hp-house-bg-tertiary);
+  --card-bg: linear-gradient(160deg, var(--hp-house-bg-secondary), var(--hp-house-bg-tertiary));
+  --card-border: var(--hp-house-border);
+  scrollbar-color: var(--hp-house-secondary) #0c0804;
+  background-color: var(--hp-house-bg-primary);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, var(--hp-house-bg-wash) 0%, transparent 58%),
+    radial-gradient(circle at 12% 82%, var(--hp-house-bg-tint) 0%, transparent 48%),
+    radial-gradient(circle at 88% 18%, var(--hp-house-bg-tint) 0%, transparent 42%);
+}
+
+body.theme-wizarding[class*="hp-house-"]::before {
+  background:
+    radial-gradient(circle at 52% 40%, rgb(0 0 0 / 0.08), transparent 62%),
+    radial-gradient(circle at 50% 38%, var(--hp-house-bg-tint) 0%, transparent 64%);
+}
+
+body.theme-wizarding[class*="hp-house-"] *::-webkit-scrollbar-thumb {
+  background: var(--hp-house-secondary);
+}
+
+body.theme-wizarding[class*="hp-house-"] header,
+body.theme-wizarding[class*="hp-house-"] nav,
+body.theme-wizarding[class*="hp-house-"] .site-navbar {
+  border-bottom-color: var(--hp-house-border);
+  box-shadow: 0 1px 20px var(--hp-house-glow);
+}
+
+body.theme-wizarding[class*="hp-house-"] .nav-link:hover,
+body.theme-wizarding[class*="hp-house-"] .nav-link.text-primary {
+  color: var(--hp-house-text-accent) !important;
+  border-bottom-color: var(--hp-house-secondary);
+}
+
+body.theme-wizarding[class*="hp-house-"] .site-title,
+body.theme-wizarding[class*="hp-house-"] .site-logo,
+body.theme-wizarding[class*="hp-house-"] .logo,
+body.theme-wizarding[class*="hp-house-"] .hero-site-title {
+  color: var(--hp-house-secondary);
+  text-shadow: 0 0 20px var(--hp-house-glow-strong);
+}
+
+body.theme-wizarding[class*="hp-house-"] h1,
+body.theme-wizarding[class*="hp-house-"] h2,
+body.theme-wizarding[class*="hp-house-"] h3 {
+  text-shadow: 0 0 24px var(--hp-house-glow-strong);
+}
+
+body.theme-wizarding[class*="hp-house-"] .section-title {
+  border-left-color: var(--hp-house-secondary);
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizard-card,
+body.theme-wizarding[class*="hp-house-"] .card,
+body.theme-wizarding[class*="hp-house-"] [class*="-card"],
+body.theme-wizarding[class*="hp-house-"] [class*="card-"] {
+  border-color: var(--hp-house-border) !important;
+  box-shadow:
+    inset 0 0 30px rgb(0 0 0 / 0.5),
+    0 0 0 1px var(--hp-house-glow);
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizard-card:hover,
+body.theme-wizarding[class*="hp-house-"] .card:hover,
+body.theme-wizarding[class*="hp-house-"] [class*="-card"]:hover {
+  border-color: var(--hp-house-secondary) !important;
+  box-shadow:
+    inset 0 0 30px rgb(0 0 0 / 0.5),
+    0 0 16px var(--hp-house-glow-strong);
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizard-card,
+body.theme-wizarding[class*="hp-house-"] .card,
+body.theme-wizarding[class*="hp-house-"] [class*="-card"] {
+  border-top-color: var(--hp-house-secondary) !important;
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="default"],
+body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="glow"],
+body.theme-wizarding[class*="hp-house-"] button.primary,
+body.theme-wizarding[class*="hp-house-"] .btn-primary,
+body.theme-wizarding[class*="hp-house-"] #goblet-submit {
+  background: var(--hp-house-primary) !important;
+  border-color: var(--hp-house-secondary) !important;
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="default"]:hover,
+body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="glow"]:hover,
+body.theme-wizarding[class*="hp-house-"] button.primary:hover,
+body.theme-wizarding[class*="hp-house-"] .btn-primary:hover {
+  box-shadow: 0 0 14px var(--hp-house-glow-strong) !important;
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizarding-chapter-symbol {
+  color: var(--hp-house-secondary);
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizarding-chapter-line {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--hp-house-border) 20%,
+      var(--hp-house-secondary) 50%,
+      var(--hp-house-border) 80%,
+      transparent 100%
+    );
+}
+
+body.theme-wizarding[class*="hp-house-"] .marauders-map-section {
+  border-color: var(--hp-house-secondary);
+  box-shadow: 0 0 24px var(--hp-house-glow);
+}
+
+body.theme-wizarding[class*="hp-house-"] .daily-prophet-masthead {
+  border-top: 3px solid var(--hp-house-primary);
+  border-bottom: 3px solid var(--hp-house-primary);
+}
+
+body.theme-wizarding[class*="hp-house-"] input:focus,
+body.theme-wizarding[class*="hp-house-"] textarea:focus,
+body.theme-wizarding[class*="hp-house-"] input:focus-visible,
+body.theme-wizarding[class*="hp-house-"] textarea:focus-visible {
+  border-color: var(--hp-house-secondary) !important;
+  box-shadow: 0 0 0 2px var(--hp-house-glow);
+}
+
+body.theme-wizarding[class*="hp-house-"] .wizarding-horcrux-hud-item.is-found {
+  background: var(--hp-house-secondary);
+  border-color: var(--hp-house-secondary);
+}
+
+body.theme-wizarding[class*="hp-house-"] .daily-prophet-ticker-label {
+  background: var(--hp-house-secondary);
+  color: var(--hp-house-primary);
+}
+
+body.theme-wizarding[class*="hp-house-"] .daily-prophet-ticker-track {
+  color: var(--hp-house-text-accent);
+}
+
+body.theme-wizarding[class*="hp-house-"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+  background:
+    radial-gradient(ellipse at 50% -10%, var(--hp-house-bg-wash) 0%, transparent 62%),
+    radial-gradient(circle at 15% 85%, var(--hp-house-bg-tint) 0%, transparent 52%),
+    radial-gradient(circle at 85% 16%, var(--hp-house-bg-tint) 0%, transparent 46%);
+}
+
+#hp-house-banner {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgb(10 5 0 / 0.92);
+  border: 1px solid var(--hp-house-secondary, #c9a84c);
+  border-radius: 8px;
+  padding: 14px 28px;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  box-shadow: 0 0 24px var(--hp-house-glow, rgb(201 168 76 / 0.3));
+  animation: banner-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes banner-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-16px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+#hp-house-banner .banner-animal {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+#hp-house-banner .banner-house {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 1.4rem;
+  color: var(--hp-house-secondary, #c9a84c);
+  letter-spacing: 0.08em;
+}
+
+#hp-house-banner .banner-motto {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--hp-house-text-accent, #c9a97a);
+}
+
+#hp-house-indicator {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* Wizarding spell hovers for key interactive elements */
 :root.theme-wizarding .spell-hoverable {
   position: relative;
@@ -857,6 +1137,11 @@ body.theme-wizarding .wizard-konami-toast.hide {
 }
 
 @media (max-width: 640px) {
+  #hp-house-banner {
+    max-width: 90vw;
+    padding: 12px 16px;
+  }
+
   :root.theme-wizarding h1 {
     letter-spacing: -0.02em;
   }
@@ -877,6 +1162,11 @@ body.theme-wizarding .wizard-konami-toast.hide {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #hp-house-banner {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+
   :root.theme-wizarding h1,
   :root.theme-wizarding body.wizarding-activate {
     animation: none !important;

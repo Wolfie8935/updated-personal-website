@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { enableWandTrail } from "@/utils/wandTrail";
+import { clearSortedHouse, restoreSortedHouseOnLoad } from "@/wizarding/houseSorting";
 
 type Theme = "dark" | "light" | "wizarding";
 const THEME_CYCLE: Theme[] = ["dark", "light", "wizarding"];
@@ -38,6 +39,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const root = document.documentElement;
     const body = document.body;
+    clearSortedHouse();
     root.classList.remove("light", "dark", "theme-wizarding");
     body.classList.remove("theme-wizarding");
 
@@ -53,6 +55,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         body.classList.add("wizarding-activate");
       });
       window.setTimeout(() => body.classList.remove("wizarding-activate"), 650);
+      restoreSortedHouseOnLoad();
     }
 
     localStorage.setItem("theme", theme);

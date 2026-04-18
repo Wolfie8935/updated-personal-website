@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useReducedMotion } from "@/components/wizarding/useReducedMotion";
+import { applySortingHouse } from "@/wizarding/houseSorting";
+import {
+  speechRecognitionSupported,
+  subscribeWizardingSpeech,
+} from "@/wizarding/sharedSpeechRecognition";
 import "./chamber-of-secrets.css";
 
 type Trait = "FORCE" | "LOGIC" | "SOCIAL" | "INTUITION";
@@ -209,13 +214,15 @@ const transcriptUnlocksChamber = (transcript: string) => {
   return parseltongueUnlocksFromSpeech(n);
 };
 
-function getSpeechRecognitionConstructor(): (new () => SpeechRecognition) | null {
-  if (typeof window === "undefined") return null;
-  const w = window as Window & {
-    SpeechRecognition?: new () => SpeechRecognition;
-    webkitSpeechRecognition?: new () => SpeechRecognition;
-  };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+function isElementActivelyVisible(element: Element) {
+  const rect = element.getBoundingClientRect();
+  const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
+  if (viewportH <= 0) return false;
+  const activeBandTop = viewportH * 0.2;
+  const activeBandBottom = viewportH * 0.8;
+  const overlapsActiveBand = rect.bottom > activeBandTop && rect.top < activeBandBottom;
+  const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportH) - Math.max(rect.top, 0));
+  return overlapsActiveBand && visibleHeight > 24;
 }
 
 const hasHorcruxTrigger = () => {
@@ -316,6 +323,7 @@ export function ChamberOfSecrets({ enabled }: { enabled: boolean }) {
   const chamberSectionRef = useRef<HTMLElement | null>(null);
   const isUnlockedRef = useRef(false);
   const voiceUnlockConsumedRef = useRef(false);
+  const sortedHouseAppliedRef = useRef<string | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [unlockSource, setUnlockSource] = useState("");
   const [showContent, setShowContent] = useState(false);
@@ -328,7 +336,7 @@ export function ChamberOfSecrets({ enabled }: { enabled: boolean }) {
   const [voicePermissionDenied, setVoicePermissionDenied] = useState(false);
 
   useEffect(() => {
-    setSpeechSupported(getSpeechRecognitionConstructor() !== null);
+    setSpeechSupported(speechRecognitionSupported());
   }, []);
 
   useEffect(() => {
@@ -349,6 +357,7 @@ export function ChamberOfSecrets({ enabled }: { enabled: boolean }) {
     setHouseStep(0);
     setVoiceListening(false);
     setVoicePermissionDenied(false);
+    sortedHouseAppliedRef.current = null;
   }, [enabled]);
 
   useEffect(() => {
@@ -474,177 +483,47 @@ export function ChamberOfSecrets({ enabled }: { enabled: boolean }) {
       return;
     }
 
-    const SR = getSpeechRecognitionConstructor();
     const el = chamberSectionRef.current ?? document.getElementById("chamber");
-    if (!SR || !el) return;
+    if (!el) return;
 
-    let mounted = true;
-    let inView = false;
-    /** After `abort()`, many browsers require a new instance before `start()` works again. */
-    let recognition: SpeechRecognition | null = null;
-    let pendingRestartId: number | null = null;
-
-    const cancelPendingRestart = () => {
-      if (pendingRestartId !== null) {
-        window.clearTimeout(pendingRestartId);
-        pendingRestartId = null;
-      }
-    };
-
-    const releaseMicrophone = () => {
-      cancelPendingRestart();
-      if (recognition) {
-        try {
-          recognition.abort();
-        } catch {
-          try {
-            recognition.stop();
-          } catch {
-            /* already dead */
-          }
-        }
-        recognition = null;
-      }
-      if (mounted) setVoiceListening(false);
-    };
-
-    const wireRecognitionHandlers = (r: SpeechRecognition) => {
-      r.continuous = false;
-      r.interimResults = true;
-      r.lang =
-        typeof navigator !== "undefined" && /^en/i.test(navigator.language) ? navigator.language : "en-US";
-
-      r.onresult = (event: SpeechRecognitionEvent) => {
-        if (!mounted || isUnlockedRef.current || voiceUnlockConsumedRef.current) return;
-        const segments: { index: number; text: string; isFinal: boolean; confidence?: number }[] = [];
-        let transcript = "";
-        for (let i = 0; i < event.results.length; i += 1) {
-          const res = event.results[i]!;
-          const alt = res[0]!;
-          transcript += alt.transcript;
-          segments.push({
-            index: i,
-            text: alt.transcript,
-            isFinal: res.isFinal,
-            confidence: typeof alt.confidence === "number" ? alt.confidence : undefined,
-          });
-        }
-
-        const normalized = normalizeWhisper(transcript);
-        const wouldUnlock = transcriptUnlocksChamber(transcript);
-        console.log("[Chamber voice]", {
-          rawTranscript: transcript,
-          normalized,
-          wouldUnlock,
-          resultCount: event.results.length,
-          segments,
-        });
-
+    return subscribeWizardingSpeech({
+      id: "chamber-of-secrets",
+      isActive: () => enabled && !isUnlockedRef.current && isElementActivelyVisible(el),
+      onTranscript: (rawTranscript) => {
+        if (isUnlockedRef.current || voiceUnlockConsumedRef.current) return;
+        const wouldUnlock = transcriptUnlocksChamber(rawTranscript);
         if (!wouldUnlock) return;
         voiceUnlockConsumedRef.current = true;
-        cancelPendingRestart();
-        try {
-          r.stop();
-        } catch {
-          /* ignore */
-        }
-        if (mounted) setVoiceListening(false);
         setIsUnlocked(true);
         setUnlockSource("The stone heard your voice");
-      };
-
-      r.onerror = (event: SpeechRecognitionErrorEvent) => {
-        if (!mounted) return;
-        if (event.error === "aborted") return;
-        console.log("[Chamber voice] error", { error: event.error, message: event.message });
-        if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+      },
+      onListeningChange: (listening) => {
+        const active = enabled && !isUnlockedRef.current && isElementActivelyVisible(el);
+        setVoiceListening(active && listening);
+      },
+      onError: (error) => {
+        if (error === "not-allowed" || error === "service-not-allowed") {
           setVoicePermissionDenied(true);
           setVoiceListening(false);
         }
-      };
-
-      r.onend = () => {
-        if (!mounted || isUnlockedRef.current || voiceUnlockConsumedRef.current) {
-          if (mounted) setVoiceListening(false);
-          return;
-        }
-        if (!inView) {
-          if (mounted) setVoiceListening(false);
-          return;
-        }
-        cancelPendingRestart();
-        pendingRestartId = window.setTimeout(() => {
-          pendingRestartId = null;
-          if (!mounted || isUnlockedRef.current || !inView || voiceUnlockConsumedRef.current) return;
-          const live = recognition;
-          if (!live) return;
-          try {
-            live.start();
-            if (mounted) setVoiceListening(true);
-          } catch {
-            recognition = null;
-            startRecognition();
-          }
-        }, 280);
-      };
-    };
-
-    const startRecognition = () => {
-      if (!mounted || isUnlockedRef.current || voiceUnlockConsumedRef.current || !inView) return;
-      if (!recognition) {
-        recognition = new SR();
-        wireRecognitionHandlers(recognition);
-      }
-      try {
-        recognition.start();
-        if (mounted) setVoiceListening(true);
-        console.log("[Chamber voice] session start (transcript is only this phrase until you pause)");
-      } catch {
-        recognition = null;
-        try {
-          recognition = new SR();
-          wireRecognitionHandlers(recognition);
-          recognition.start();
-          if (mounted) setVoiceListening(true);
-          console.log("[Chamber voice] session start (new recognition instance)");
-        } catch {
-          if (mounted) setVoiceListening(false);
-        }
-      }
-    };
-
-    const intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        /* Any visible slice of the chamber counts — strict ratios blocked mic on some layouts. */
-        const visible = entry.isIntersecting && entry.intersectionRatio > 0.06;
-        inView = visible;
-        if (!mounted || isUnlockedRef.current) return;
-        if (visible) startRecognition();
-        else releaseMicrophone();
       },
-      { threshold: [0, 0.06, 0.12, 0.25], rootMargin: "0px 0px 0px 0px" },
-    );
-
-    intersectionObserver.observe(el);
-
-    return () => {
-      mounted = false;
-      inView = false;
-      cancelPendingRestart();
-      try {
-        recognition?.abort();
-      } catch {
-        /* ignore */
-      }
-      recognition = null;
-      intersectionObserver.disconnect();
-      setVoiceListening(false);
-    };
+    });
   }, [enabled, isUnlocked, speechSupported]);
 
   const spellResult = useMemo(() => computeSpellQuizResult(quizAnswers), [quizAnswers]);
   const houseResult = useMemo(() => computeHouseQuizResult(houseQuizAnswers), [houseQuizAnswers]);
+
+  useEffect(() => {
+    if (!enabled || !showContent || !houseResult) return;
+    const houseKey = houseResult.houseClass.toLowerCase();
+    if (sortedHouseAppliedRef.current === houseKey) return;
+
+    const timer = window.setTimeout(() => {
+      applySortingHouse(houseKey);
+      sortedHouseAppliedRef.current = houseKey;
+    }, 1200);
+    return () => window.clearTimeout(timer);
+  }, [enabled, showContent, houseResult]);
 
   const onSpellAnswer = (questionId: QuizQuestion["id"], optionId: string, questionIndex: number) => {
     setQuizAnswers((previous) => ({ ...previous, [questionId]: optionId }));
