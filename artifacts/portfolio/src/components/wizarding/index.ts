@@ -8,3 +8,6 @@ export { WizardingSkillSubtitle } from "./WizardingSkillSubtitle";
 export { WizardingScrollbarScope } from "./WizardingScrollbarScope";
 export { WizardingCinematicIntro } from "./WizardingCinematicIntro";
 export { MaraudersMap } from "./MaraudersMap";
+export { WizardingNoxLumos } from "./WizardingNoxLumos";
+export { WizardingPatronus } from "./WizardingPatronus";
+export { Platform934Divider } from "./Platform934Divider";

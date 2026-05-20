@@ -682,8 +682,7 @@ body.theme-wizarding[class*="hp-house-"] [class*="-card"] {
 body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="default"],
 body.theme-wizarding[class*="hp-house-"] .wizard-button[data-variant="glow"],
 body.theme-wizarding[class*="hp-house-"] button.primary,
-body.theme-wizarding[class*="hp-house-"] .btn-primary,
-body.theme-wizarding[class*="hp-house-"] #goblet-submit {
+body.theme-wizarding[class*="hp-house-"] .btn-primary {
   background: var(--hp-house-primary) !important;
   border-color: var(--hp-house-secondary) !important;
 }

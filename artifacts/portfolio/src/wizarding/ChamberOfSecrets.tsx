@@ -653,7 +653,7 @@ export function ChamberOfSecrets({ enabled }: { enabled: boolean }) {
 
               <Card className="wizard-card chamber-panel chamber-panel-quiz" id="panel-house-quiz">
                 <CardContent className="p-6 md:p-7">
-                  <h3 className="text-2xl font-bold mb-2">Sorting Scroll</h3>
+                  <h3 className="text-2xl font-bold mb-2">Sorting Hat</h3>
                   <p className="text-sm text-muted-foreground mb-5">
                     The Hat asks three things — only one question shows at a time.
                   </p>

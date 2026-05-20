@@ -4,12 +4,6 @@
   inherits: false;
 }
 
-@keyframes wizard-lumos-flash {
-  0% { opacity: 0; }
-  25% { opacity: 0.75; }
-  100% { opacity: 0; }
-}
-
 @keyframes wizard-revelio-unblur {
   from { opacity: 0; filter: blur(8px) sepia(1); }
   to { opacity: 1; filter: none; }
@@ -240,16 +234,6 @@ body.theme-wizarding .wizard-nav-spell-popup.is-exiting {
   animation: wizard-angle-spin 1.2s linear infinite;
 }
 
-.theme-wizarding #home.wizard-section-spell-cast::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.68), transparent 58%);
-  animation: wizard-lumos-flash 700ms ease-out;
-}
-
 .theme-wizarding #about.wizard-section-spell-cast > * {
   animation: wizard-revelio-unblur 0.8s ease-out both;
 }
@@ -336,7 +320,6 @@ body.theme-wizarding .wizard-nav-spell-popup.is-exiting {
   body.theme-wizarding .wizard-nav-spell-popup.is-exiting,
   .theme-wizarding .wizard-type-char,
   .theme-wizarding #projects .wizard-project-card:hover::before,
-  .theme-wizarding #home.wizard-section-spell-cast::before,
   .theme-wizarding #about.wizard-section-spell-cast > *,
   .theme-wizarding #skills.wizard-section-spell-cast .wizard-card,
   .theme-wizarding #projects.wizard-section-spell-cast .wizard-card,

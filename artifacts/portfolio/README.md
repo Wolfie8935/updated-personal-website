@@ -190,6 +190,10 @@ This is intentional behavior. A hard reload resets to baseline wizarding theme.
 
 - Wizarding-focused guide: [`readme_wizard.md`](./readme_wizard.md)
 
-## License / Attribution Notes
+## License
 
-This is a personal portfolio project. Wizarding presentation elements are fan-inspired visual motifs and interaction design, not an official affiliation.
+Copyright (c) 2025 Aman Goel. All Rights Reserved.
+
+This project and its source code may **not** be used, copied, modified, or distributed without the prior written permission of the author. See [LICENSE](./LICENSE) for full terms.
+
+Wizarding presentation elements are fan-inspired visual motifs and interaction design, not an official affiliation with Warner Bros. or the Harry Potter IP.

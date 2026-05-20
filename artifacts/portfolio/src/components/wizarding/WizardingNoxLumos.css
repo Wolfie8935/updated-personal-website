@@ -1,0 +1,32 @@
+:root.theme-wizarding .wizarding-nox-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 320ms ease-out;
+  background: radial-gradient(
+    circle var(--nox-spot-radius, 168px) at var(--nox-x, 50%) var(--nox-y, 50%),
+    rgb(0 0 0 / 0) 0%,
+    rgb(0 0 0 / 0) 22%,
+    rgb(0 0 0 / 0.82) 62%,
+    rgb(0 0 0 / 0.96) 100%
+  );
+}
+
+:root.theme-wizarding .wizarding-nox-overlay.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-wizarding .wizarding-nox-overlay {
+    transition: none;
+    background: radial-gradient(
+      circle min(55vw, 420px) at var(--nox-x, 50%) var(--nox-y, 50%),
+      rgb(0 0 0 / 0) 0%,
+      rgb(0 0 0 / 0) 18%,
+      rgb(0 0 0 / 0.88) 58%,
+      rgb(0 0 0 / 0.97) 100%
+    );
+  }
+}

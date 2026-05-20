@@ -9,8 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useTheme } from "@/context/ThemeContext";
-import { GobletOfFire } from "@/wizarding/GobletOfFire";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -24,7 +22,6 @@ const TO_EMAIL = "goel07.aman@gmail.com";
 
 export function Contact() {
   const { toast } = useToast();
-  const { theme } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
@@ -194,15 +191,6 @@ export function Contact() {
               </Card>
             </div>
           </div>
-
-          {theme === "wizarding" && (
-            <div className="max-w-3xl mx-auto mt-14 lg:mt-16">
-              <p className="text-center text-sm font-mono text-muted-foreground mb-3 tracking-wide">
-                Triwizard registration
-              </p>
-              <GobletOfFire />
-            </div>
-          )}
         </motion.div>
       </div>
     </section>

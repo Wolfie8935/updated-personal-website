@@ -1,0 +1,146 @@
+.theme-wizarding .p934-divider {
+  position: relative;
+  width: 100%;
+  height: 76px;
+  overflow: hidden;
+  /* faint ambient glow even before animation */
+  background: radial-gradient(
+    ellipse 12% 100% at 50% 50%,
+    rgba(255, 200, 80, 0.04),
+    transparent 70%
+  );
+}
+
+/* ── Half wrappers ───────────────────────────────────────────── */
+
+.theme-wizarding .p934-half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.theme-wizarding .p934-half--left {
+  left: 0;
+}
+
+.theme-wizarding .p934-half--right {
+  right: 0;
+}
+
+/* ── Brick grid ──────────────────────────────────────────────── */
+
+.theme-wizarding .p934-bricks {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 0;
+}
+
+.theme-wizarding .p934-bricks--left {
+  align-items: flex-end;
+}
+
+.theme-wizarding .p934-bricks--right {
+  align-items: flex-start;
+}
+
+.theme-wizarding .p934-row {
+  display: flex;
+  gap: 2px;
+}
+
+/* Stagger alternate rows by half a brick (20px + 1px gap / 2 = ~10.5px) */
+.theme-wizarding .p934-bricks--left .p934-row--offset {
+  margin-right: -21px;
+}
+
+.theme-wizarding .p934-bricks--right .p934-row--offset {
+  margin-left: -21px;
+}
+
+/* ── Individual brick ────────────────────────────────────────── */
+
+.theme-wizarding .p934-brick {
+  display: inline-block;
+  width: 40px;
+  min-width: 40px;
+  height: 16px;
+  border-radius: 1px;
+  /* subtle variation shades applied via modifier classes below */
+  background: #7b2e1c;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 170, 100, 0.13),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.28),
+    inset 1px 0 0 rgba(0, 0, 0, 0.08),
+    inset -1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.theme-wizarding .p934-brick--v0 { background: #7b2e1c; }
+.theme-wizarding .p934-brick--v1 { background: #852f1a; }
+.theme-wizarding .p934-brick--v2 { background: #6d2818; }
+.theme-wizarding .p934-brick--v3 { background: #7f311f; }
+
+/* ── Portal (center reveal) ──────────────────────────────────── */
+
+.theme-wizarding .p934-portal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.theme-wizarding .p934-portal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 30% 85% at 50% 50%,
+    rgba(255, 210, 100, 0.26) 0%,
+    rgba(255, 140, 20, 0.1) 45%,
+    transparent 70%
+  );
+}
+
+.theme-wizarding .p934-portal::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 70%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 200, 80, 0.55) 30%,
+    rgba(255, 220, 120, 0.8) 50%,
+    rgba(255, 200, 80, 0.55) 70%,
+    transparent
+  );
+  border-radius: 2px;
+  box-shadow: 0 0 10px 3px rgba(255, 185, 40, 0.35);
+}
+
+/* ── Platform label ──────────────────────────────────────────── */
+
+.theme-wizarding .p934-label {
+  position: relative;
+  z-index: 1;
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 218, 130, 0.92);
+  text-shadow:
+    0 0 6px rgba(255, 185, 50, 0.9),
+    0 0 18px rgba(255, 140, 10, 0.5),
+    0 0 36px rgba(255, 120, 0, 0.25);
+  user-select: none;
+}

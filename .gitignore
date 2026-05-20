@@ -47,3 +47,8 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Wizard assets (large/licensed media files)
+artifacts/portfolio/public/wizard_assets/*.mp3
+artifacts/portfolio/public/wizard_assets/*.wav
+artifacts/portfolio/public/wizard_assets/*.ogg

@@ -12,9 +12,11 @@ import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { HorcruxHunt } from "@/wizarding/HorcruxHunt";
 import {
-  ChapterDivider,
   MaraudersMap,
+  Platform934Divider,
   WizardingCinematicIntro,
+  WizardingNoxLumos,
+  WizardingPatronus,
   WizardingPhase4Effects,
 } from "@/components/wizarding";
 import { ChamberOfSecrets } from "@/wizarding/ChamberOfSecrets";
@@ -34,6 +36,8 @@ export default function Home() {
         )}
       >
       <WizardingPhase4Effects enabled={isWizarding} />
+      <WizardingNoxLumos enabled={isWizarding} />
+      <WizardingPatronus enabled={isWizarding} />
       <RestrictedSection />
       {isWizarding && (
         <>
@@ -50,22 +54,22 @@ export default function Home() {
       
       <main>
         <Hero />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <About />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Skills />
         {isWizarding && <MaraudersMap />}
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Experience />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Projects />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Research />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Achievements />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         <Contact />
-        {isWizarding && <ChapterDivider symbol="✦" className="my-10 md:my-12" />}
+        {isWizarding && <Platform934Divider className="my-10 md:my-12" />}
         {isWizarding && <ChamberOfSecrets enabled={isWizarding} />}
       </main>
 
