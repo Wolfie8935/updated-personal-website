@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital,wght@0,400;1,400&family=MedievalSharp&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./components/modern/modern.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
