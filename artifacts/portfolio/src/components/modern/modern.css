@@ -733,3 +733,28 @@
     transform: none !important;
   }
 }
+
+/* ---- Masked clip-reveal for the hero headline (the journey's opening beat) ---- */
+:root:not(.theme-wizarding) .reveal-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+:root:not(.theme-wizarding) .reveal-mask > span {
+  display: inline-block;
+  will-change: transform;
+  animation: modern-reveal-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes modern-reveal-up {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.theme-wizarding) .reveal-mask > span {
+    animation: none !important;
+  }
+}
