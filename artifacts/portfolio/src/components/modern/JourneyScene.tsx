@@ -64,6 +64,22 @@ export function JourneyScene({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
     container.appendChild(renderer.domElement);
 
+    // ---- Theme awareness ----
+    // Dark keeps a transparent canvas (the aurora + dark page show through, and
+    // additive glow / bloom read beautifully on black). Light can't do that: the
+    // bloom composer outputs an opaque black backdrop, and additive blending is
+    // invisible on a pale page. So in light we clear to the themed background
+    // colour, switch the constellation to normal blending, and skip bloom.
+    const readThemeBg = () => {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue("--background")
+        .trim();
+      const [h, s, l] = raw.split(/\s+/).map((v) => parseFloat(v));
+      return new THREE.Color().setHSL((h || 0) / 360, (s || 0) / 100, (l || 0) / 100);
+    };
+    const isLightTheme = () => document.documentElement.classList.contains("light");
+    let light = isLightTheme();
+
     // ---- Optional bloom (high tier only) ----
     const useBloom = tier === "high";
     let composer: EffectComposer | null = null;
@@ -165,6 +181,42 @@ export function JourneyScene({
     const synapses = new THREE.LineSegments(synGeo, synMat);
     group.add(synapses);
 
+    // ---- Apply / track the active theme ----
+    // baseLineOpacity / baseSynOpacity feed the render loop so per-frame opacity
+    // respects the theme. bloomActive gates the composer (off in light).
+    let baseLineOpacity = 0.55;
+    let baseSynOpacity = 0.14;
+    let bloomActive = useBloom && !light;
+    const applyTheme = (isLight: boolean) => {
+      const blend = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+      lineMat.blending = blend;
+      nodeMat.blending = blend;
+      starMat.blending = blend;
+      synMat.blending = blend;
+      lineMat.needsUpdate = true;
+      nodeMat.needsUpdate = true;
+      starMat.needsUpdate = true;
+      synMat.needsUpdate = true;
+      baseLineOpacity = isLight ? 0.85 : 0.55;
+      baseSynOpacity = isLight ? 0.2 : 0.14;
+      starMat.opacity = isLight ? 0.95 : 0.85;
+      nodeMat.opacity = isLight ? 1 : 0.9;
+      if (isLight) renderer.setClearColor(readThemeBg(), 1);
+      else renderer.setClearColor(0x000000, 0);
+      bloomActive = useBloom && !isLight;
+    };
+    applyTheme(light);
+
+    // Re-apply when the user toggles dark ↔ light (no full scene re-init).
+    const themeObserver = new MutationObserver(() => {
+      light = isLightTheme();
+      applyTheme(light);
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     // ---- Interaction & animation ----
     const pointer = { x: 0, y: 0 };
     const targetP = { x: 0, y: 0 };
@@ -213,11 +265,11 @@ export function JourneyScene({
       tmpColor.copy(palette[i0]).lerp(palette[i1], pIdx - i0);
       lineMat.color.copy(tmpColor);
       nodeMat.color.copy(tmpColor).offsetHSL(0.08, 0, 0.05);
-      lineMat.opacity = 0.55 * (1 - conv * 0.6);
-      synMat.opacity = (0.08 + Math.sin(t * 0.8) * 0.05 + 0.06) * (1 - conv);
+      lineMat.opacity = baseLineOpacity * (1 - conv * 0.6);
+      synMat.opacity = (baseSynOpacity + Math.sin(t * 0.8) * 0.05) * (1 - conv);
 
       if (bloomPass) bloomPass.strength = stage.bloom;
-      if (composer) composer.render();
+      if (composer && bloomActive) composer.render();
       else renderer.render(scene, camera);
     };
 
@@ -268,6 +320,7 @@ export function JourneyScene({
     return () => {
       stop();
       io.disconnect();
+      themeObserver.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
