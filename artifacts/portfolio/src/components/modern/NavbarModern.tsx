@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
 import { toggleThemeWithTransition } from "@/components/modern/themeTransition";
 import { useActiveSection } from "@/components/modern/hooks/useActiveSection";
+import { useScrollTo } from "@/components/modern/journey/ScrollContext";
 
 const navItems = [
   { name: "Home", href: "home" },
@@ -23,6 +24,7 @@ export function NavbarModern() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const active = useActiveSection(navItems.map((i) => i.href));
   const { theme, toggleTheme } = useTheme();
+  const scrollToTarget = useScrollTo();
 
   useEffect(() => {
     let ticking = false;
@@ -41,11 +43,7 @@ export function NavbarModern() {
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);
-    const el = document.getElementById(href);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 72;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    scrollToTarget(`#${href}`, -72);
   };
 
   const downloadResume = () => {

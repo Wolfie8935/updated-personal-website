@@ -1,13 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, ChevronRight, GraduationCap, Microscope, Code2, Trophy } from "lucide-react";
 import { GlassCard } from "@/components/modern/GlassCard";
-
-// Code-split three.js: the WebGL scene loads as its own async chunk so it doesn't
-// bloat the initial bundle (better LCP/TTI). The aurora background covers the gap.
-const HeroScene = lazy(() =>
-  import("@/components/modern/HeroScene").then((m) => ({ default: m.HeroScene })),
-);
+import { useScrollTo } from "@/components/modern/journey/ScrollContext";
 import { useCountUp } from "@/components/modern/hooks/useCountUp";
 import { useMagnetic } from "@/components/modern/hooks/useMagnetic";
 import { useTextScramble } from "@/components/modern/hooks/useTextScramble";
@@ -119,14 +114,7 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
 
 export function HeroModern() {
   const scrambled = useTextScramble(TAGLINES);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
+  const scrollTo = useScrollTo();
 
   const stats: Stat[] = [
     { kind: "num", icon: <GraduationCap className="h-5 w-5 text-indigo-400" />, label: "CGPA", value: 9.79, decimals: 2, suffix: " / 10" },
@@ -137,10 +125,8 @@ export function HeroModern() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden pt-24">
-      {/* WebGL constellation (async chunk; aurora shows until it loads) */}
-      <Suspense fallback={null}>
-        <HeroScene className="pointer-events-none absolute inset-0 z-0 opacity-90" />
-      </Suspense>
+      {/* The neural constellation now lives in a fixed full-viewport layer (JourneyScene
+          in ModernHome) that spans the whole page. This veil keeps hero text readable. */}
       {/* readability veil */}
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-background/10 via-transparent to-background/80" />
 
@@ -155,7 +141,12 @@ export function HeroModern() {
             <LiveStatus />
 
             <h1 className="sheen mt-6 text-6xl font-extrabold tracking-tight text-foreground sm:text-8xl">
-              Aman <span className="text-aurora">Goel.</span>
+              <span className="reveal-mask">
+                <span>Aman </span>
+              </span>
+              <span className="reveal-mask">
+                <span className="text-aurora" style={{ animationDelay: "0.08s" }}>Goel.</span>
+              </span>
             </h1>
 
             <p className="mt-4 font-mono text-sm text-indigo-400 sm:text-base">
@@ -199,7 +190,7 @@ export function HeroModern() {
                 Explore CERAS
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </MagneticButton>
-              <MagneticButton variant="ghost" onClick={() => scrollTo("projects")}>
+              <MagneticButton variant="ghost" onClick={() => scrollTo("#projects")}>
                 View Projects
               </MagneticButton>
             </motion.div>
@@ -215,7 +206,7 @@ export function HeroModern() {
       </div>
 
       <button
-        onClick={() => scrollTo("about")}
+        onClick={() => scrollTo("#about")}
         aria-label="Scroll to about"
         className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-muted-foreground transition-colors hover:text-foreground"
       >
