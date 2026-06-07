@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ExternalLink, Github, Terminal, Zap, FolderGit2 } from "lucide-react";
 import { SectionHeading } from "@/components/modern/SectionHeading";
 import { GlassCard } from "@/components/modern/GlassCard";
+import { useReducedMotion } from "@/components/wizarding/useReducedMotion";
 
 const GITHUB_REPOS = "https://github.com/Wolfie8935?tab=repositories";
 
@@ -98,12 +100,25 @@ function LinkBtn({
 }
 
 export function ProjectsModern() {
+  const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  // Gentle outer parallax: the whole grid drifts up as the section scrolls past,
+  // adding depth over the fixed 3D journey without disturbing each card's reveal.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [36, -36]);
+
   return (
-    <section id="projects" className="cv-auto relative py-24">
+    <section ref={sectionRef} id="projects" className="cv-auto relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading index="04" title="Featured" accent="Projects" />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          style={{ y: gridY }}
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+        >
           {projects.map((project, idx) => (
             <motion.div
               key={project.id}
@@ -197,7 +212,7 @@ export function ProjectsModern() {
               </GlassCard>
             </a>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
