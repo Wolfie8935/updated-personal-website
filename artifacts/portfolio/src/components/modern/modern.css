@@ -66,7 +66,7 @@
      not the WebGL bloom composer is covering this layer (bloom output is
      opaque; without bloom the canvas is transparent and this shows through).
      Light mode overrides below restore stronger colour. */
-  opacity: 0.18;
+  opacity: 0;
   will-change: transform;
   transform: translateZ(0);
   mix-blend-mode: screen;
