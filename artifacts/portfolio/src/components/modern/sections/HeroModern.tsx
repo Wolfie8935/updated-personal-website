@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ChevronRight, GraduationCap, Microscope, Code2, Trophy } from "lucide-react";
+import { useReducedMotion } from "@/components/wizarding/useReducedMotion";
 import { GlassCard } from "@/components/modern/GlassCard";
 import { useScrollTo } from "@/components/modern/journey/ScrollContext";
 import { useCountUp } from "@/components/modern/hooks/useCountUp";
@@ -113,6 +115,14 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
 export function HeroModern() {
   const scrambled = useTextScramble(TAGLINES);
   const scrollTo = useScrollTo();
+  const reduced = useReducedMotion();
+
+  // Cinematic zoom-out: as you scroll away, the whole hero recedes into the
+  // scene (scales down + dims) instead of just sliding off — the camera feels
+  // like it's pulling back into the 3D journey.
+  const { scrollY } = useScroll();
+  const heroScale = useTransform(scrollY, [0, 720], reduced ? [1, 1] : [1, 0.9]);
+  const heroOpacity = useTransform(scrollY, [0, 720], reduced ? [1, 1] : [1, 0.25]);
 
   const stats: Stat[] = [
     { kind: "num", icon: <GraduationCap className="h-5 w-5 text-indigo-400" />, label: "CGPA", value: 9.79, decimals: 2, suffix: " / 10" },
@@ -128,7 +138,10 @@ export function HeroModern() {
       {/* readability veil */}
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-background/10 via-transparent to-background/80" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <motion.div
+        style={{ scale: heroScale, opacity: heroOpacity }}
+        className="relative z-10 mx-auto w-full max-w-7xl origin-top px-4 sm:px-6 lg:px-8 will-change-transform"
+      >
         <div className="flex min-h-[78vh] flex-col justify-center">
           {/* CSS-driven entrance (not framer `animate`): the hero must appear
               even if the JS animation ticker stalls during initial load. */}
@@ -192,7 +205,7 @@ export function HeroModern() {
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <button
         onClick={() => scrollTo("#about")}

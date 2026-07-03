@@ -72,6 +72,9 @@ export function StatementInterlude({
     // line completes while it's the hero of the viewport, not after.
     offset: ["start 0.92", "start 0.35"],
   });
+  // zoom-in: the statement grows toward the reader while its words ignite,
+  // then settles slightly past full size — a scroll-driven dolly-in
+  const scale = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [0.82, 1.06]);
 
   // Flatten segments into words while remembering which are accented.
   const words = segments.flatMap((seg) =>
@@ -86,7 +89,10 @@ export function StatementInterlude({
           {kicker}
         </p>
       )}
-      <p className="text-balance text-center text-4xl font-bold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+      <motion.p
+        style={{ scale }}
+        className="text-balance text-center text-4xl font-bold leading-[1.15] tracking-tight text-foreground will-change-transform sm:text-5xl md:text-6xl"
+      >
         {words.map(({ w, accent }, i) => (
           <Word
             key={`${w}-${i}`}
@@ -99,7 +105,7 @@ export function StatementInterlude({
             {w}
           </Word>
         ))}
-      </p>
+      </motion.p>
     </div>
   );
 }
