@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowDown, ChevronRight, GraduationCap, Microscope, Code2, Trophy } from "lucide-react";
 import { GlassCard } from "@/components/modern/GlassCard";
 import { useScrollTo } from "@/components/modern/journey/ScrollContext";
@@ -84,10 +83,9 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
   });
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
+    <div
+      className="hero-enter"
+      style={{ "--enter-delay": `${0.9 + index * 0.1}s` } as React.CSSProperties}
     >
       <GlassCard className="glass-blur h-full p-5" tiltMax={10}>
         <div className="flex flex-col items-start gap-3">
@@ -108,7 +106,7 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
           </div>
         </div>
       </GlassCard>
-    </motion.div>
+    </div>
   );
 }
 
@@ -132,12 +130,9 @@ export function HeroModern() {
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex min-h-[78vh] flex-col justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl"
-          >
+          {/* CSS-driven entrance (not framer `animate`): the hero must appear
+              even if the JS animation ticker stalls during initial load. */}
+          <div className="hero-enter max-w-3xl">
             <LiveStatus />
 
             <h1 className="sheen mt-6 text-6xl font-extrabold tracking-tight text-foreground sm:text-8xl">
@@ -156,35 +151,29 @@ export function HeroModern() {
             </p>
 
             <div className="mt-5 h-16 sm:h-12">
-              <motion.p
-                className="text-2xl font-light text-muted-foreground sm:text-3xl"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.35, duration: 0.8 }}
+              <p
+                className="hero-enter text-2xl font-light text-muted-foreground sm:text-3xl"
+                style={{ "--enter-delay": "0.35s" } as React.CSSProperties}
               >
                 <span className="font-medium text-foreground">Former Indian tennis player</span>{" "}
                 who now <span className="text-aurora font-medium">rallies with</span>{" "}
                 <span className="font-medium text-cyan-400">AI &amp; ML systems</span>.
-              </motion.p>
+              </p>
             </div>
 
-            <motion.p
-              className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
+            <p
+              className="hero-enter mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
+              style={{ "--enter-delay": "0.5s" } as React.CSSProperties}
             >
               I&apos;m a CS undergrad who builds real systems: reasoning engines, ML pipelines,
               and backends that stay fast under load. Recent work includes{" "}
               <span className="text-foreground font-medium">CERAS</span> — a cognitive efficiency
               &amp; reasoning alignment platform — and probabilistic-ML research at IISc Bangalore.
-            </motion.p>
+            </p>
 
-            <motion.div
-              className="mt-9 flex flex-wrap gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
+            <div
+              className="hero-enter mt-9 flex flex-wrap gap-4"
+              style={{ "--enter-delay": "0.7s" } as React.CSSProperties}
             >
               <MagneticButton onClick={() => window.open("https://ceras-frontend.onrender.com/", "_blank")}>
                 Explore CERAS
@@ -193,8 +182,8 @@ export function HeroModern() {
               <MagneticButton variant="ghost" onClick={() => scrollTo("#projects")}>
                 View Projects
               </MagneticButton>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Stats */}
           <div className="mt-20 grid grid-cols-1 gap-4 pb-10 sm:grid-cols-2 lg:grid-cols-4">

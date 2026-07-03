@@ -97,10 +97,13 @@ export function SkillsModern() {
           {skillCategories.map((category, i) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              // columns enter from their own side: left column slides in from the
+              // left, right column from the right, centre rises — a horizontal +
+              // vertical weave instead of a uniform fade-up
+              initial={{ opacity: 0, x: ((i % 3) - 1) * 44, y: (i % 3) === 1 ? 34 : 8 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+              transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
             >
               <GlassCard className="group h-full p-6" tiltMax={7}>
                 <div className="mb-4 flex items-center gap-3">

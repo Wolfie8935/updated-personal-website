@@ -52,3 +52,6 @@ Thumbs.db
 artifacts/portfolio/public/wizard_assets/*.mp3
 artifacts/portfolio/public/wizard_assets/*.wav
 artifacts/portfolio/public/wizard_assets/*.ogg
+
+# graphify knowledge graph (generated locally)
+graphify-out/

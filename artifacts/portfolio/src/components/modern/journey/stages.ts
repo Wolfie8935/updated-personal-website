@@ -23,16 +23,33 @@ export interface StageFrame {
   palette: number;
   /** 0 = lattice intact, 1 = particles converged to a point */
   converge: number;
+  /** morph target index into journey/shapes.ts (fractional = mid-morph) */
+  morph: number;
+  /** extra x-tilt for shapes that read better tipped toward camera (wave) */
+  tiltX: number;
 }
 
 // Ordered by `at`. Stages cross-fade; they never hard-cut.
+// The shape vocabulary (journey/shapes.ts):
+//   0 torus knot · 1 helix · 2 wave sheet · 3 galaxy
 export const STAGES: StageFrame[] = [
-  { at: 0.0,  cameraZ: 7.0, scale: 1.0,  offsetX: 1.4,  offsetY: 0.0,  spin: 0.12, spread: 1.0,  bloom: 1.15, palette: 0.0, converge: 0 },
-  { at: 0.16, cameraZ: 7.6, scale: 0.92, offsetX: -1.6, offsetY: 0.1,  spin: 0.10, spread: 1.1,  bloom: 0.95, palette: 0.5, converge: 0 },
-  { at: 0.36, cameraZ: 8.2, scale: 1.05, offsetX: 1.2,  offsetY: -0.1, spin: 0.16, spread: 1.35, bloom: 1.05, palette: 1.2, converge: 0 },
-  { at: 0.58, cameraZ: 9.6, scale: 0.8,  offsetX: -1.0, offsetY: 0.0,  spin: 0.08, spread: 1.2,  bloom: 0.7,  palette: 2.0, converge: 0 },
-  { at: 0.78, cameraZ: 8.4, scale: 1.1,  offsetX: 0.0,  offsetY: 0.0,  spin: 0.20, spread: 0.9,  bloom: 1.0,  palette: 2.6, converge: 0 },
-  { at: 1.0,  cameraZ: 6.4, scale: 0.7,  offsetX: 0.0,  offsetY: 0.0,  spin: 0.30, spread: 0.4,  bloom: 1.4,  palette: 3.0, converge: 1 },
+  // Hero — an interlocked torus knot slowly tumbling on the right. Not a ball.
+  { at: 0.0,  cameraZ: 7.0, scale: 1.0,  offsetX: 1.5,  offsetY: 0.0,  spin: 0.18, spread: 1.0,  bloom: 1.2,  palette: 0.0, converge: 0, morph: 0,   tiltX: 0.3 },
+  // About — the knot unwinds into a double helix on the left.
+  { at: 0.14, cameraZ: 7.8, scale: 0.92, offsetX: -1.7, offsetY: 0.1,  spin: 0.26, spread: 1.1,  bloom: 1.0,  palette: 0.5, converge: 0, morph: 1,   tiltX: 0.35 },
+  // Skills — the helix cascades into a flowing wave sheet, tipped toward camera.
+  { at: 0.3,  cameraZ: 8.2, scale: 1.1,  offsetX: 1.2,  offsetY: -0.6, spin: 0.1,  spread: 1.3,  bloom: 1.0,  palette: 1.0, converge: 0, morph: 2,   tiltX: 0.85 },
+  // Experience — the sheet keeps rolling, drifting left under the timeline.
+  { at: 0.44, cameraZ: 8.8, scale: 1.0,  offsetX: -1.1, offsetY: -0.4, spin: 0.14, spread: 1.2,  bloom: 1.05, palette: 1.5, converge: 0, morph: 2.3, tiltX: 0.7 },
+  // Projects — the sheet swirls up into a spiral galaxy on the right.
+  { at: 0.58, cameraZ: 8.6, scale: 0.95, offsetX: 1.3,  offsetY: 0.1,  spin: 0.24, spread: 1.35, bloom: 1.05, palette: 2.0, converge: 0, morph: 3,   tiltX: 0.5 },
+  // Research — the galaxy holds, drifting left, calmer.
+  { at: 0.72, cameraZ: 9.2, scale: 0.9,  offsetX: -1.2, offsetY: 0.0,  spin: 0.18, spread: 1.15, bloom: 1.1,  palette: 2.5, converge: 0, morph: 3,   tiltX: 0.55 },
+  // Off the Clock (07) — the galaxy sweeps CENTRE-STAGE, big and playful,
+  // spinning up behind the flip cards. The section's own 3D moment.
+  { at: 0.86, cameraZ: 7.2, scale: 1.35, offsetX: 0.0,  offsetY: -0.2, spin: 0.55, spread: 1.0,  bloom: 1.35, palette: 3.0, converge: 0, morph: 3,   tiltX: 0.75 },
+  // Contact — everything converges to a single glowing point. One idea.
+  { at: 1.0,  cameraZ: 6.2, scale: 0.7,  offsetX: 0.0,  offsetY: 0.2,  spin: 0.4,  spread: 0.4,  bloom: 1.5,  palette: 3.5, converge: 1, morph: 3,   tiltX: 0.2 },
 ];
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -66,5 +83,7 @@ export function sampleStage(p: number, stages: StageFrame[] = STAGES): SampledSt
     bloom: lerp(lo.bloom, hi.bloom, t),
     palette: lerp(lo.palette, hi.palette, t),
     converge: lerp(lo.converge, hi.converge, t),
+    morph: lerp(lo.morph, hi.morph, t),
+    tiltX: lerp(lo.tiltX, hi.tiltX, t),
   };
 }

@@ -758,3 +758,279 @@
     animation: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Enhancements round 3 — award pass: interest quirks, contact CTA, marquee v2
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ---- shared 3D stage: gives children real perspective for rotateX/Y ---- */
+:root:not(.theme-wizarding) .swing-3d {
+  perspective: 1200px;
+}
+
+/* ---- hero entrance: pure CSS so the opening never depends on the JS
+   animation ticker (which can stall during heavy initial load) ---- */
+:root:not(.theme-wizarding) .hero-enter {
+  opacity: 0;
+  animation: hero-enter-up 0.7s var(--modern-ease) var(--enter-delay, 0s) forwards;
+}
+@keyframes hero-enter-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.theme-wizarding) .hero-enter {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}
+
+/* ---- Interests: true 3D flip cards ---- */
+:root:not(.theme-wizarding) .flip-scene {
+  perspective: 1000px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+:root:not(.theme-wizarding) .flip-inner {
+  position: relative;
+  min-height: 200px;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.32, 1.25, 0.5, 1);
+}
+:root:not(.theme-wizarding) .flip-scene:hover .flip-inner,
+:root:not(.theme-wizarding) .flip-scene:focus-visible .flip-inner,
+:root:not(.theme-wizarding) .flip-scene.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+:root:not(.theme-wizarding) .flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+:root:not(.theme-wizarding) .flip-front {
+  position: relative; /* defines the card height */
+  min-height: 200px;
+}
+:root:not(.theme-wizarding) .flip-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--aurora-1) 18%, var(--card-frost)),
+    color-mix(in srgb, var(--aurora-3) 14%, var(--card-frost))
+  );
+}
+:root:not(.theme-wizarding) .flip-hint {
+  opacity: 0.55;
+  transition: opacity 0.3s var(--modern-ease), transform 0.4s var(--modern-spring);
+}
+:root:not(.theme-wizarding) .flip-scene:hover .flip-hint {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+/* ---- back-face loops: run whenever visible (back face only shows flipped) ---- */
+:root:not(.theme-wizarding) .flip-quirk-ball {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 32% 30%, #ecfccb 0%, #bef264 45%, #84cc16 100%);
+  box-shadow: 0 0 10px rgba(190, 242, 100, 0.5);
+  animation: flip-ball-bounce 1.3s cubic-bezier(0.35, 0, 0.65, 1) infinite alternate;
+}
+@keyframes flip-ball-bounce {
+  0%   { transform: translate(0, 0) scaleY(0.92); }
+  100% { transform: translate(140px, -46px) scaleY(1); }
+}
+:root:not(.theme-wizarding) .flip-quirk-plane {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  color: var(--aurora-2);
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.5));
+  animation: flip-plane-lap 3.2s var(--modern-ease) infinite;
+}
+@keyframes flip-plane-lap {
+  0%   { transform: translate(0, 0) rotate(4deg); opacity: 0; }
+  12%  { opacity: 1; }
+  50%  { transform: translate(-90px, 26px) rotate(-10deg); opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translate(-180px, -8px) rotate(6deg); opacity: 0; }
+}
+:root:not(.theme-wizarding) .flip-quirk-steam {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+  display: flex;
+  gap: 7px;
+}
+:root:not(.theme-wizarding) .flip-quirk-steam i {
+  display: block;
+  width: 3px;
+  height: 26px;
+  border-radius: 999px;
+  background: linear-gradient(to top, transparent, rgba(236, 72, 153, 0.6), transparent);
+  filter: blur(1.5px);
+  animation: quirk-steam-rise 1.6s var(--modern-ease) infinite;
+}
+:root:not(.theme-wizarding) .flip-quirk-steam i:nth-child(2) { height: 34px; animation-delay: 0.25s; }
+:root:not(.theme-wizarding) .flip-quirk-steam i:nth-child(3) { height: 22px; animation-delay: 0.5s; }
+:root:not(.theme-wizarding) .flip-quirk-type {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 15px;
+  color: var(--aurora-2);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: quirk-typewriter 1.6s steps(24, end) 0.4s infinite alternate;
+}
+:root:not(.theme-wizarding) .type-caret {
+  animation: caret-blink 0.8s step-end infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+:root:not(.theme-wizarding) .flip-quirk-think {
+  position: absolute;
+  right: 22px;
+  top: 20px;
+  display: flex;
+  gap: 5px;
+}
+:root:not(.theme-wizarding) .flip-quirk-think i {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--aurora-1);
+  animation: quirk-think-pulse 1s var(--modern-ease) infinite;
+}
+:root:not(.theme-wizarding) .flip-quirk-think i:nth-child(2) { animation-delay: 0.18s; background: var(--aurora-3); }
+:root:not(.theme-wizarding) .flip-quirk-think i:nth-child(3) { animation-delay: 0.36s; background: var(--aurora-2); }
+:root:not(.theme-wizarding) .flip-quirk-compass {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  color: #34d399;
+  animation: quirk-compass-spin 3.4s cubic-bezier(0.4, 0, 0.3, 1) infinite;
+}
+
+/* ---- tennis-ball icon (pure CSS — crisp at any scale, no emoji font drift) ---- */
+:root:not(.theme-wizarding) .tennis-ball-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 32% 30%, #ecfccb 0%, #bef264 45%, #84cc16 100%);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset -2px -2px 4px rgba(63, 98, 18, 0.55);
+}
+:root:not(.theme-wizarding) .tennis-ball-icon::before,
+:root:not(.theme-wizarding) .tennis-ball-icon::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1.6px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+}
+:root:not(.theme-wizarding) .tennis-ball-icon::before {
+  left: -13px;
+  top: 1px;
+}
+:root:not(.theme-wizarding) .tennis-ball-icon::after {
+  right: -13px;
+  top: 1px;
+}
+
+/* ---- shared quirk keyframes (used by the flip-card back faces) ---- */
+@keyframes quirk-steam-rise {
+  0%   { opacity: 0; transform: translateY(8px) scaleY(0.6) translateX(0); }
+  35%  { opacity: 0.9; }
+  100% { opacity: 0; transform: translateY(-22px) scaleY(1.15) translateX(3px); }
+}
+@keyframes quirk-typewriter {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+@keyframes quirk-think-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1.25); }
+}
+@keyframes quirk-compass-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---- marquee v2: reverse row + soft edge fade ---- */
+:root:not(.theme-wizarding) .marquee--reverse {
+  animation-direction: reverse;
+  animation-duration: 42s;
+}
+:root:not(.theme-wizarding) .marquee-band {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ---- contact: big email CTA with a gradient underline sweep ---- */
+:root:not(.theme-wizarding) .email-cta {
+  position: relative;
+  padding-bottom: 3px;
+}
+:root:not(.theme-wizarding) .email-cta .email-cta-text {
+  background-image: linear-gradient(90deg, var(--aurora-1), var(--aurora-2), var(--aurora-3));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  transition: background-size 0.45s var(--modern-ease);
+}
+:root:not(.theme-wizarding) .email-cta:hover .email-cta-text {
+  background-size: 100% 2px;
+}
+
+/* ---- contact: the send plane wiggles while sending ---- */
+:root:not(.theme-wizarding) .send-plane {
+  animation: send-plane-fly 0.9s var(--modern-ease) infinite;
+}
+@keyframes send-plane-fly {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  55%  { transform: translate(14px, -12px) rotate(12deg); opacity: 0; }
+  56%  { transform: translate(-10px, 8px) rotate(-8deg); opacity: 0; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+
+/* ---- reduced motion: all round-3 quirks off ---- */
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.theme-wizarding) .flip-inner {
+    transition: none !important;
+  }
+  :root:not(.theme-wizarding) .flip-quirk-ball,
+  :root:not(.theme-wizarding) .flip-quirk-plane,
+  :root:not(.theme-wizarding) .flip-quirk-steam i,
+  :root:not(.theme-wizarding) .flip-quirk-type,
+  :root:not(.theme-wizarding) .type-caret,
+  :root:not(.theme-wizarding) .flip-quirk-think i,
+  :root:not(.theme-wizarding) .flip-quirk-compass,
+  :root:not(.theme-wizarding) .flip-hint,
+  :root:not(.theme-wizarding) .send-plane,
+  :root:not(.theme-wizarding) .marquee--reverse {
+    animation: none !important;
+    transition: none !important;
+  }
+  :root:not(.theme-wizarding) .email-cta .email-cta-text {
+    transition: none !important;
+  }
+}

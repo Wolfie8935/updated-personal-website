@@ -5,21 +5,24 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { sampleStage } from "@/components/modern/journey/stages";
+import { buildShapes } from "@/components/modern/journey/shapes";
 import type { DeviceTier } from "@/components/modern/hooks/useDeviceTier";
 
 /**
- * JourneyScene — the signature scroll-driven neural constellation for the modern
- * themes. Rendered as a fixed full-viewport WebGL layer behind all content.
+ * JourneyScene — the signature scroll-driven morphing constellation for the
+ * modern themes. Rendered as a fixed full-viewport WebGL layer behind all
+ * content.
  *
- * One evolving "reasoning core" (icosahedron lattice + node points) wrapped in a
- * drifting additive star field and faint synapses. As the visitor scrolls, the
- * normalized progress in `progressRef` drives a keyframed journey (see journey/
- * stages.ts): the core dollies, drifts, re-spreads, shifts hue, and finally
- * converges inward to a single glowing point.
+ * The centrepiece is a particle cloud that MORPHS between shape targets as the
+ * visitor scrolls — sphere → double helix → torus knot → wave sheet → spiral
+ * galaxy → a single converged point (see journey/shapes.ts + journey/stages.ts).
+ * Around it: a drifting additive star field and faint synapse lines. The
+ * normalized progress in `progressRef` drives the whole keyframed journey:
+ * camera dolly, drift, hue shifts, morph, and final convergence.
  *
  * Tiers (see useDeviceTier):
- * - "high": full star count, DPR ≤ 1.75, UnrealBloom glow.
- * - "low":  fewer stars, DPR 1, no bloom.
+ * - "high": 2600 particles, full star count, DPR ≤ 1.75, UnrealBloom glow.
+ * - "low":  1100 particles, fewer stars, DPR 1, no bloom.
  * - "static": a single rendered frame, no rAF loop (prefers-reduced-motion).
  *
  * Lifecycle-safe: caps DPR, pauses when off-screen or the tab is hidden, handles
@@ -48,11 +51,14 @@ export function JourneyScene({
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
     camera.position.set(0, 0, 7);
 
+    // Bloom already soft-blurs everything it renders, so MSAA on top of it is
+    // pure waste; skipping it (and capping DPR at 1.5) roughly halves GPU cost.
+    const useBloom = tier === "high";
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: !useBloom,
         powerPreference: "high-performance",
       });
     } catch {
@@ -60,7 +66,7 @@ export function JourneyScene({
       return;
     }
     renderer.setSize(width, height);
-    const maxDpr = tier === "low" ? 1 : 1.75;
+    const maxDpr = tier === "low" ? 1 : 1.5;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
     container.appendChild(renderer.domElement);
 
@@ -81,13 +87,20 @@ export function JourneyScene({
     let light = isLightTheme();
 
     // ---- Optional bloom (high tier only) ----
-    const useBloom = tier === "high";
+    // Half-resolution bloom target: the pass is a stack of gaussian blurs, so
+    // feeding it a half-size buffer is visually identical for a glow effect
+    // but ~4x cheaper — the main de-lag lever.
     let composer: EffectComposer | null = null;
     let bloomPass: UnrealBloomPass | null = null;
     if (useBloom) {
       composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
-      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 1.15, 0.6, 0.85);
+      bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(width / 2, height / 2),
+        1.15,
+        0.6,
+        0.85,
+      );
       composer.addPass(bloomPass);
     }
 
@@ -99,33 +112,55 @@ export function JourneyScene({
     ];
 
     const group = new THREE.Group();
-    group.position.set(1.4, 0, 0); // matches STAGES[0] so there's no first-frame snap
+    group.position.set(1.5, 0, 0); // matches STAGES[0] so there's no first-frame snap
+    // photogenic starting angle: the torus knot reads as a sculpted object on
+    // the very first rendered frame instead of an edge-on particle band
+    group.rotation.set(0.45, 0.65, 0);
     scene.add(group);
 
-    // ---- Reasoning core: icosahedron lattice ----
-    const icoGeo = new THREE.IcosahedronGeometry(1.7, 1);
-    const edges = new THREE.EdgesGeometry(icoGeo);
-    const lineMat = new THREE.LineBasicMaterial({
-      color: palette[0].clone(),
-      transparent: true,
-      opacity: 0.55,
-      blending: THREE.AdditiveBlending,
-    });
-    const lattice = new THREE.LineSegments(edges, lineMat);
-    group.add(lattice);
+    // ---- Morphing journey cloud: the signature object ----
+    const CLOUD_COUNT = tier === "low" ? 1100 : 2600;
+    const shapes = buildShapes(CLOUD_COUNT);
+    const cloudPositions = new Float32Array(CLOUD_COUNT * 3);
+    cloudPositions.set(shapes[0]);
 
-    const nodeTex = makeSpriteTexture();
-    const nodeMat = new THREE.PointsMaterial({
-      color: palette[1].clone(),
-      size: 0.12,
+    // Per-particle colour gradient along the index so the cloud shimmers with
+    // the whole aurora palette; the material colour tints it per stage.
+    const cloudColors = new Float32Array(CLOUD_COUNT * 3);
+    const tmpGrad = new THREE.Color();
+    for (let i = 0; i < CLOUD_COUNT; i++) {
+      const g = (i / CLOUD_COUNT) * (palette.length - 1);
+      const gi = Math.floor(g);
+      tmpGrad.copy(palette[gi]).lerp(palette[Math.min(gi + 1, palette.length - 1)], g - gi);
+      // brighten toward white so vertex colours read after material tinting
+      tmpGrad.lerp(new THREE.Color("#ffffff"), 0.45);
+      cloudColors[i * 3] = tmpGrad.r;
+      cloudColors[i * 3 + 1] = tmpGrad.g;
+      cloudColors[i * 3 + 2] = tmpGrad.b;
+    }
+
+    // Physics state: every particle is a body with velocity. Each frame a
+    // spring pulls it toward its morph target, damping bleeds energy, and the
+    // pointer pushes bodies aside — so the cloud behaves like a physical
+    // medium (ripples, recoils, reforms) instead of a keyframed texture.
+    const cloudVel = new Float32Array(CLOUD_COUNT * 3);
+
+    const cloudGeo = new THREE.BufferGeometry();
+    cloudGeo.setAttribute("position", new THREE.BufferAttribute(cloudPositions, 3));
+    cloudGeo.setAttribute("color", new THREE.BufferAttribute(cloudColors, 3));
+    const cloudTex = makeSpriteTexture();
+    const cloudMat = new THREE.PointsMaterial({
+      color: palette[0].clone(),
+      size: tier === "low" ? 0.065 : 0.05,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.95,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      map: nodeTex,
+      map: cloudTex,
     });
-    const nodes = new THREE.Points(icoGeo, nodeMat);
-    group.add(nodes);
+    const cloud = new THREE.Points(cloudGeo, cloudMat);
+    group.add(cloud);
 
     // ---- Constellation field: scattered additive stars ----
     const STAR_COUNT = tier === "low" ? 70 : 150;
@@ -160,6 +195,51 @@ export function JourneyScene({
     const stars = new THREE.Points(starGeo, starMat);
     group.add(stars);
 
+    // ---- Wireframe satellites: small geometric solids orbiting at different
+    // depths — they sell the parallax and make the scene read as a 3D space,
+    // not a flat backdrop. ----
+    interface Satellite {
+      mesh: THREE.LineSegments;
+      geo: THREE.EdgesGeometry;
+      mat: THREE.LineBasicMaterial;
+      orbitR: number;
+      orbitSpeed: number;
+      orbitPhase: number;
+      orbitTiltY: number;
+      spinX: number;
+      spinY: number;
+    }
+    const satellites: Satellite[] = [];
+    const satelliteSpecs: Array<{ geo: THREE.BufferGeometry; color: number; r: number; speed: number; scale: number }> = [
+      { geo: new THREE.IcosahedronGeometry(0.34, 0), color: 0x6366f1, r: 3.3, speed: 0.12, scale: 1 },
+      { geo: new THREE.OctahedronGeometry(0.3, 0), color: 0x22d3ee, r: 4.1, speed: -0.09, scale: 1 },
+      { geo: new THREE.TetrahedronGeometry(0.28, 0), color: 0xec4899, r: 4.8, speed: 0.07, scale: 1 },
+    ];
+    for (let i = 0; i < satelliteSpecs.length; i++) {
+      const spec = satelliteSpecs[i];
+      const edges = new THREE.EdgesGeometry(spec.geo);
+      spec.geo.dispose(); // only the edges survive
+      const mat = new THREE.LineBasicMaterial({
+        color: spec.color,
+        transparent: true,
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending,
+      });
+      const mesh = new THREE.LineSegments(edges, mat);
+      group.add(mesh);
+      satellites.push({
+        mesh,
+        geo: edges,
+        mat,
+        orbitR: spec.r,
+        orbitSpeed: spec.speed,
+        orbitPhase: (i / satelliteSpecs.length) * Math.PI * 2,
+        orbitTiltY: 0.5 + i * 0.4,
+        spinX: 0.3 + i * 0.12,
+        spinY: 0.22 + i * 0.09,
+      });
+    }
+
     // ---- Synapses: faint lines from a few stars to the core ----
     const synapsePositions: number[] = [];
     for (let i = 0; i < 18; i++) {
@@ -182,25 +262,27 @@ export function JourneyScene({
     group.add(synapses);
 
     // ---- Apply / track the active theme ----
-    // baseLineOpacity / baseSynOpacity feed the render loop so per-frame opacity
+    // baseCloudOpacity / baseSynOpacity feed the render loop so per-frame opacity
     // respects the theme. bloomActive gates the composer (off in light).
-    let baseLineOpacity = 0.55;
+    let baseCloudOpacity = 0.95;
     let baseSynOpacity = 0.14;
     let bloomActive = useBloom && !light;
     const applyTheme = (isLight: boolean) => {
       const blend = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
-      lineMat.blending = blend;
-      nodeMat.blending = blend;
+      cloudMat.blending = blend;
       starMat.blending = blend;
       synMat.blending = blend;
-      lineMat.needsUpdate = true;
-      nodeMat.needsUpdate = true;
+      cloudMat.needsUpdate = true;
       starMat.needsUpdate = true;
       synMat.needsUpdate = true;
-      baseLineOpacity = isLight ? 0.85 : 0.55;
+      for (const s of satellites) {
+        s.mat.blending = blend;
+        s.mat.opacity = isLight ? 0.65 : 0.5;
+        s.mat.needsUpdate = true;
+      }
+      baseCloudOpacity = isLight ? 0.8 : 0.95;
       baseSynOpacity = isLight ? 0.2 : 0.14;
       starMat.opacity = isLight ? 0.95 : 0.85;
-      nodeMat.opacity = isLight ? 1 : 0.9;
       if (isLight) renderer.setClearColor(readThemeBg(), 1);
       else renderer.setClearColor(0x000000, 0);
       bloomActive = useBloom && !isLight;
@@ -228,33 +310,144 @@ export function JourneyScene({
 
     const clock = new THREE.Clock();
     const tmpColor = new THREE.Color();
+    const maxShape = shapes.length - 1;
+
+    // pointer projected into the cloud's local space for the repulsion force
+    const pointerLocal = new THREE.Vector3();
+    const SPRING_K = 16; // pull toward morph target
+    const DAMPING = 5.5; // exponential energy loss
+    const REPULSE_R = 1.15; // pointer influence radius (world units)
+    const REPULSE_F = 26; // pointer push strength
 
     const renderFrame = () => {
-      const t = clock.getElapsedTime();
+      // clamped delta so physics stays stable across tab-switch hitches
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const t = clock.elapsedTime;
       const stage = sampleStage(progressRef.current);
 
       pointer.x += (targetP.x - pointer.x) * 0.05;
       pointer.y += (targetP.y - pointer.y) * 0.05;
 
-      // Camera dolly + group placement eased toward the journey stage targets.
+      // Camera dolly + a slow lateral orbit so the scene is seen from a living
+      // viewpoint (this is what makes it read as 3D space, not wallpaper).
       camera.position.z += (stage.cameraZ - camera.position.z) * 0.06;
+      camera.position.x += (Math.sin(t * 0.07) * 0.5 - camera.position.x) * 0.03;
+      camera.position.y += (Math.cos(t * 0.055) * 0.3 - camera.position.y) * 0.03;
+      camera.lookAt(group.position.x * 0.4, group.position.y * 0.4, 0);
       group.position.x += (stage.offsetX - group.position.x) * 0.06;
       group.position.y += (stage.offsetY - group.position.y) * 0.06;
       const s = group.scale.x + (stage.scale - group.scale.x) * 0.06;
       group.scale.setScalar(s);
 
-      group.rotation.y = t * stage.spin + pointer.x * 0.5;
-      group.rotation.x = Math.sin(t * 0.18) * 0.15 + pointer.y * 0.35;
+      // 0.65 base yaw = photogenic three-quarter view from frame one
+      group.rotation.y = 0.65 + t * stage.spin + pointer.x * 0.5;
+      group.rotation.x =
+        stage.tiltX + Math.sin(t * 0.18) * 0.12 + pointer.y * 0.3;
       stars.rotation.y = -t * 0.04;
       stars.rotation.z = t * 0.02;
 
-      // Star field spread + convergence toward a single point.
       const conv = stage.converge;
+
+      // ---- Morph the journey cloud between shape targets ----
+      const m = Math.min(Math.max(stage.morph, 0), maxShape);
+      const ia = Math.min(Math.floor(m), maxShape - 1);
+      const f = m - ia;
+      // smoothstep the blend so shape-holds feel settled and transitions swell
+      const fe = f * f * (3 - 2 * f);
+      const shapeA = shapes[ia];
+      const shapeB = shapes[ia + 1];
+      const collapse = 1 - conv;
+      // slow organic breath so the cloud never looks frozen mid-hold
+      const breath = 1 + Math.sin(t * 0.55) * 0.025;
+      const k = collapse * breath;
+      // per-particle swirl: a height-dependent twist that flows through the
+      // shape over time — the cloud is always alive, never a static object
+      const swirlAmp = 0.16 * collapse;
+
+      // ---- physics step ----
+      // Pointer position on the z=0 plane, in the cloud's local space, so the
+      // repulsion force tracks the cursor regardless of group drift/scale.
+      const halfH = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+      pointerLocal.set(
+        camera.position.x + pointer.x * halfH * camera.aspect,
+        camera.position.y - pointer.y * halfH,
+        0,
+      );
+      group.worldToLocal(pointerLocal);
+      const rLocal = REPULSE_R / (s || 1);
+      const r2 = rLocal * rLocal;
+      const kdt = SPRING_K * dt;
+      const damp = Math.exp(-DAMPING * dt);
+      const step = tier === "static" ? 0 : dt;
+
+      for (let i = 0; i < CLOUD_COUNT; i++) {
+        const j = i * 3;
+        const x = (shapeA[j] + (shapeB[j] - shapeA[j]) * fe) * k;
+        const y = (shapeA[j + 1] + (shapeB[j + 1] - shapeA[j + 1]) * fe) * k;
+        const z = (shapeA[j + 2] + (shapeB[j + 2] - shapeA[j + 2]) * fe) * k;
+        const a = swirlAmp * Math.sin(t * 0.5 + y * 1.1);
+        const cosA = 1 - a * a * 0.5; // small-angle cos
+        const tx = x * cosA - z * a;
+        const ty = y + Math.sin(t * 0.9 + x * 0.8) * 0.04 * collapse;
+        const tz = x * a + z * cosA;
+
+        if (step === 0) {
+          // reduced motion: no simulation, just the sampled pose
+          cloudPositions[j] = tx;
+          cloudPositions[j + 1] = ty;
+          cloudPositions[j + 2] = tz;
+          continue;
+        }
+
+        // spring toward the morph target
+        let vx = cloudVel[j] + (tx - cloudPositions[j]) * kdt;
+        let vy = cloudVel[j + 1] + (ty - cloudPositions[j + 1]) * kdt;
+        let vz = cloudVel[j + 2] + (tz - cloudPositions[j + 2]) * kdt;
+
+        // pointer repulsion — bodies inside the radius get shoved outward
+        const dx = cloudPositions[j] - pointerLocal.x;
+        const dy = cloudPositions[j + 1] - pointerLocal.y;
+        const dz = cloudPositions[j + 2] - pointerLocal.z;
+        const d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 < r2) {
+          const d = Math.sqrt(d2) + 1e-4;
+          const f = (REPULSE_F * (1 - d2 / r2) * step) / d;
+          vx += dx * f;
+          vy += dy * f;
+          vz += dz * f;
+        }
+
+        vx *= damp;
+        vy *= damp;
+        vz *= damp;
+        cloudVel[j] = vx;
+        cloudVel[j + 1] = vy;
+        cloudVel[j + 2] = vz;
+        cloudPositions[j] += vx * step;
+        cloudPositions[j + 1] += vy * step;
+        cloudPositions[j + 2] += vz * step;
+      }
+      cloudGeo.attributes.position.needsUpdate = true;
+
+      // Satellites orbit the core on tilted paths and fade during convergence.
+      for (const sat of satellites) {
+        const oa = t * sat.orbitSpeed + sat.orbitPhase;
+        sat.mesh.position.set(
+          Math.cos(oa) * sat.orbitR,
+          Math.sin(oa * sat.orbitTiltY) * sat.orbitR * 0.35,
+          Math.sin(oa) * sat.orbitR * 0.8,
+        );
+        sat.mesh.rotation.x = t * sat.spinX;
+        sat.mesh.rotation.y = t * sat.spinY;
+        sat.mat.opacity = (light ? 0.65 : 0.5) * collapse;
+      }
+
+      // Star field spread + convergence toward a single point.
       const spread = stage.spread;
       for (let i = 0; i < STAR_COUNT; i++) {
-        starPositions[i * 3] = starBase[i * 3] * spread * (1 - conv);
-        starPositions[i * 3 + 1] = starBase[i * 3 + 1] * spread * (1 - conv);
-        starPositions[i * 3 + 2] = starBase[i * 3 + 2] * spread * (1 - conv);
+        starPositions[i * 3] = starBase[i * 3] * spread * collapse;
+        starPositions[i * 3 + 1] = starBase[i * 3 + 1] * spread * collapse;
+        starPositions[i * 3 + 2] = starBase[i * 3 + 2] * spread * collapse;
       }
       starGeo.attributes.position.needsUpdate = true;
 
@@ -263,9 +456,10 @@ export function JourneyScene({
       const i0 = Math.floor(pIdx);
       const i1 = (i0 + 1) % palette.length;
       tmpColor.copy(palette[i0]).lerp(palette[i1], pIdx - i0);
-      lineMat.color.copy(tmpColor);
-      nodeMat.color.copy(tmpColor).offsetHSL(0.08, 0, 0.05);
-      lineMat.opacity = baseLineOpacity * (1 - conv * 0.6);
+      cloudMat.color.copy(tmpColor);
+      // as everything converges, the cloud brightens instead of fading — a spark
+      cloudMat.opacity = baseCloudOpacity * (1 - conv * 0.25);
+      cloudMat.size = (tier === "low" ? 0.065 : 0.05) * (1 + conv * 1.6);
       synMat.opacity = (baseSynOpacity + Math.sin(t * 0.8) * 0.05) * (1 - conv);
 
       if (bloomPass) bloomPass.strength = stage.bloom;
@@ -326,16 +520,18 @@ export function JourneyScene({
       document.removeEventListener("visibilitychange", onVisibility);
       composer?.dispose();
       renderer.dispose();
-      icoGeo.dispose();
-      edges.dispose();
+      cloudGeo.dispose();
       starGeo.dispose();
       synGeo.dispose();
-      lineMat.dispose();
-      nodeMat.dispose();
+      cloudMat.dispose();
       starMat.dispose();
       synMat.dispose();
-      nodeTex.dispose();
+      cloudTex.dispose();
       starTex.dispose();
+      for (const sat of satellites) {
+        sat.geo.dispose();
+        sat.mat.dispose();
+      }
       if (renderer.domElement.parentNode === container) {
         container.removeChild(renderer.domElement);
       }

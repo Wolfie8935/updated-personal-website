@@ -99,6 +99,77 @@ function LinkBtn({
   );
 }
 
+function ProjectCard({ project }: { project: Project }) {
+  return (
+    <GlassCard
+      className={`flex h-full flex-col p-6 md:p-7 ${project.featured ? "conic-border glass-blur" : ""}`}
+      tiltMax={project.featured ? 3 : 7}
+    >
+      <div className="mb-4 flex items-start justify-between">
+        <span className="grid h-12 w-12 place-items-center rounded-xl glass">
+          {project.featured ? (
+            <Zap className="h-6 w-6 text-violet-400" />
+          ) : (
+            <Terminal className="h-5 w-5 text-muted-foreground" />
+          )}
+        </span>
+        {project.tag && (
+          <span className="rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">
+            {project.tag}
+          </span>
+        )}
+      </div>
+
+      <h3 className={`font-bold text-foreground ${project.featured ? "text-2xl md:text-3xl" : "text-xl"}`}>
+        {project.title}
+      </h3>
+      {project.subtitle && (
+        <p className="mt-1 font-mono text-sm text-indigo-400">{project.subtitle}</p>
+      )}
+
+      <p className="mt-4 leading-relaxed text-muted-foreground">{project.description}</p>
+
+      <div className="mt-5 flex-grow">
+        <h4 className="mb-3 text-sm font-semibold text-foreground">Key Highlights</h4>
+        <ul className={`grid gap-2 ${project.featured ? "sm:grid-cols-2" : "grid-cols-1"}`}>
+          {project.features.map((f, i) => (
+            <li key={i} className="flex items-start text-sm text-muted-foreground">
+              <span className="mr-2 text-indigo-400">▹</span> {f}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4">
+        {project.tech.map((t) => (
+          <span key={t} className="rounded bg-white/5 px-2 py-1 font-mono text-xs text-muted-foreground">
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        {project.demo && (
+          <LinkBtn href={project.demo} primary>
+            <ExternalLink className="h-4 w-4" /> Live Demo
+          </LinkBtn>
+        )}
+        {project.github && (
+          <LinkBtn href={project.github}>
+            <Github className="h-4 w-4" /> GitHub
+          </LinkBtn>
+        )}
+      </div>
+    </GlassCard>
+  );
+}
+
+/**
+ * Normal vertical scroll — no scroll hijacking — but every card arrives with
+ * a doorway-style 3D swing: it slides in from its own side of the page while
+ * rotating flat from a slight Y-angle (perspective set in modern.css via
+ * .swing-3d). Horizontal + vertical motion woven together, intuitively.
+ */
 export function ProjectsModern() {
   const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
@@ -110,92 +181,57 @@ export function ProjectsModern() {
   });
   const gridY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [36, -36]);
 
+  const swingFrom = (side: "left" | "right" | "up") =>
+    reduced
+      ? { opacity: 0 }
+      : side === "up"
+        ? { opacity: 0, y: 44, rotateX: 8 }
+        : {
+            opacity: 0,
+            x: side === "left" ? -70 : 70,
+            rotateY: side === "left" ? 14 : -14,
+          };
+  const swingTo = { opacity: 1, x: 0, y: 0, rotateX: 0, rotateY: 0 };
+
   return (
     <section ref={sectionRef} id="projects" className="cv-auto relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading index="04" title="Featured" accent="Projects" />
 
-        <motion.div
-          style={{ y: gridY }}
-          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {projects.map((project, idx) => (
-            <motion.div
-              key={project.id}
-              className={project.featured ? "md:col-span-2 lg:col-span-3" : ""}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-            >
-              <GlassCard
-                className={`flex h-full flex-col p-6 md:p-7 ${project.featured ? "conic-border glass-blur" : ""}`}
-                tiltMax={project.featured ? 3 : 7}
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-xl glass">
-                    {project.featured ? (
-                      <Zap className="h-6 w-6 text-violet-400" />
-                    ) : (
-                      <Terminal className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </span>
-                  {project.tag && (
-                    <span className="rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">
-                      {project.tag}
-                    </span>
-                  )}
-                </div>
-
-                <h3 className={`font-bold text-foreground ${project.featured ? "text-2xl md:text-3xl" : "text-xl"}`}>
-                  {project.title}
-                </h3>
-                {project.subtitle && (
-                  <p className="mt-1 font-mono text-sm text-indigo-400">{project.subtitle}</p>
-                )}
-
-                <p className="mt-4 leading-relaxed text-muted-foreground">{project.description}</p>
-
-                <div className="mt-5 flex-grow">
-                  <h4 className="mb-3 text-sm font-semibold text-foreground">Key Highlights</h4>
-                  <ul className={`grid gap-2 ${project.featured ? "sm:grid-cols-2" : "grid-cols-1"}`}>
-                    {project.features.map((f, i) => (
-                      <li key={i} className="flex items-start text-sm text-muted-foreground">
-                        <span className="mr-2 text-indigo-400">▹</span> {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4">
-                  {project.tech.map((t) => (
-                    <span key={t} className="rounded bg-white/5 px-2 py-1 font-mono text-xs text-muted-foreground">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-3">
-                  {project.demo && (
-                    <LinkBtn href={project.demo} primary>
-                      <ExternalLink className="h-4 w-4" /> Live Demo
-                    </LinkBtn>
-                  )}
-                  {project.github && (
-                    <LinkBtn href={project.github}>
-                      <Github className="h-4 w-4" /> GitHub
-                    </LinkBtn>
-                  )}
-                </div>
-              </GlassCard>
-            </motion.div>
-          ))}
+        <motion.div style={{ y: gridY }} className="swing-3d grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            className="md:col-span-2 lg:col-span-3"
+            initial={swingFrom("up")}
+            whileInView={swingTo}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ProjectCard project={projects[0]} />
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            initial={swingFrom("left")}
+            whileInView={swingTo}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ProjectCard project={projects[1]} />
+          </motion.div>
+
+          <motion.div
+            initial={swingFrom("up")}
+            whileInView={swingTo}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ProjectCard project={projects[2]} />
+          </motion.div>
+
+          <motion.div
+            initial={swingFrom("right")}
+            whileInView={swingTo}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
           >
             <a href={GITHUB_REPOS} target="_blank" rel="noopener noreferrer" className="block h-full">
               <GlassCard className="flex min-h-[260px] h-full flex-col items-center justify-center gap-5 border-dashed p-8 text-center" tiltMax={7}>
