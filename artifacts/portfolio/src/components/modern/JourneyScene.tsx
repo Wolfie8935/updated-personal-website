@@ -283,13 +283,13 @@ export function JourneyScene({
       baseCloudOpacity = isLight ? 0.8 : 0.95;
       baseSynOpacity = isLight ? 0.2 : 0.14;
       starMat.opacity = isLight ? 0.95 : 0.85;
-      // ALWAYS clear opaquely to the themed background. With a transparent
-      // canvas the final look depended on whether the bloom composer ran
-      // (its target is opaque, hiding the aurora wash behind the canvas) —
-      // so dev/prod and high/low tiers rendered visibly different colours.
-      // An opaque clear makes the deep near-black backdrop deterministic
-      // everywhere; the aurora remains as the no-WebGL fallback.
-      renderer.setClearColor(readThemeBg(), 1);
+      // Dark keeps the TRANSPARENT clear. Important: with bloom active the
+      // EffectComposer gamma-encodes the whole buffer, so an opaque near-black
+      // clear colour comes out as washed grey — transparent alpha stays black.
+      // Dark-mode consistency between the bloom and no-bloom paths is handled
+      // in CSS instead (the dark aurora is dimmed to near-black in modern.css).
+      if (isLight) renderer.setClearColor(readThemeBg(), 1);
+      else renderer.setClearColor(0x000000, 0);
       bloomActive = useBloom && !isLight;
     };
     applyTheme(light);

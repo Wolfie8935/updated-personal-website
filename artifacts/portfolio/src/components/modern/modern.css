@@ -62,7 +62,11 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(56px);
-  opacity: 0.55;
+  /* Dark mode: kept faint so the backdrop reads deep near-black whether or
+     not the WebGL bloom composer is covering this layer (bloom output is
+     opaque; without bloom the canvas is transparent and this shows through).
+     Light mode overrides below restore stronger colour. */
+  opacity: 0.18;
   will-change: transform;
   transform: translateZ(0);
   mix-blend-mode: screen;
