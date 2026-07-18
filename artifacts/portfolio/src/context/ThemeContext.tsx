@@ -8,11 +8,14 @@ const THEME_CYCLE: Theme[] = ["dark", "light", "wizarding"];
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+  /** Jump straight to a theme (the modern UI's toggle flips dark/light without cycling through wizarding). */
+  setTheme: (theme: Theme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: "dark",
   toggleTheme: () => {},
+  setTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -159,7 +162,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     });
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
